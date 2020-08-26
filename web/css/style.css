@@ -1,0 +1,33 @@
+h1{
+    font-size: 24px;
+    background-color: #006699;
+    color:white;
+}
+h2{
+    font-size: 14px;
+    font-weight: bold;
+}
+body{
+    background-color: lightgray;
+}
+button{
+    font-size: 14px;
+    background-color: green;
+    color:white;
+}
+.success{
+    color: blue;
+    font-size: 14px;
+    font-weight: bold;
+}
+th{
+    background-color: olive;
+    color:white;
+}
+table{
+    padding: 0px !important;
+}
+span{
+    color: blue;
+    background-color: #ffffff;
+}

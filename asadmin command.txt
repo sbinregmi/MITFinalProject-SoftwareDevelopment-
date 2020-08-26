@@ -1,0 +1,8 @@
+Create database having username: App and password: app
+
+
+asadmin create-jdbc-connection-pool --datasourceclassname=org.apache.derby.jdbc.ClientDataSource --restype=javax.sql.DataSource --property portNumber=1527:password=app:user=App:serverName=localhost:databaseName=caassignment2db:connectionAttributes=;create\=true EcommercePool
+
+asadmin ping-connection-pool EcommercePool
+
+asadmin create-jdbc-resource --connectionpoolid EcommercePool jdbc/caassignment2db
