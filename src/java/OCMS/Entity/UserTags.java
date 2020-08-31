@@ -26,7 +26,7 @@ public class UserTags implements Serializable {
 
     
     @ManyToOne
-    private Registration userId;
+    private Users userId;
     
     
     @ManyToOne
@@ -35,7 +35,7 @@ public class UserTags implements Serializable {
     public UserTags() {
     }
 
-    public UserTags(Long id, Registration userId, Tags userTagId) {
+    public UserTags(Long id, Users userId, Tags userTagId) {
         this.id = id;
         this.userId = userId;
         this.userTagId = userTagId;
@@ -49,11 +49,11 @@ public class UserTags implements Serializable {
         this.id = id;
     }
 
-    public Registration getUserId() {
+    public Users getUserId() {
         return userId;
     }
 
-    public void setUserId(Registration userId) {
+    public void setUserId(Users userId) {
         this.userId = userId;
     }
 

@@ -5,7 +5,7 @@
  */
 package OCMS.EJB;
 
-import OCMS.Entity.Registration;
+import OCMS.Entity.Users;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -19,7 +19,7 @@ import javax.persistence.Query;
  * @author SabinRegmi
  */
 @Stateless
-public class RegistrationEJB {
+public class UserEJB {
 
     @PersistenceContext(unitName = "OCMSPU")
     private EntityManager em;
@@ -27,54 +27,54 @@ public class RegistrationEJB {
     @Resource
     SessionContext ctx;
 
-    //find all User
-    public List<Registration> findAllUser() {
-        Query query = em.createNamedQuery("Registration.findAllUser");
+    //find all Users
+    public List<Users> findAllUser() {
+        Query query = em.createNamedQuery("Users.findAllUser");
         return query.getResultList();
     }
 
     //find users by role
-    public List<Registration> findUserByRole(String role) {
-        return em.createNamedQuery("Registration.findUserByRole").setParameter("role", role).getResultList();
+    public List<Users> findUserByRole(String role) {
+        return em.createNamedQuery("Users.findUserByRole").setParameter("role", role).getResultList();
     }
 
     //find users by Id
-    public Registration findUserById(Long id) {
-        return em.find(Registration.class, id);
+    public Users findUserById(Long id) {
+        return em.find(Users.class, id);
     }
 
-    //create a User
-    public Registration createUser(Registration registration) {
+    //create a Users
+    public Users createUser(Users registration) {
         em.persist(registration);
         System.out.println(ctx.getCallerPrincipal().getName());
         return registration;
     }
     
-    //Approve a User
-    public Registration approveUser(Registration registration) {
+    //Approve a Users
+    public Users approveUser(Users registration) {
         registration.setIsApproved(true);
         em.merge(registration);
         System.out.println(ctx.getCallerPrincipal().getName());
         return registration;
     }
     
-    //update a User
-    public Registration updateUser(Registration registration) {
+    //update a Users
+    public Users updateUser(Users registration) {
         em.merge(registration);
         System.out.println(ctx.getCallerPrincipal().getName());
         return registration;
     }
     
-     //delete a User
-    public void deleteUser(Registration registration) {
-        registration=em.find(Registration.class, registration.getId());
+     //delete a Users
+    public void deleteUser(Users registration) {
+        registration=em.find(Users.class, registration.getId());
         em.remove(registration);
         System.out.println(ctx.getCallerPrincipal().getName());
     }
     
     //Checking login credential
-    public Registration loginUser(String userName,String password) {
-        return (Registration) em.createNamedQuery("Registration.loginUser")
+    public Users loginUser(String userName,String password) {
+        return (Users) em.createNamedQuery("Users.loginUser")
                 .setParameter("userName", userName)
                 .setParameter("password", password).getSingleResult();
     }

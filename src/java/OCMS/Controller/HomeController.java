@@ -5,9 +5,9 @@
  */
 package OCMS.Controller;
 
-import OCMS.EJB.RegistrationEJB;
+import OCMS.EJB.UserEJB;
 import javax.ejb.EJB;
-import OCMS.Entity.Registration;
+import OCMS.Entity.Users;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 
@@ -18,7 +18,7 @@ import javax.annotation.security.RolesAllowed;
 @RolesAllowed({"Administrator", "ConferenceManager", "Author", "Participant"})
 public class HomeController {
     @EJB
-    private RegistrationEJB registrationEJB;
-    private Registration user = new Registration();
+    private UserEJB registrationEJB;
+    private Users user = new Users();
     
 }

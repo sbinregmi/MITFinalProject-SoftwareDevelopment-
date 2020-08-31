@@ -36,12 +36,12 @@ public class SessionParticipant implements Serializable {
     @ManyToOne
     private Session sessionId;
     @ManyToOne
-    private Registration participantId;
+    private Users participantId;
 
     public SessionParticipant() {
     }
 
-    public SessionParticipant(Session sessionId, Registration participantId) {
+    public SessionParticipant(Session sessionId, Users participantId) {
         this.sessionId = sessionId;
         this.participantId = participantId;
     }
@@ -62,11 +62,11 @@ public class SessionParticipant implements Serializable {
         this.sessionId = sessionId;
     }
 
-    public Registration getParticipantId() {
+    public Users getParticipantId() {
         return participantId;
     }
 
-    public void setParticipantId(Registration participantId) {
+    public void setParticipantId(Users participantId) {
         this.participantId = participantId;
     }
 

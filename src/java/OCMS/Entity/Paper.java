@@ -30,7 +30,7 @@ import javax.persistence.OneToMany;
     @NamedQuery(name="findPaperById", query="select p from Paper p where p.paperId=:pPaperId"),
     @NamedQuery(name="findPaperBytopic", query="select p from Paper p where p.topic=:pTopic"),
     @NamedQuery(name="findPaperByAuthorId", query="select p from Paper p where p.authorId=:pAuthorId"),
-    @NamedQuery(name="findPaperByTagsForUser", query="select p from Paper p, Registration r where r.id=:pId")
+    @NamedQuery(name="findPaperByTagsForUser", query="select p from Paper p, Users u where u.id=:pId")
 })
 public class Paper implements Serializable {
 
@@ -45,7 +45,7 @@ public class Paper implements Serializable {
     private Date updatedDate;
     private String paperAbstract;
     @ManyToOne
-    private Registration authorId;
+    private Users authorId;
     private String publisher;
     private String tags;
     @OneToMany(mappedBy = "paperId")
@@ -54,7 +54,7 @@ public class Paper implements Serializable {
     public Paper() {
     }
 
-    public Paper(String paperId, String paperTitle, Enum.PaperTopic topic, String paperUrl, Date createdDate, Date updatedDate, String paperAbstract, Registration authorId, String publisher, String tags) {
+    public Paper(String paperId, String paperTitle, Enum.PaperTopic topic, String paperUrl, Date createdDate, Date updatedDate, String paperAbstract, Users authorId, String publisher, String tags) {
         this.paperId = paperId;
         this.paperTitle = paperTitle;
         this.topic = topic;
@@ -123,11 +123,11 @@ public class Paper implements Serializable {
         this.paperAbstract = paperAbstract;
     }
 
-    public Registration getAuthorId() {
+    public Users getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(Registration authorId) {
+    public void setAuthorId(Users authorId) {
         this.authorId = authorId;
     }
 

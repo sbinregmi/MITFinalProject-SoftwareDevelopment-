@@ -5,8 +5,10 @@
  */
 package OCMS.Controller;
 
-import OCMS.EJB.RegistrationEJB;
-import OCMS.Entity.Registration;
+import OCMS.EJB.UserEJB;
+import OCMS.Entity.Users;
+import OCMS.ModelData.Enum.Role;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +27,30 @@ import javax.faces.context.FacesContext;
 @DeclareRoles({"Administrator", "ConferenceManager", "Author", "Participant"})
 public class AccountController {
     @EJB
-    private RegistrationEJB registrationEJB;
+    private UserEJB registrationEJB;
     
-    private Registration user = new Registration();
-    private List<Registration> userList = new ArrayList<Registration>();
+    private Users user = new Users();
+    private List<Users> userList = new ArrayList<Users>();
     private boolean isJustCreated = false;
     private boolean isProfileUpdated=false;
     
      // Public Methods           
     public String createNewUser() {
         user.setIsActive(true);
-        user.setIsApproved(false);
+        if(user.getRole().equals(Role.Participant)){
+            user.setIsApproved(true);
+        }
+        else{
+            user.setIsApproved(false);
+        }
         user.setUserName(user.getEmail());
+        LocalDateTime timeZone=LocalDateTime.now();
+        user.setTimeZone(timeZone);
         Date dateNow=new Date();
         user.setCreatedDate((java.sql.Date)dateNow);
         user = registrationEJB.createUser(user);
       
-        return "registration.xhtml";
+        return "register.xhtml";
     }
     
     //Update profile
@@ -101,8 +110,27 @@ public class AccountController {
         user = registrationEJB.loginUser(user.getUserName(), user.getPassword());
         FacesContext context = FacesContext.getCurrentInstance();
         if (user.getId() != null) {
+            String returnPageUrl="";
+            if(user.getRole().equals(Role.Admin)){
+                returnPageUrl= "/admin/dashboard?faces-redirect=true";
+            }
+            else if(user.getRole().equals(Role.Author) && user.isIsApproved()){
+                returnPageUrl= "/author/dashboard?faces-redirect=true";
+            }
+            else if(user.getRole().equals(Role.Organizator) && user.isIsApproved()){
+                returnPageUrl= "/organizer/dashboard?faces-redirect=true";
+            }else if(user.getRole().equals(Role.Participant)){
+                returnPageUrl= "/participant/dashboard?faces-redirect=true";
+            }
+            else{
+                context.addMessage(null, new FacesMessage("User is not approved. Try again"));
+            user.setUserName(null);
+            user.setPassword(null);
+            return null;
+            }
             context.getExternalContext().getSessionMap().put("user", user);
-            return "home?faces-redirect=true";
+            return returnPageUrl;
+            
         } else {
             context.addMessage(null, new FacesMessage("Username or password wrong. Try again"));
             user.setUserName(null);
