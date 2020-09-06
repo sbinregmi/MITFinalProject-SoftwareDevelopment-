@@ -5,7 +5,14 @@
  */
 package OCMS.EJB;
 
+import OCMS.Entity.Tags;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -14,6 +21,29 @@ import javax.ejb.Stateless;
 @Stateless
 public class TagsEJB {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @PersistenceContext(unitName = "OCMSPU")
+    private EntityManager em;
+
+    @Resource
+    SessionContext ctx;
+
+    //find all Tags
+    public List<Tags> findAllTags() {
+        Query query = em.createNamedQuery("findAllTags");
+        return query.getResultList();
+    }
+    
+    //update tag
+    public Tags updateTag(Tags tag){
+        em.merge(tag);
+        System.out.println(ctx.getCallerPrincipal().getName());
+        return tag;
+    }
+    
+    //create a Tag
+    public Tags createTag(Tags tag) {
+        em.persist(tag);
+        System.out.println(ctx.getCallerPrincipal().getName());
+        return tag;
+    }
 }

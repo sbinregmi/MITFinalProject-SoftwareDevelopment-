@@ -29,13 +29,13 @@ public class UserEJB {
 
     //find all Users
     public List<Users> findAllUser() {
-        Query query = em.createNamedQuery("Users.findAllUser");
+        Query query = em.createNamedQuery("findAllUser");
         return query.getResultList();
     }
 
     //find users by role
     public List<Users> findUserByRole(String role) {
-        return em.createNamedQuery("Users.findUserByRole").setParameter("role", role).getResultList();
+        return em.createNamedQuery("findUserByRole").setParameter("role", role).getResultList();
     }
 
     //find users by Id
@@ -71,11 +71,16 @@ public class UserEJB {
         em.remove(registration);
         System.out.println(ctx.getCallerPrincipal().getName());
     }
-    
+        
     //Checking login credential
     public Users loginUser(String userName,String password) {
-        return (Users) em.createNamedQuery("Users.loginUser")
+        List<Users> currentUser= em.createNamedQuery("loginUser")
                 .setParameter("userName", userName)
-                .setParameter("password", password).getSingleResult();
+                .setParameter("password", password).getResultList();
+        if (currentUser.isEmpty())
+            return null;
+        else
+            return currentUser.get(0);
+            
     }
 }

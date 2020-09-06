@@ -31,7 +31,7 @@ and open the template in the editor.
                 <div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
                     <div class="menu_close_container"><div class="menu_close"></div></div>
                     <div class="logo menu_logo">
-                        <a href="${facesContext.externalContext.requestContextPath}/index.faces">
+                        <a href="${facesContext.externalContext.requestContextPath}/index.xhtml">
                             <div class="logo_container d-flex flex-row align-items-start justify-content-start">
                                 <div class="logo_image"><div><img src="images/logo.png" alt="" /></div></div>
                                 <div class="logo_content">
@@ -42,10 +42,10 @@ and open the template in the editor.
                         </a>
                     </div>
                     <ul>
-                        <li class="menu_item"><a href="${facesContext.externalContext.requestContextPath}/index.faces">Home</a></li>
-                        <li class="menu_item"><a href="${facesContext.externalContext.requestContextPath}/about.faces">About us</a></li>
-                        <li class="menu_item"><a href="${facesContext.externalContext.requestContextPath}/conference.faces">Conferences</a></li>
-                        <li class="menu_item"><a href="${facesContext.externalContext.requestContextPath}/contact.faces">Contact</a></li>
+                        <li class="menu_item"><a href="${facesContext.externalContext.requestContextPath}/index.xhtml">Home</a></li>
+                        <li class="menu_item"><a href="${facesContext.externalContext.requestContextPath}/about.xhtml">About us</a></li>
+                        <li class="menu_item"><a href="${facesContext.externalContext.requestContextPath}/conference.xhtml">Conferences</a></li>
+                        <li class="menu_item"><a href="${facesContext.externalContext.requestContextPath}/contact.xhtml">Contact</a></li>
                     </ul>
                 </div>
                 <div class="menu_social">
@@ -77,7 +77,7 @@ and open the template in the editor.
                                     <div class="col">
                                         <div class="header_top_content d-flex flex-row align-items-center justify-content-start">
                                             <div>
-                                                <a href="${facesContext.externalContext.requestContextPath}/index.faces">
+                                                <a href="${facesContext.externalContext.requestContextPath}/index.xhtml">
                                                     <div class="logo_container d-flex flex-row align-items-start justify-content-start">
                                                         <div class="logo_image"><div><img src="images/logo.png" alt=""/></div></div>
                                                         <div class="logo_content">
@@ -112,15 +112,15 @@ and open the template in the editor.
                                                 <div class="header_nav_content d-flex flex-row align-items-center justify-content-start">
                                                     <nav class="main_nav">
                                                         <ul>
-                                                            <li class="#{request.requestURI.equals('/OCMS/index.faces')?'active':''}"><a href="${facesContext.externalContext.requestContextPath}/index.faces">Home</a></li>
-                                                            <li class="#{request.requestURI.equals('/OCMS/about.faces')?'active':''}"><a href="${facesContext.externalContext.requestContextPath}/about.faces">About Us</a></li>
-                                                            <li class="#{request.requestURI.equals('/OCMS/conference.faces')?'active':''}"><a href="${facesContext.externalContext.requestContextPath}/conference.faces">Conferences</a></li>
-                                                            <li class="#{request.requestURI.equals('/OCMS/contact.faces')?'active':''}"> <a href="${facesContext.externalContext.requestContextPath}/contact.faces">Contact</a></li>
+                                                            <li class="#{request.requestURI.equals('/OCMS/index.xhtml')?'active':''}"><a href="${facesContext.externalContext.requestContextPath}/index.xhtml">Home</a></li>
+                                                            <li class="#{request.requestURI.equals('/OCMS/about.xhtml')?'active':''}"><a href="${facesContext.externalContext.requestContextPath}/about.xhtml">About Us</a></li>
+                                                            <li class="#{request.requestURI.equals('/OCMS/conference.xhtml')?'active':''}"><a href="${facesContext.externalContext.requestContextPath}/conference.xhtml">Conferences</a></li>
+                                                            <li class="#{request.requestURI.equals('/OCMS/contact.xhtml')?'active':''}"> <a href="${facesContext.externalContext.requestContextPath}/contact.xhtml">Contact</a></li>
                                                         </ul>
                                                     </nav>
                                                     <div class="header_extra ml-auto">
                                                         <div class="header_search"><i class="fa fa-search" aria-hidden="true"></i></div>
-                                                        <div class="button header_button"><a href="${facesContext.externalContext.requestContextPath}/login.faces">Login / Register</a></div>
+                                                        <div class="button header_button"><a href="${facesContext.externalContext.requestContextPath}/login.xhtml">Login / Register</a></div>
 
                                                     </div>
                                                 </div>

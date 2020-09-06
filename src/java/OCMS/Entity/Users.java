@@ -7,11 +7,14 @@ package OCMS.Entity;
 
 import OCMS.ModelData.Enum;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TimeZone;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
 import javax.faces.view.facelets.Tag;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +34,7 @@ import javax.security.enterprise.credential.Password;
     @NamedQuery(name="findAllUser",query="select u from Users u"),
     @NamedQuery(name="findUserByRole", query="select u from Users u where u.role=:uRole"),
     @NamedQuery(name="findUserById", query="select u from Users u where u.id=:uId"),
-    @NamedQuery(name="loginUser", query="select u from Users u where u.userName=:uUserName AND u.password=:uPassword")
+    @NamedQuery(name="loginUser", query="select u from Users u where u.userName=:userName AND u.password=:password")
     
 })
 public class Users implements Serializable {
@@ -40,21 +43,29 @@ public class Users implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private Date dateOfBirth;
+    @Column(nullable = false)
     private String email;
     private String phoneNumber;
     private String qualification;
+    @Column(nullable = false)
     private String role;
     private boolean isApproved;
     private boolean isPublic;
     private boolean isActive;
+    @Column(nullable = false)
     private String userName;
+    @Column(nullable = false)
     private String password;
-    private LocalDateTime timeZone;
+    @Column(nullable = false)
+    private String timeZone;
     private String address;
+    @Column(nullable = false)
     private Date createdDate;
     private Date updatedDate;
     @OneToMany(mappedBy = "authorId")
@@ -67,8 +78,7 @@ public class Users implements Serializable {
     public Users() {
     }
 
-    public Users(Long id, String firstName, String lastName, Date dateOfBirth, String email, String phoneNumber, String qualification, String role,  boolean isApproved, boolean isPublic, boolean isActive, String userName, String password, LocalDateTime timeZone, String address, Date createdDate, Date updatedDate, List<Paper> paperList, List<SessionParticipant> sessionParticipantList) {
-        this.id = id;
+    public Users( String firstName, String lastName, Date dateOfBirth, String email, String phoneNumber, String qualification, String role,  boolean isApproved, boolean isPublic, boolean isActive, String userName, String password, String timeZone, String address, Date createdDate, Date updatedDate, List<Paper> paperList, List<SessionParticipant> sessionParticipantList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -194,11 +204,11 @@ public class Users implements Serializable {
         this.password = password;
     }
 
-    public LocalDateTime getTimeZone() {
+    public String getTimeZone() {
         return timeZone;
     }
 
-    public void setTimeZone(LocalDateTime timeZone) {
+    public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
     }
 

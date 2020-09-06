@@ -6,7 +6,9 @@
 package OCMS.Entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,20 +30,35 @@ public class Contact implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+    @Column(nullable = false)
     private String fullName;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String subject;
+    @Column(nullable = false)
     private String message;
+    @Column(nullable = false)
+    private Date createdDate;
 
     public Contact() {
     }
 
-    public Contact(String fullName, String email, String subject, String message) {
+    public Contact(String fullName, String email, String subject, String message, Date createdDate) {
         this.fullName = fullName;
         this.email = email;
         this.subject = subject;
         this.message = message;
+        this.createdDate = createdDate;
+    }
+
+    public Contact(Long id, String fullName, String email, String subject, String message, Date createdDate) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.subject = subject;
+        this.message = message;
+        this.createdDate = createdDate;
     }
 
     public Long getId() {
@@ -84,42 +101,18 @@ public class Contact implements Serializable {
         this.message = message;
     }
 
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
     @Override
     public String toString() {
-        return "Contact{" + "id=" + id + ", fullName=" + fullName + ", email=" + email + ", subject=" + subject + ", message=" + message + '}';
+        return "Contact{" + "id=" + id + ", fullName=" + fullName + ", email=" + email + ", subject=" + subject + ", message=" + message + ", createdDate=" + createdDate + '}';
     }
 
-   
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Contact other = (Contact) obj;
-        if (!Objects.equals(this.fullName, other.fullName)) {
-            return false;
-        }
-        if (!Objects.equals(this.email, other.email)) {
-            return false;
-        }
-        if (!Objects.equals(this.subject, other.subject)) {
-            return false;
-        }
-        if (!Objects.equals(this.message, other.message)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-    
     
 }

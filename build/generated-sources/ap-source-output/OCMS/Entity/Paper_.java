@@ -3,13 +3,13 @@ package OCMS.Entity;
 import OCMS.Entity.PaperTags;
 import OCMS.Entity.Users;
 import OCMS.ModelData.Enum.PaperTopic;
-import java.sql.Date;
+import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2020-08-31T19:32:05")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2020-09-06T14:42:29")
 @StaticMetamodel(Paper.class)
 public class Paper_ { 
 

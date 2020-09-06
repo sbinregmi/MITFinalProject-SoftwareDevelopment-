@@ -3,7 +3,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 template="/WEB-INF/Templates/generalLayout.xhtml"
-                >
+                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:define name="title">Home</ui:define>
     <ui:define name="customCSS">
         
@@ -39,15 +40,21 @@
 
         <div class="intro">
             <div class="intro_content d-flex flex-row flex-wrap align-items-start justify-content-between">
-
-                <!-- Intro Item -->
+                <c:forEach var="tag" items="#{homeController.getAllTags()}">
+                     <!-- Intro Item -->
                 <div class="intro_item">
-                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_1.jpg" alt="" /></div>
+                    <c:if test="#{not empty tag.url}">
+                       <div class="intro_image">
+                           <img src="${facesContext.externalContext.requestContextPath}#{tag.url.replace('\\', '/')}" alt="" />
+                       </div>
+                    </c:if>
                     <div class="intro_body">
-                        <div class="intro_title"><a href="#">Articificial Intelligence </a></div>
-                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
+                        <div class="intro_title"><a href="#">#{tag.name} </a></div>
+                        <div class="intro_subtitle">#{tag.description}</div>
                     </div>
                 </div>
+                </c:forEach>
+               
 
                 <!-- Intro Item -->
                 <div class="intro_item">

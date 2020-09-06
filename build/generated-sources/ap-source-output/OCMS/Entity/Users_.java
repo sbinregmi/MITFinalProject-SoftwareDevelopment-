@@ -3,21 +3,20 @@ package OCMS.Entity;
 import OCMS.Entity.Paper;
 import OCMS.Entity.SessionParticipant;
 import OCMS.Entity.UserTags;
-import java.sql.Date;
-import java.time.LocalDateTime;
+import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2020-08-31T19:32:05")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2020-09-06T14:42:29")
 @StaticMetamodel(Users.class)
 public class Users_ { 
 
     public static volatile SingularAttribute<Users, String> lastName;
     public static volatile SingularAttribute<Users, String> role;
     public static volatile SingularAttribute<Users, String> address;
-    public static volatile SingularAttribute<Users, LocalDateTime> timeZone;
+    public static volatile SingularAttribute<Users, String> timeZone;
     public static volatile SingularAttribute<Users, Date> dateOfBirth;
     public static volatile ListAttribute<Users, Paper> paperList;
     public static volatile SingularAttribute<Users, Date> updatedDate;

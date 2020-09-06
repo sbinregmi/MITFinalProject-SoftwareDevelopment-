@@ -6,7 +6,7 @@
 package OCMS.Entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,32 +15,42 @@ import javax.persistence.OneToOne;
 import OCMS.ModelData.Enum;
 import java.util.List;
 import javax.faces.view.facelets.Tag;
+import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+
 /**
  *
  * @author SabinRegmi
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="findAllPaper",query="select p from Paper p"),
-    @NamedQuery(name="findPaperByTitle", query="select p from Paper p where p.paperTitle=:pTitle"),
-    @NamedQuery(name="findPaperById", query="select p from Paper p where p.paperId=:pPaperId"),
-    @NamedQuery(name="findPaperBytopic", query="select p from Paper p where p.topic=:pTopic"),
-    @NamedQuery(name="findPaperByAuthorId", query="select p from Paper p where p.authorId=:pAuthorId"),
-    @NamedQuery(name="findPaperByTagsForUser", query="select p from Paper p, Users u where u.id=:pId")
+    @NamedQuery(name = "findAllPaper", query = "select p from Paper p")
+    ,
+    @NamedQuery(name = "findPaperByTitle", query = "select p from Paper p where p.paperTitle=:pTitle")
+    ,
+    @NamedQuery(name = "findPaperById", query = "select p from Paper p where p.paperId=:pPaperId")
+    ,
+    @NamedQuery(name = "findPaperBytopic", query = "select p from Paper p where p.topic=:pTopic")
+    ,
+    @NamedQuery(name = "findPaperByAuthorId", query = "select p from Paper p where p.authorId=:pAuthorId")
+    ,
+    @NamedQuery(name = "findPaperByTagsForUser", query = "select p from Paper p, Users u where u.id=:pId")
 })
 public class Paper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     private String paperId;
-
+    @Column(nullable = false)
     private String paperTitle;
+    @Column(nullable = false)
     private Enum.PaperTopic topic;
+    @Column(nullable = false)
     private String paperUrl;
+    @Column(nullable = false)
     private Date createdDate;
     private Date updatedDate;
     private String paperAbstract;
@@ -152,6 +162,4 @@ public class Paper implements Serializable {
         return "Paper{" + "paperId=" + paperId + ", paperTitle=" + paperTitle + ", topic=" + topic + ", paperUrl=" + paperUrl + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", paperAbstract=" + paperAbstract + ", authorId=" + authorId + ", publisher=" + publisher + ", tags=" + tags + '}';
     }
 
-    
-    
 }

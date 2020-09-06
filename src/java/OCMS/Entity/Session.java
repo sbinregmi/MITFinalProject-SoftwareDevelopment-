@@ -6,10 +6,10 @@
 package OCMS.Entity;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
@@ -33,23 +33,24 @@ public class Session implements Serializable {
 
     @Id
     private Long sessionId;
+    @Column(nullable = false)
     private String sessionName;
     private TimeZone timeZone;
-    private Time sessionDateTime;
+    @Column(nullable = false)
+    private Date sessionDateTime;
     private String organization;
     private String country;
     private boolean isSeatAvailable;
     private int maximumParticipant;
     private Date createdDate;
     private Date updatedDate;
-    private String tags;
     @OneToMany(mappedBy = "sessionId")
     private List<SessionParticipant> sessionIds;
 
     public Session() {
     }
 
-    public Session(Long sessionId, String sessionName, TimeZone timeZone, Time sessionDateTime, String organization, String country, boolean isSeatAvailable, int maximumParticipant, Date createdDate, Date updatedDate) {
+    public Session(Long sessionId, String sessionName, TimeZone timeZone, Date sessionDateTime, String organization, String country, boolean isSeatAvailable, int maximumParticipant, Date createdDate, Date updatedDate) {
         this.sessionId = sessionId;
         this.sessionName = sessionName;
         this.timeZone = timeZone;
@@ -86,11 +87,11 @@ public class Session implements Serializable {
         this.timeZone = timeZone;
     }
 
-    public Time getSessionDateTime() {
+    public Date getSessionDateTime() {
         return sessionDateTime;
     }
 
-    public void setSessionDateTime(Time sessionDateTime) {
+    public void setSessionDateTime(Date sessionDateTime) {
         this.sessionDateTime = sessionDateTime;
     }
 

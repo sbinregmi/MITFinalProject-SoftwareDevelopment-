@@ -5,20 +5,38 @@
  */
 package OCMS.Controller;
 
-import OCMS.EJB.UserEJB;
-import javax.ejb.EJB;
+import OCMS.EJB.TagsEJB;
+import OCMS.Entity.Tags;
 import OCMS.Entity.Users;
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.RolesAllowed;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
+import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author SabinRegmi
  */
-@RolesAllowed({"Administrator", "ConferenceManager", "Author", "Participant"})
+@ManagedBean(name = "homeController")
+@RequestScoped
+@PermitAll
 public class HomeController {
+
     @EJB
-    private UserEJB registrationEJB;
-    private Users user = new Users();
+    private TagsEJB tagsEJB;
+    private Tags tag = new Tags();
+
+    //setter amd getter for user
+    public Tags getTag() {
+        return this.tag;
+    }
+
+    public List<Tags> getAllTags() {
+        return tagsEJB.findAllTags();
+    }
     
 }

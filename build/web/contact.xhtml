@@ -2,6 +2,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
                 template="/WEB-INF/Templates/generalLayout.xhtml"
                 >
     <ui:define name="title">Contact</ui:define>
@@ -56,13 +57,13 @@
                     <div class="col-lg-6">
                         <div class="contact_form_container">
                             <div class="contact_form_title">Get in touch with us</div>
-                            <form action="#" class="contact_form" id="contact_form">
-                                <input type="text" class="contact_input" placeholder="Name" required="required" />
-                                <input type="email" class="contact_input" placeholder="E-mail" required="required" />
-                                <input type="text" class="contact_input" placeholder="Subject" required="required" />
-                                <textarea name="contact_textarea" id="contact_textarea" class="contact_textarea contact_input" placeholder="Message" required="required"></textarea>
-                                <button class="button contact_button"><span>Send Message</span></button>
-                            </form>
+                            <h:form class="contact_form" id="contact">
+                                <h:inputText  value="#{contactController.contact.fullName}" class="contact_input" a:placeholder="Full Name" required="true" requiredMessage="Please Enter Your Name."/>
+                                <h:inputText a:type="email" value="#{contactController.contact.email}"  class="contact_input" a:placeholder="E-mail" required="true" requiredMessage="Please Enter Your Email Address."/>
+                                <h:inputText value="#{contactController.contact.subject}" class="contact_input" a:placeholder="Subject" required="true" requiredMessage="Please Enter Subject."/>
+                                <h:inputTextarea value="#{contactController.contact.message}" id="contact_textarea" class="contact_textarea contact_input" a:placeholder="Message or Query" required="true" requiredMessage="Please Enter Message or Query."></h:inputTextarea>
+                                <h:commandButton id="btnSubmit" value="Send Message" class="button contact_button" immediate="false" action="#{contactController.createContact}"/>
+                            </h:form>
                         </div>
                     </div>
                     <div class="col-lg-5 offset-lg-1">
