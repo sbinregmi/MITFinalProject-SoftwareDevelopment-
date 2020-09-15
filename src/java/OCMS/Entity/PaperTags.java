@@ -11,17 +11,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author SabinRegmi
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "findTagsByPaperId", query = "select pt from PaperTags pt where pt.paperId.paperId=:paperId"),
+     @NamedQuery(name = "removeTagsByPaperId", query = "Delete FROM PaperTags pt where pt.paperId.paperId=:paperId")
+})
 public class PaperTags implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @ManyToOne

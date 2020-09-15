@@ -6,8 +6,10 @@
 package OCMS.EJB;
 
 import OCMS.Entity.Paper;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,31 +28,54 @@ public class PaperEJB {
 
     @Resource
     SessionContext ctx;
+    
+    @EJB
+    private PaperTagsEJB paperTagsEJB;
 
     //find all Paper
     public List<Paper> findAllPaper() {
-        Query query = em.createNamedQuery("Paper.findAllPaper");
+        Query query = em.createNamedQuery("findAllPaper");
         return query.getResultList();
     }
 
     //find paper by paper title
     public List<Paper> findPaperByTitle(String paperTitle) {
-        return em.createNamedQuery("Paper.findPaperByTitle").setParameter("paperTitle", paperTitle).getResultList();
+        return em.createNamedQuery("findPaperByTitle").setParameter("paperTitle", paperTitle).getResultList();
     }
 
     //find paper by Id
-    public Paper findPaperById(String id) {
+    public Paper findPaperById(Long id) {
         return em.find(Paper.class, id);
     }
     
-    //find paper by paper topic
-    public List<Paper> findPaperBytopic(String topic) {
-        return em.createNamedQuery("Paper.findPaperBytopic").setParameter("topic", topic).getResultList();
-    }
+//    //find paper by paper topic
+//    public List<Paper> findPaperBytopic(String topic) {
+//        return em.createNamedQuery("findPaperBytopic").setParameter("topic", topic).getResultList();
+//    }
 
     //find paper by Author Id
     public List<Paper> findPaperByAuthorId(Long authorId) {
-        return em.createNamedQuery("Paper.findPaperByAuthorId").setParameter("authorId", authorId).getResultList();
+        List<Paper> paperList= em.createNamedQuery("findPaperByAuthorId").setParameter("authorId", authorId).getResultList();
+        if(paperList==null){
+            return null;
+        }
+        else{
+            List<Paper> finalPaperList=new ArrayList<Paper>();
+            for(Paper paper:paperList){
+                paper.setPaperTags(paperTagsEJB.findTagsByPaperId(paper.getPaperId()));
+                finalPaperList.add(paper);
+            }
+            return finalPaperList;
+        }
+    }
+    
+    //find number of paper submitted by a author
+    public int numberOfPaperSubmittedByAuthor(Long authorId) {
+        int numberOfPaper=0;
+        List<Paper> paper=em.createNamedQuery("numberOfPaperSubmittedByAuthor").setParameter("authorId", authorId).getResultList();
+        if(paper!=null)
+            numberOfPaper=paper.size();
+        return numberOfPaper;
     }
 
     //create a paper
@@ -58,5 +83,18 @@ public class PaperEJB {
         em.persist(paper);
         System.out.println(ctx.getCallerPrincipal().getName());
         return paper;
+    }
+    
+     //delete a paper
+    public void deletePaper(Paper paper) {
+        paper=em.find(Paper.class, paper.getPaperId());
+        em.remove(paper);
+        System.out.println(ctx.getCallerPrincipal().getName());
+    }
+     //delete a paper by ID
+    public void deletePaperById(Long paperId) {
+        Paper paper=em.find(Paper.class, paperId);
+        em.remove(paper);
+        System.out.println(ctx.getCallerPrincipal().getName());
     }
 }

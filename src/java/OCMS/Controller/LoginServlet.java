@@ -41,6 +41,9 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+         HttpServletRequest servletRequest = (HttpServletRequest) request;
+        String baseUrl = servletRequest.getServletContext().getContextPath();
+        response.sendRedirect(baseUrl + "/login.xhtml");
     }
 
     /**
@@ -79,13 +82,15 @@ public class LoginServlet extends HttpServlet {
                     baseUrl = baseUrl + "/participant/dashboard.xhtml";
 
                 } else {
-                    request.setAttribute("errMessage", "Roles is not defined.");
+                    request.getSession().setAttribute("errMessage", "Roles is not defined.");
+                    //request.setAttribute("errMessage", "Roles is not defined.");
                     baseUrl = baseUrl + "/login.xhtml";
                 }
                 //request.getRequestDispatcher(baseUrl).forward(request, response);
                 response.sendRedirect(baseUrl);
             } else {
-                request.setAttribute("errMessage", "Username or password incorrect.");
+                request.getSession().setAttribute("errMessage", "Username or password incorrect.");
+                //request.setAttribute("errMessage", "Username or password incorrect.");
                 response.sendRedirect(baseUrl + "/login.xhtml");
 
             }

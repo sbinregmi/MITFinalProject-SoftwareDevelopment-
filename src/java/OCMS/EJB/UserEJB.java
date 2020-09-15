@@ -51,31 +51,43 @@ public class UserEJB {
     }
     
     //Approve a Users
-    public Users approveUser(Users registration) {
-        registration.setIsApproved(true);
-        em.merge(registration);
+    public Users approveUser(Users user) {
+        user.setIsApproved(true);
+        em.merge(user);
         System.out.println(ctx.getCallerPrincipal().getName());
-        return registration;
+        return user;
     }
     
     //update a Users
-    public Users updateUser(Users registration) {
-        em.merge(registration);
+    public Users updateUser(Users user) {
+        Users u=em.merge(user);
         System.out.println(ctx.getCallerPrincipal().getName());
-        return registration;
+        return u;
     }
     
      //delete a Users
-    public void deleteUser(Users registration) {
-        registration=em.find(Users.class, registration.getId());
-        em.remove(registration);
+    public void deleteUser(Users user) {
+        user=em.find(Users.class, user.getId());
+        em.remove(user);
         System.out.println(ctx.getCallerPrincipal().getName());
     }
-        
+    
+    //Find user by username or email --For password reset purpose
+    public Users findUserByEmailOrUsername(String userName) {
+        List<Users> currentUser= em.createNamedQuery("findUserByEmailOrUsername")
+                .setParameter("userName", userName)
+                .setParameter("email", userName).getResultList();
+        if (currentUser.isEmpty())
+            return null;
+        else
+            return currentUser.get(0);
+    }
     //Checking login credential
     public Users loginUser(String userName,String password) {
         List<Users> currentUser= em.createNamedQuery("loginUser")
                 .setParameter("userName", userName)
+                .setParameter("password", password)
+                .setParameter("email", userName)
                 .setParameter("password", password).getResultList();
         if (currentUser.isEmpty())
             return null;

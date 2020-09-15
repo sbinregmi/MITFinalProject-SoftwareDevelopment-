@@ -32,7 +32,10 @@ public class TagsEJB {
         Query query = em.createNamedQuery("findAllTags");
         return query.getResultList();
     }
-    
+    //find tag by Id
+    public Tags findTagById(Long id) {
+        return em.find(Tags.class, id);
+    }
     //update tag
     public Tags updateTag(Tags tag){
         em.merge(tag);

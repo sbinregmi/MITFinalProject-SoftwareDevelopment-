@@ -5,15 +5,10 @@
  */
 package OCMS.Entity;
 
-import OCMS.ModelData.Enum;
 import java.io.Serializable;
 import java.util.Date;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.TimeZone;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
-import javax.faces.view.facelets.Tag;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,8 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.security.enterprise.credential.Password;
+import javax.persistence.Transient;
 
 /**
  *
@@ -34,21 +28,20 @@ import javax.security.enterprise.credential.Password;
     @NamedQuery(name="findAllUser",query="select u from Users u"),
     @NamedQuery(name="findUserByRole", query="select u from Users u where u.role=:uRole"),
     @NamedQuery(name="findUserById", query="select u from Users u where u.id=:uId"),
-    @NamedQuery(name="loginUser", query="select u from Users u where u.userName=:userName AND u.password=:password")
-    
+    @NamedQuery(name="loginUser", query="select u from Users u where (u.userName=:userName AND u.password=:password) OR (u.email=:email AND u.password=:password)"),
+    @NamedQuery(name="findUserByEmailOrUsername", query="select u from Users u where u.userName=:userName OR u.email=:email")
 })
 public class Users implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
     private String lastName;
     @Column(nullable = false)
-    private Date dateOfBirth;
+    private String country;
     @Column(nullable = false)
     private String email;
     private String phoneNumber;
@@ -68,20 +61,23 @@ public class Users implements Serializable {
     @Column(nullable = false)
     private Date createdDate;
     private Date updatedDate;
-    @OneToMany(mappedBy = "authorId")
+    @OneToMany(mappedBy = "authorId", cascade = CascadeType.PERSIST)
     private List<Paper> paperList;
-    @OneToMany(mappedBy = "participantId")
+    @OneToMany(mappedBy = "participantId", cascade = CascadeType.PERSIST)
     private List<SessionParticipant> sessionParticipantList;
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.PERSIST)
     private List<UserTags> userTags;
+    @Transient
+    private List<Long> tagList;
 
     public Users() {
     }
 
-    public Users( String firstName, String lastName, Date dateOfBirth, String email, String phoneNumber, String qualification, String role,  boolean isApproved, boolean isPublic, boolean isActive, String userName, String password, String timeZone, String address, Date createdDate, Date updatedDate, List<Paper> paperList, List<SessionParticipant> sessionParticipantList) {
+    public Users(Long id, String firstName, String lastName, String country, String email, String phoneNumber, String qualification, String role, boolean isApproved, boolean isPublic, boolean isActive, String userName, String password, String timeZone, String address, Date createdDate, Date updatedDate, List<Paper> paperList, List<SessionParticipant> sessionParticipantList, List<UserTags> userTags, List<Long> tagList) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
+        this.country = country;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.qualification = qualification;
@@ -97,6 +93,29 @@ public class Users implements Serializable {
         this.updatedDate = updatedDate;
         this.paperList = paperList;
         this.sessionParticipantList = sessionParticipantList;
+        this.userTags = userTags;
+        this.tagList = tagList;
+    }
+
+    
+
+    public Users(String firstName, String lastName, String country, String email, String phoneNumber, String qualification, String role, boolean isApproved, boolean isPublic, boolean isActive, String userName, String password, String timeZone, String address, Date createdDate, Date updatedDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.country = country;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.qualification = qualification;
+        this.role = role;
+        this.isApproved = isApproved;
+        this.isPublic = isPublic;
+        this.isActive = isActive;
+        this.userName = userName;
+        this.password = password;
+        this.timeZone = timeZone;
+        this.address = address;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
     }
 
     public Long getId() {
@@ -123,12 +142,12 @@ public class Users implements Serializable {
         this.lastName = lastName;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getCountry() {
+        return country;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getEmail() {
@@ -261,9 +280,17 @@ public class Users implements Serializable {
         this.userTags = userTags;
     }
 
+    public List<Long> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Long> tagList) {
+        this.tagList = tagList;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", phoneNumber=" + phoneNumber + ", qualification=" + qualification + ", role=" + role + ", isApproved=" + isApproved + ", isPublic=" + isPublic + ", isActive=" + isActive + ", userName=" + userName + ", password=" + password + ", timeZone=" + timeZone + ", address=" + address + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", paperList=" + paperList + ", sessionParticipantList=" + sessionParticipantList + ", userTags=" + userTags + '}';
+        return "User{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", country=" + country + ", email=" + email + ", phoneNumber=" + phoneNumber + ", qualification=" + qualification + ", role=" + role + ", isApproved=" + isApproved + ", isPublic=" + isPublic + ", isActive=" + isActive + ", userName=" + userName + ", password=" + password + ", timeZone=" + timeZone + ", address=" + address + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", paperList=" + paperList + ", sessionParticipantList=" + sessionParticipantList + ", userTags=" + userTags + '}';
     }
    
     

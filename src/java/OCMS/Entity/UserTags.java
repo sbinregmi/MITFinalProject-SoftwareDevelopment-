@@ -11,17 +11,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author SabinRegmi
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "findTagsByUserId", query = "select ut from UserTags ut where ut.userId.id=:userId"),
+    @NamedQuery(name = "removeTagsByUserId", query = "Delete FROM UserTags ut where ut.userId.id=:userId")
+})
 public class UserTags implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     

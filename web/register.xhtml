@@ -18,32 +18,53 @@ and open the template in the editor.
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="Conference project" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="${facesContext.externalContext.requestContextPath}/css/style.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/login.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2-bootstrap4.min.css"/>
         <script src="${facesContext.externalContext.requestContextPath}/js/jquery-3.2.1.min.js"></script>
     </head>
     <body>
         <div class="container">
-            <h:form prependId="false" enctype="multipart/form-data" a:name="registerform" class="form-group">
+            <h:form a:method="POST" a:accept-charset="utf-8"  class="form-group needs-validation" a:novalidate="">
+                <a href="${facesContext.externalContext.requestContextPath}/index.xhtml">
+                    <span class="login100-form-title p-b-33">
+                        <img src="images/logo.png" />  
+                    </span>
+                    <p class="org-name">Easy Conference</p> <br />
+                </a>
                 <h4 style="text-align:center;margin-top: 20px;">Please Create your Account</h4>
                 <div class="row jumbotron">
+                    <div class="col-md-12 mb-12">
+                        <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
+                    </div>
                     <div class="col-md-6 mb-3">
                         <label for="">First Name</label>
-                        <h:inputText value="#{accountController.user.firstName}" class="form-control" a:placeholder="First Name" />
+                        <h:inputText value="#{accountController.user.firstName}" class="form-control" a:placeholder="First Name" a:required="required"/>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please enter first name.</div>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="">Last Name</label>
-                        <h:inputText value="#{accountController.user.lastName}" class="form-control" a:placeholder="Last Name"/>
+                        <h:inputText value="#{accountController.user.lastName}" class="form-control" a:placeholder="Last Name" a:required="required"/>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please enter last name.</div>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="">Username</label>
-                        <h:inputText value="#{accountController.user.userName}" class="form-control" a:placeholder="Username" />
+                        <h:inputText value="#{accountController.user.userName}" class="form-control" a:placeholder="Username" a:required="required"/>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please enter username.</div>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="">Email</label>
-                        <h:inputText a:type="email" value="#{accountController.user.email}" class="form-control" a:placeholder="email"/>
+                        <h:inputText a:type="email" value="#{accountController.user.email}" class="form-control" a:placeholder="email" a:required="required"/>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please enter valid email address.</div>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -53,13 +74,17 @@ and open the template in the editor.
 
                     <div class="col-md-6 mb-3">
                         <label for="">Address </label>
-                        <h:inputText value="#{accountController.user.address}" class="form-control" a:placeholder="Address" />
+                        <h:inputText value="#{accountController.user.address}" class="form-control" a:placeholder="Address" a:required="required"/>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please enter your address.</div>
                     </div>
 
 
                     <div class="col-md-6 mb-3">
                         <label for="">Password</label>
-                        <h:inputText value="#{accountController.user.password}" a:type="password" class="form-control" a:placeholder="Password"/>
+                        <h:inputText value="#{accountController.user.password}" a:type="password" class="form-control" a:placeholder="Password" a:required="required"/>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please enter password.</div>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -69,39 +94,53 @@ and open the template in the editor.
 
                     <div class="col-md-6 mb-6">
                         <label for="">Role</label>
-                        <h:selectOneMenu class="custom-select mr-sm-2" value="#{accountController.user.role}">
+                        <h:selectOneMenu class="custom-select mr-sm-2 form-control" value="#{accountController.user.role}" a:required="required">
                             <f:selectItem itemLabel="Choose Role" a:selected="true" a:disabled="disabled"/>
                             <f:selectItem itemLabel="Author" itemValue="Author"/>
                             <f:selectItem itemLabel="Participant" itemValue="Participant"/>
                         </h:selectOneMenu>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please select a role.</div>
+                    </div>
+                    <div class="col-md-6 mb-6">
+                        <label for="">Interest Groups</label>
+                        <h:selectManyListbox value="#{accountController.user.tagList}" class="select2bs4 form-control" a:multiple="multiple" a:data-placeholder="Choose the Topic"
+                                             style="width: 100%;" a:required="required">
+                            <c:forEach var="tag" items="#{homeController.getAllTags()}">
+                                <f:selectItem itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
+                            </c:forEach>
+                            <!--                                            <option>AI Application</option>
+                                                                        <option>Machine Learning</option>
+                                                                        <option>Artificial Neural Network</option>-->
+                        </h:selectManyListbox>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please choice your interest group.</div>
+                    </div>
+                    <div class="col-md-6 mb-6">
+                        <label for="">Time Zone</label>
+                        <h:selectOneMenu value="#{accountController.user.timeZone}" id="timeZone" class="custom-select mr-sm-2 timeZoneDropdownClass form-control">
+                            <f:selectItem itemLabel="Choose Timezone" a:disabled="disabled"/>
+                            <c:forEach var="timeZone" items="#{accountController.getListOfTimeZones()}">
+                                <f:selectItem itemLabel="#{timeZone}" itemValue="#{timeZone}"/>
+                            </c:forEach>
+                        </h:selectOneMenu>
+                        <span>Your current time zone is selected. You can change.</span>
                     </div>
                     <div class="col-md-6 mb-6">
                         <label for="">Country</label>
-                        <h:selectOneMenu  value="#{accountController.user.role}" id="country" class="custom-select mr-sm-2">
+                        <h:selectOneMenu  value="#{accountController.user.country}" id="country" class="custom-select mr-sm-2 form-control" a:required="required">
                             <f:selectItem itemLabel="Choose Country" a:selected="true" a:disabled="disabled"/>
                             <c:forEach var="country" items="#{accountController.getListOfCountries()}">
                                 <f:selectItem itemLabel="#{country}" itemValue="#{country}"/>
                             </c:forEach>
                         </h:selectOneMenu >
-                    </div>
-                    <div class="col-md-12 mb-12">
-                        <label for="">Time Zone</label>
-                        <h:selectOneMenu value="#{accountController.user.timeZone}" class="custom-select mr-sm-2 timeZoneDropdownClass" disabled="true">
-                            <f:selectItem itemLabel="Choose Timezone" a:disabled="disabled"/>
-                            <!--                            <option value="">GMT+10</option>
-                                                        <option value="">GMT+6</option>-->
-                            <c:forEach var="timeZone" items="#{accountController.getListOfTimeZones()}">
-                                <f:selectItem itemLabel="#{timeZone}" itemValue="#{timeZone}"/>
-                            </c:forEach>
-                        </h:selectOneMenu>
-                        <span>Your current time zone is selected. You want to change?</span>
-                        <input type="checkbox" onchange="timeZoneControl(this);" value="false" id="customeTimeZone"/>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">Please select your country.</div>
                     </div>
 
                     <div class="col-md-12" style="text-align:center;margin-top: 20px;">
                         <h:commandButton id="btnSubmit" value="Register" class="btn btn-primary" immediate="false" action="#{accountController.createNewUser()}"/>
-                    </div>
-
+                    </div>/>
                     <div class="col-md-12" style="text-align:center;margin-top: 20px;">
                         <label for="">Already have Account? <a href="${facesContext.externalContext.requestContextPath}/login.xhtml">Sign In</a></label>
                     </div>
@@ -113,25 +152,33 @@ and open the template in the editor.
 
         <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/popper.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
         <script>
-                            setDefaultTimeZone();
-                            function timeZoneControl(customTimeZone)
-                            {
-                                $(".timeZoneDropdownClass").prop("disabled", !customTimeZone.checked);
-                                if (!customTimeZone.checked) {
-                                    setDefaultTimeZone();
-                                }
-                            }
-                            function setDefaultTimeZone() {
-                                var currentDateClientSide = (new Date()).toString();
-                                var GTMStr = (currentDateClientSide.slice(currentDateClientSide.indexOf("GMT") + 4)).toString();
-                                var hourInMilisecond = GTMStr.substr(0, GTMStr.indexOf(' '));
-                                var hour = parseInt(hourInMilisecond) / 100;
-                                var finalGTMStr = "GMT" + (hour > 0 ? "+" : "") + hour;
-                                $(".timeZoneDropdownClass")[0].value = finalGTMStr;
+            $(document).ready(function () {
+                var timeZone = document.getElementsByClassName("timeZoneDropdownClass");
+                setDefaultTimeZone();
+                function setDefaultTimeZone() {
+                    var currentDateClientSide = (new Date()).toString();
+                    var GTMStr = (currentDateClientSide.slice(currentDateClientSide.indexOf("GMT") + 4)).toString();
+                    var hourInMilisecond = GTMStr.substr(0, GTMStr.indexOf(' '));
+                    var hour = parseInt(hourInMilisecond) / 100;
+                    var finalGTMStr = "GMT" + (hour > 0 ? "+" : "") + hour;
 
-                            }
+                    timeZone[0].value = finalGTMStr;
+                    timeZone[0].selected = true;
+                }
+                bsCustomFileInput.init();
 
+                //Initialize Select2 Elements
+                $('.select2').select2()
+
+                //Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+            });
         </script>
     </body>
 </html>

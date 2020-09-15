@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ import javax.persistence.OneToMany;
 })
 public class Session implements Serializable {
 
-
+private static final long serialVersionUID = 1L;
     @Id
     private Long sessionId;
     @Column(nullable = false)
@@ -44,7 +45,7 @@ public class Session implements Serializable {
     private int maximumParticipant;
     private Date createdDate;
     private Date updatedDate;
-    @OneToMany(mappedBy = "sessionId")
+    @OneToMany(mappedBy = "sessionId", cascade = CascadeType.PERSIST)
     private List<SessionParticipant> sessionIds;
 
     public Session() {

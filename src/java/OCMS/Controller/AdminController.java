@@ -61,7 +61,7 @@ public class AdminController {
         Part image = tag.getImage();
         FacesContext context = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
-        String imageDir = File.separator + "images" + File.separator + "tags" + File.separator;
+        String imageDir = File.separator + "resource" + File.separator + "tags" + File.separator;
         File dir = new File(imageDir);
         if (!dir.exists()) {
             dir.mkdirs(); //create directory /images/tags if not exist
@@ -110,9 +110,9 @@ public class AdminController {
             tagsEJB.updateTag(tag);
         }
 
-        String baseUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        //String baseUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 
-        return baseUrl + "/admin/addTag.xhtml";
+        return "addTag";
     }
 
     @PostConstruct

@@ -4,16 +4,17 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/Users.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/WEB-INF/Templates/generalLayout.xhtml</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/author/profile.xhtml</file>
             <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/AccountController.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/register.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/LoginFilter.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/login.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/LoginServlet.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/AdminController.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/js/custom.js</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/resetpassword.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/admin/addtag.xhtml</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/EJB/PaperTagsEJB.java</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/Paper.java</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/author/paper/create.xhtml</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/author/managePapers.xhtml</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/EJB/UserTagsEJB.java</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/AuthorController.java</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/EJB/UserEJB.java</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/UserTags.java</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/EJB/PaperEJB.java</file>
         </group>
     </open-files>
 </project-private>

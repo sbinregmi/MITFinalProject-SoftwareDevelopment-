@@ -15,11 +15,14 @@ import javax.persistence.OneToOne;
 import OCMS.ModelData.Enum;
 import java.util.List;
 import javax.faces.view.facelets.Tag;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -27,27 +30,26 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findAllPaper", query = "select p from Paper p")
+    @NamedQuery(name = "findAllPaper", query = "select p from Paper p ORDER BY p.createdDate")
     ,
-    @NamedQuery(name = "findPaperByTitle", query = "select p from Paper p where p.paperTitle=:pTitle")
+    @NamedQuery(name = "findPaperByTitle", query = "select p from Paper p where p.paperTitle=:pTitle ORDER BY p.createdDate DESC")
     ,
     @NamedQuery(name = "findPaperById", query = "select p from Paper p where p.paperId=:pPaperId")
+   
     ,
-    @NamedQuery(name = "findPaperBytopic", query = "select p from Paper p where p.topic=:pTopic")
+    @NamedQuery(name = "findPaperByAuthorId", query = "select p from Paper p where p.authorId.id=:authorId ORDER BY p.createdDate DESC")
     ,
-    @NamedQuery(name = "findPaperByAuthorId", query = "select p from Paper p where p.authorId=:pAuthorId")
-    ,
-    @NamedQuery(name = "findPaperByTagsForUser", query = "select p from Paper p, Users u where u.id=:pId")
+    @NamedQuery(name = "numberOfPaperSubmittedByAuthor", query = "select p from Paper p where p.authorId.id=:authorId"),
+//select p, t.name from Paper  p LEFT JOIN PaperTags pt ON p.paperId = pt.paperId LEFT JOIN Tags t ON pt.tagId = t.id where p.authorId.id=:authorId
+    @NamedQuery(name = "findPaperByTagsForUser", query = "select p from Paper p, Users u where u.id=:pId ORDER BY p.createdDate DESC")
 })
 public class Paper implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
     @Id
-    private String paperId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long paperId;
     @Column(nullable = false)
     private String paperTitle;
-    @Column(nullable = false)
-    private Enum.PaperTopic topic;
     @Column(nullable = false)
     private String paperUrl;
     @Column(nullable = false)
@@ -57,31 +59,46 @@ public class Paper implements Serializable {
     @ManyToOne
     private Users authorId;
     private String publisher;
-    private String tags;
-    @OneToMany(mappedBy = "paperId")
+    @OneToMany(mappedBy = "paperId", cascade = CascadeType.PERSIST)
     private List<PaperTags> paperTags;
+    @Transient
+    private Part pdfFile;
+    @Transient
+    private List<Long> tagList;
 
     public Paper() {
     }
 
-    public Paper(String paperId, String paperTitle, Enum.PaperTopic topic, String paperUrl, Date createdDate, Date updatedDate, String paperAbstract, Users authorId, String publisher, String tags) {
+    public Paper(String paperTitle, String paperUrl, Date createdDate, Date updatedDate, String paperAbstract, Users authorId, String publisher) {
         this.paperId = paperId;
         this.paperTitle = paperTitle;
-        this.topic = topic;
         this.paperUrl = paperUrl;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.paperAbstract = paperAbstract;
         this.authorId = authorId;
         this.publisher = publisher;
-        this.tags = tags;
     }
 
-    public String getPaperId() {
+    public Paper(String paperTitle, String paperUrl, Date createdDate, Date updatedDate, String paperAbstract, Users authorId, String publisher, List<PaperTags> paperTags,List<Long> tagList) {
+        this.paperId = paperId;
+        this.paperTitle = paperTitle;
+        this.paperUrl = paperUrl;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+        this.paperAbstract = paperAbstract;
+        this.authorId = authorId;
+        this.publisher = publisher;
+        this.paperTags = paperTags;
+        this.tagList=tagList;
+    }
+    
+
+    public Long getPaperId() {
         return paperId;
     }
 
-    public void setPaperId(String paperId) {
+    public void setPaperId(Long paperId) {
         this.paperId = paperId;
     }
 
@@ -93,13 +110,7 @@ public class Paper implements Serializable {
         this.paperTitle = paperTitle;
     }
 
-    public Enum.PaperTopic getTopic() {
-        return topic;
-    }
-
-    public void setTopic(Enum.PaperTopic topic) {
-        this.topic = topic;
-    }
+   
 
     public String getPaperUrl() {
         return paperUrl;
@@ -149,17 +160,35 @@ public class Paper implements Serializable {
         this.publisher = publisher;
     }
 
-    public String getTags() {
-        return tags;
+
+    public List<PaperTags> getPaperTags() {
+        return paperTags;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setPaperTags(List<PaperTags> paperTags) {
+        this.paperTags = paperTags;
     }
+
+    public Part getPdfFile() {
+        return pdfFile;
+    }
+
+    public void setPdfFile(Part pdfFile) {
+        this.pdfFile = pdfFile;
+    }
+
+    public List<Long> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Long> tagList) {
+        this.tagList = tagList;
+    }
+    
 
     @Override
     public String toString() {
-        return "Paper{" + "paperId=" + paperId + ", paperTitle=" + paperTitle + ", topic=" + topic + ", paperUrl=" + paperUrl + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", paperAbstract=" + paperAbstract + ", authorId=" + authorId + ", publisher=" + publisher + ", tags=" + tags + '}';
+        return "Paper{" + "paperId=" + paperId + ", paperTitle=" + paperTitle + ", paperUrl=" + paperUrl + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", paperAbstract=" + paperAbstract + ", authorId=" + authorId + ", publisher=" + publisher + '}';
     }
 
 }

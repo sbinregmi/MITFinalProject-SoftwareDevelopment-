@@ -5,8 +5,13 @@
  */
 package OCMS.Controller;
 
+import OCMS.EJB.TagsEJB;
 import OCMS.EJB.UserEJB;
+import OCMS.EJB.UserTagsEJB;
+import OCMS.Entity.Tags;
+import OCMS.Entity.UserTags;
 import OCMS.Entity.Users;
+import static OCMS.Entity.Users_.userTags;
 import OCMS.ModelData.Enum.Role;
 import java.util.Date;
 import java.util.ArrayList;
@@ -36,12 +41,16 @@ public class AccountController {
 
     @EJB
     private UserEJB userEJB;
-
+    @EJB
+    private UserTagsEJB userTagsEJB;
+    @EJB
+    private TagsEJB tagsEJB;
     private Users user = new Users();
     private List<Users> userList = new ArrayList<Users>();
     private boolean isJustCreated = false;
     private boolean isProfileUpdated = false;
     private boolean isUserLoggedIn = false;
+    private boolean isUsernameOrEmailExists = false; //Used for password reset service
 
     // Public Methods    
     //Getters & Setters   
@@ -61,43 +70,141 @@ public class AccountController {
         this.isUserLoggedIn = isUserLoggedIn;
     }
 
+    public boolean getIsUsernameOrEmailExists() {
+        return this.isUsernameOrEmailExists;
+    }
+
+    public void setIsUsernameOrEmailExists(boolean isUsernameOrEmailExists) {
+        this.isUsernameOrEmailExists = isUsernameOrEmailExists;
+    }
+
+    //Create a new user
     public String createNewUser() {
         FacesContext context = FacesContext.getCurrentInstance();
-        user.setIsActive(true);
-        if (user.getRole().equals(Role.Participant)) {
-            user.setIsApproved(true);
-        } else {
-            user.setIsApproved(false);
-        }
-        
-        Date dateNow = new Date();
-        user.setCreatedDate(dateNow);
-        user = userEJB.createUser(user);
-        if(user!=null){
-            context.addMessage(null, new FacesMessage("User registration is succeessful."));
-        }
+        try {
+            Users isUserExist = userEJB.findUserByEmailOrUsername(user.getUserName());
+            if (isUserExist == null) {
+                user.setIsActive(true);
+                if (user.getRole().equals(Role.Participant)) {
+                    user.setIsApproved(true);
+                } else {
+                    user.setIsApproved(false);
+                }
+                Date dateNow = new Date();
+                user.setCreatedDate(dateNow);
+                user = userEJB.createUser(user);
+                if (user.getId() != null) {
+                    UserTags userTag = new UserTags();
+                    for (Long tag : user.getTagList()) {
+                        userTag = new UserTags();
+                        userTag.setUserId(user);
+                        userTag.setUserTagId(tagsEJB.findTagById(tag));
+                        userTag = userTagsEJB.createUserTag(userTag);
+                    }
+                    if (userTag != null) {
+                        user = new Users();
+                        context.addMessage("sucess", new FacesMessage("User registration is succeessful."));
+                    } else {
+                        for (UserTags uTag : userTagsEJB.findTagsByUserId(user.getId())) {
+                            userTagsEJB.removeUserTags(uTag);
+                        }
+                        userEJB.deleteUser(user);
+                    }
+                } else {
+                    context.addMessage("error", new FacesMessage("User registratiom is failed."));
+                }
+            } else {
+                context.addMessage("error", new FacesMessage("Username or email already exist."));
+            }
 
-        return "register.xhtml";
+            return "register";
+        } catch (Exception e) {
+            context.addMessage("error", new FacesMessage("Internal server error. Please try later." + e.getLocalizedMessage()));
+            return "register";
+        }
+    }
+
+    public String resetPassword() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            String newPassword = user.getPassword();
+            String userNameOrEmail = user.getUserName();
+            user = userEJB.findUserByEmailOrUsername(userNameOrEmail);
+            if (user != null) {
+                if (newPassword == null || newPassword.isEmpty()) {
+                    user = new Users();
+                    user.setUserName(userNameOrEmail);
+                    setIsUsernameOrEmailExists(true);
+                    context.addMessage("success", new FacesMessage("Username/Email found. Reset your password."));
+                    return "resetpassword";
+                } else {
+                    user.setPassword(newPassword);
+                    user = userEJB.updateUser(user);
+                    if (user != null) {
+                        context.addMessage("success", new FacesMessage("Password reset is successful."));
+                    } else {
+                        context.addMessage("error", new FacesMessage("Password reset is failed."));
+                    }
+                }
+            } else {
+                context.addMessage("error", new FacesMessage("Username or email does not exist."));
+            }
+            return "resetpassword";
+        } catch (Exception e) {
+            context.addMessage("success", new FacesMessage("Internal server error. Please try later."));
+            return "resetpassword";
+        }
     }
 
     //Update profile
     @PermitAll
-    public String updateProfile() {
-        isProfileUpdated = false;
+    public boolean updateProfile(Users user, UserEJB userEJB, UserTagsEJB userTagsEJB, TagsEJB tagsEJB) {
         Date dateNow = new Date();
         user.setUpdatedDate(dateNow);
+        boolean tagAlreadExist = false;
+        if (user.getTagList().size() == user.getUserTags().size()) {
+            for (Long tagId : user.getTagList()) {
+                tagAlreadExist = false;
+                for (UserTags userTag : user.getUserTags()) {
+                    if (tagId == userTag.getUserTagId().getId()) {
+                        tagAlreadExist = true;
+                        break;
+                    }
+                }
+                if (!tagAlreadExist) {
+                    break;
+                }
+            }
+        }
+
+        if (!tagAlreadExist) {
+            for (UserTags uTag : userTagsEJB.findTagsByUserId(user.getId())) {
+                userTagsEJB.removeUserTags(uTag);
+            }
+            List<UserTags> newUserTagList = new ArrayList<UserTags>();
+            for (Long tagId : user.getTagList()) {
+                UserTags userTag = new UserTags();
+                userTag.setUserId(user);
+                userTag.setUserTagId(tagsEJB.findTagById(tagId));
+                userTag = userTagsEJB.createUserTag(userTag);
+                if (userTag != null) {
+                    newUserTagList.add(userTag);
+                }
+            }
+            user.setUserTags(newUserTagList);
+        }
         user = userEJB.updateUser(user);
         if (user != null) {
-            isProfileUpdated = true;
+            return true;
+        } else {
+            return false;
         }
-        return "registration.xhtml";
     }
 
     @RolesAllowed("Administrator")
     public String approveUser() {
         user.setIsActive(true);
         user.setIsApproved(true);
-        user.setUserName(user.getEmail());
         Date dateNow = new Date();
         user.setCreatedDate(dateNow);
         user = userEJB.approveUser(user);
@@ -186,7 +293,7 @@ public class AccountController {
     //Return list of time zone
     public List<String> getListOfTimeZones() {
         String[] zoneIds = TimeZone.getAvailableIDs();
-        List<String>  timeZoneList = new ArrayList<String>();
+        List<String> timeZoneList = new ArrayList<String>();
         for (String zoneId : zoneIds) {
             TimeZone timeZone = TimeZone.getTimeZone(zoneId);
             long hours = TimeUnit.MILLISECONDS.toHours(timeZone.getRawOffset());
@@ -196,7 +303,7 @@ public class AccountController {
                 timeZoneList.add(String.format("GMT%d", hours));
             }
         }
-        timeZoneList=timeZoneList.stream().distinct().collect(Collectors.toList());
+        timeZoneList = timeZoneList.stream().distinct().collect(Collectors.toList());
         Collections.sort(timeZoneList);
         return timeZoneList;
     }

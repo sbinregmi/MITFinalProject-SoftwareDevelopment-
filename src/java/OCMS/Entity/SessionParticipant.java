@@ -29,7 +29,7 @@ public class SessionParticipant implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     
@@ -37,13 +37,15 @@ public class SessionParticipant implements Serializable {
     private Session sessionId;
     @ManyToOne
     private Users participantId;
+    private boolean isApproved;
 
     public SessionParticipant() {
     }
 
-    public SessionParticipant(Session sessionId, Users participantId) {
+    public SessionParticipant(Session sessionId, Users participantId, Boolean isApproved) {
         this.sessionId = sessionId;
         this.participantId = participantId;
+        this.isApproved=isApproved;
     }
 
     public Long getId() {
@@ -68,6 +70,14 @@ public class SessionParticipant implements Serializable {
 
     public void setParticipantId(Users participantId) {
         this.participantId = participantId;
+    }
+
+    public boolean isIsApproved() {
+        return isApproved;
+    }
+
+    public void setIsApproved(boolean isApproved) {
+        this.isApproved = isApproved;
     }
 
     @Override

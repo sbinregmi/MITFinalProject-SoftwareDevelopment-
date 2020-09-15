@@ -1,16 +1,195 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="/WEB-INF/Templates/authorLayout.xhtml"
+                >
+    <ui:define name="title">Profile</ui:define>
+    <ui:define name="customCSS">
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.css"></link>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2-bootstrap4.min.css"/>
+        <script src="${facesContext.externalContext.requestContextPath}/js/jquery-3.2.1.min.js"></script>
+    </ui:define>
+    <ui:define name="content">
+        <!-- Main content -->
+        <section class="content container">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <!-- About Me Box -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">About Me</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <strong><i class="fas fa-user mr-1"></i> Name</strong>
+
+                                <p class="text-muted">
+                                    #{authorController.user.firstName} #{authorController.user.lastName}
+                                </p>
+                                <hr/> 
+                                <strong><i class="fas fa-book mr-1"></i> Qualification</strong>
+
+                                <p class="text-muted">
+                                    #{authorController.user.qualification}
+                                </p>
+
+                                <hr/>
+
+                                <strong><i class="fas fa-envelope mr-1"></i> Email </strong>
+
+                                <p class="text-muted">#{authorController.user.email}</p>
+
+                                <hr/>
+
+                                <strong><i class="fas fa-phone mr-1"></i> Phone </strong>
+
+                                <p class="text-muted">
+                                    #{authorController.user.phoneNumber}
+                                </p>
+
+                                <hr/>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header p-2">
+                                <ul class="nav nav-pills">
+                                    <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
+                                </ul>
+                                <div class="form-group row">
+                                    <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
+                                </div>
+                            </div><!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="active tab-pane" id="settings">
+                                        <h:form a:method="POST" a:accept-charset="utf-8"  class="form-horizontal needs-validation" a:novalidate="">
+                                            <div class="form-group row">
+                                                <label for="inputName" class="col-sm-2 col-form-label">First Name</label>
+                                                <div class="col-sm-10">
+                                                    <h:inputText class="form-control" value="#{authorController.user.firstName}" a:placeholder="First Name" a:required="required"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputName" class="col-sm-2 col-form-label">Last Name</label>
+                                                <div class="col-sm-10">
+                                                    <h:inputText class="form-control" value="#{authorController.user.lastName}" a:placeholder="Last Name" a:required="required"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                                <div class="col-sm-10">
+                                                    <h:inputText a:type="email" class="form-control" value="#{authorController.user.email}" a:placeholder="Email" a:required="required"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputName2" class="col-sm-2 col-form-label">Qualification</label>
+                                                <div class="col-sm-10">
+                                                    <h:inputText class="form-control" value="#{authorController.user.qualification}" a:placeholder="Qualification"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputExperience" class="col-sm-2 col-form-label">Username</label>
+                                                <div class="col-sm-10">
+                                                    <h:inputText class="form-control" value="#{authorController.user.userName}" a:placeholder="Username" a:required="required"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputPhone" class="col-sm-2 col-form-label">Phone</label>
+                                                <div class="col-sm-10">
+                                                    <h:inputText class="form-control" value="#{authorController.user.phoneNumber}" a:placeholder="Phone"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputInterestGroup" class="col-sm-2 col-form-label">Interest Group</label>
+                                                <div class="col-sm-10">
+                                                    <h:selectManyListbox value="#{authorController.user.tagList}" class="select2bs4 form-control" a:multiple="multiple" a:data-placeholder="Choose the Topic"
+                                                                         style="width: 100%;" a:required="required">
+                                                        <c:forEach var="tag" items="#{homeController.getAllTags()}">
+                                                            <c:set var="selected" value="false" />
+                                                            <c:forEach var="userTag" items="#{authorController.user.userTags}">
+                                                                <c:if test="#{tag.id==userTag.userTagId.id}">
+                                                                    <f:selectItem a:selected="selected" itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
+                                                                    <c:set var="selected" value="true" />
+                                                                </c:if>
+                                                            </c:forEach>
+                                                            <c:if test="#{!selected}">
+                                                                <f:selectItem itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </h:selectManyListbox>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Country</label>
+                                                <div class="col-sm-10">
+                                                    <h:selectOneMenu value="#{authorController.user.country}" class="form-control custom-select mr-sm-2 timeZoneDropdownClass">
+                                                        <c:forEach var="country" items="#{accountController.getListOfCountries()}">
+                                                            <f:selectItem itemLabel="#{country}" itemValue="#{country}"/>
+                                                        </c:forEach>
+                                                    </h:selectOneMenu>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Time Zone</label>
+                                                <div class="col-sm-10">
+                                                    <h:selectOneMenu value="#{authorController.user.timeZone}" class="form-control custom-select mr-sm-2 timeZoneDropdownClass" a:required="required">
+                                                        <c:forEach var="timeZone" items="#{accountController.getListOfTimeZones()}">
+                                                            <f:selectItem itemLabel="#{timeZone}" itemValue="#{timeZone}"/>
+                                                        </c:forEach>
+                                                    </h:selectOneMenu>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="offset-sm-2 col-sm-10">
+                                                    <h:commandButton id="btnSubmit" value="Update" class="btn btn-danger" immediate="false" action="#{authorController.update()}"/>
+                                                </div>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                </div>
+
+                                <!-- /.tab-content -->
+                            </div><!-- /.card-body -->
+                        </div>
+                        <!-- /.nav-tabs-custom -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div><!--/. container-fluid -->
+        </section>
+    </ui:define>
+    <ui:define name="customScript">
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/popper.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script>
+            $(document).ready(function () {
+
+                bsCustomFileInput.init();
+
+                //Initialize Select2 Elements
+                $('.select2').select2()
+
+                //Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+            });
+        </script>
+    </ui:define>
+</ui:composition>

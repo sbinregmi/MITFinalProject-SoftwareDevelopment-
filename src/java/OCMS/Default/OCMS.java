@@ -20,11 +20,12 @@ import javax.persistence.Persistence;
  */
 public class OCMS {
     public static void main(String[] args) throws SQLException {
-//        Connection Conn = DriverManager.getConnection("jdbc:sqlserver://SBINREGMI:1433;user=sa;password=sbinregmi");
-//        Statement s = Conn.createStatement();
+        System.out.print("HEre is main");
+        Connection Conn = DriverManager.getConnection("jdbc:sqlserver://SBINREGMI:1433;user=sa;password=sbinregmi");
+        Statement s = Conn.createStatement();
 //        int Result = s.executeUpdate("CREATE DATABASE OCMSDB");
 //         EntityManagerFactory factory = Persistence.createEntityManagerFactory("OCMSPU"); //name of persistence unit here
 //    EntityManager entityManager = factory.createEntityManager();
-//        System.out.print(Result);
+      //  System.out.print(Result);
     }
 }

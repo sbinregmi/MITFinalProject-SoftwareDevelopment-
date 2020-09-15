@@ -3,14 +3,50 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-                template="/WEB-INF/Templates/backendLayout.xhtml"
+                template="/WEB-INF/Templates/authorLayout.xhtml"
                 >
     <ui:define name="title">Dashboard</ui:define>
-      <ui:define name="content">
-          <form action="#{authorController.authorProfile()}" method="post">
-            <h:commandButton value="Login" id="btnSubmit"/>
-        </form>
+    <ui:define name="content">
+        <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+                 <span class="info-box-icon bg-success elevation-1"><i class="fas fa fa-book"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Paper Submitted </span>
+                <span class="info-box-number">#{authorController.numberOfPaperSubmmited}</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
     </ui:define>
     <ui:define name="customScript">
-        </ui:define>
+        
+        <!-- AdminLTE App -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/dist/js/adminlte.min.js"></script>
+
+        <!-- OPTIONAL SCRIPTS -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/dist/js/demo.js"></script>
+
+        <!-- PAGE PLUGINS -->
+        <!-- jQuery Mapael -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/raphael/raphael.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery-mapael/jquery.mapael.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery-mapael/maps/usa_states.min.js"></script>
+        <!-- ChartJS -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/chart.js/Chart.min.js"></script>
+
+        <!-- PAGE SCRIPTS -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/dist/js/pages/dashboard2.js"></script>
+    </ui:define>
 </ui:composition>
