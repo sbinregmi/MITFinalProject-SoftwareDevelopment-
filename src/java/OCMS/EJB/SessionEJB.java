@@ -6,6 +6,7 @@
 package OCMS.EJB;
 
 import OCMS.Entity.Session;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -29,9 +30,16 @@ public class SessionEJB {
 
     //find all Session
     public List<Session> findAllSession() {
-        Query query = em.createNamedQuery("Session.findAllSession");
+        Query query = em.createNamedQuery("findAllSession");
         return query.getResultList();
     }
+    
+    //find upcomming session/conference
+    public List<Session> findUpcommingSession() {
+        Date currentDate=new Date();
+        return em.createNamedQuery("findUpcommingSession").setParameter("currentDateTime", currentDate).getResultList();
+    }
+
 
     //find session by session name
     public List<Session> findSessionByName(String name) {
@@ -39,7 +47,7 @@ public class SessionEJB {
     }
 
     //find session by Id
-    public Session findSessionById(String id) {
+    public Session findSessionById(Long id) {
         return em.find(Session.class, id);
     }
     

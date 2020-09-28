@@ -64,6 +64,46 @@ INSERT INTO [dbo].[PAPERTAGS]
 		   (2,3),
 		   (3,1)
 GO
+INSERT INTO [dbo].[SESSION]
+           ([COUNTRY]
+           ,[CREATEDDATE]
+           ,[ISSEATAVAILABLE]
+           ,[MAXIMUMPARTICIPANT]
+           ,[ORGANIZATION]
+           ,[SESSIONDATETIME]
+           ,[SESSIONNAME]
+           ,[TIMEZONE]
+           ,[UPDATEDDATE])
+     VALUES
+           ('Australia'
+           ,'2020-09-08'
+           ,1
+           ,10
+           ,'ABC'
+           ,'2020-10-20 23:05:48.907'
+           ,'Session 1'
+           ,'GMT10+'
+           ,null),
+
+		   ('Australia'
+           ,'2020-09-08'
+           ,1
+           ,10
+           ,'ABC'
+           ,'2020-10-20 23:05:48.907'
+           ,'Session 2'
+           ,'GMT10+'
+           ,null),
+		    ('Australia'
+           ,'2020-09-08'
+           ,1
+           ,10
+           ,'ABC'
+           ,'2020-08-20 23:05:48.907'
+           ,'Session 2'
+           ,'GMT10+'
+           ,null)
+GO
 DBCC CHECKIDENT (PAPERTAGS, reseed,6)
 GO
 DBCC CHECKIDENT (PAPER, reseed,4)
@@ -73,3 +113,5 @@ GO
 DBCC CHECKIDENT (TAGS, reseed,5)
 GO
 DBCC CHECKIDENT (TAGS, reseed,9)
+GO
+DBCC CHECKIDENT (SESSION, reseed,5)

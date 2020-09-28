@@ -5,6 +5,7 @@
  */
 package OCMS.Entity;
 
+import OCMS.ModelData.Enum;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,8 +23,8 @@ import javax.persistence.OneToOne;
 @Entity
 @NamedQueries({
     @NamedQuery(name="findAllSessionParticipant",query="select s from SessionParticipant s"),
-    @NamedQuery(name="findAllParticipantIdBySessionId", query="select s from SessionParticipant s where s.sessionId=:sSessionId")
-    
+    @NamedQuery(name="findAllParticipantIdBySessionId", query="select s from SessionParticipant s where s.sessionId=:sSessionId"),
+    @NamedQuery(name="findSessionParticipantBySessionId", query="select s from SessionParticipant s where s.participantId.id=:sParticipantId")
 })
 public class SessionParticipant implements Serializable {
 
@@ -35,17 +36,18 @@ public class SessionParticipant implements Serializable {
     
     @ManyToOne
     private Session sessionId;
+    Enum.Status status;
     @ManyToOne
     private Users participantId;
-    private boolean isApproved;
 
     public SessionParticipant() {
     }
 
-    public SessionParticipant(Session sessionId, Users participantId, Boolean isApproved) {
+    public SessionParticipant(Long id, Session sessionId, Enum.Status status, Users participantId) {
+        this.id = id;
         this.sessionId = sessionId;
+        this.status = status;
         this.participantId = participantId;
-        this.isApproved=isApproved;
     }
 
     public Long getId() {
@@ -72,13 +74,15 @@ public class SessionParticipant implements Serializable {
         this.participantId = participantId;
     }
 
-    public boolean isIsApproved() {
-        return isApproved;
+    public Enum.Status getStatus() {
+        return status;
     }
 
-    public void setIsApproved(boolean isApproved) {
-        this.isApproved = isApproved;
+    public void setStatus(Enum.Status status) {
+        this.status = status;
     }
+
+    
 
     @Override
     public String toString() {

@@ -10,9 +10,10 @@ package OCMS.ModelData;
  * @author SabinRegmi
  */
 public class Enum {
-    public enum PaperTopic{
-        AI,
-        NeuralSystem
+    public enum Status{
+        PENDING,
+        ACCEPTED,
+        REJECTED
     }
     public enum Role{
         Participant,

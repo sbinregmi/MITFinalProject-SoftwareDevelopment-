@@ -85,6 +85,12 @@ public class PaperEJB {
         return paper;
     }
     
+    //update a Users
+    public Paper updatePaper(Paper paper) {
+        Paper p=em.merge(paper);
+        System.out.println(ctx.getCallerPrincipal().getName());
+        return p;
+    }
      //delete a paper
     public void deletePaper(Paper paper) {
         paper=em.find(Paper.class, paper.getPaperId());
@@ -94,7 +100,7 @@ public class PaperEJB {
      //delete a paper by ID
     public void deletePaperById(Long paperId) {
         Paper paper=em.find(Paper.class, paperId);
-        em.remove(paper);
+         em.remove(paper);
         System.out.println(ctx.getCallerPrincipal().getName());
     }
 }

@@ -5,12 +5,13 @@
  */
 package OCMS.Entity;
 
+import OCMS.ModelData.Enum;
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -21,7 +22,8 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(name="findAllSessionPaper",query="select s from SessionPaper s"),
-    @NamedQuery(name="findAllPaperIdBySessionId", query="select s from SessionPaper s where s.sessionId=:sSessionId")
+    @NamedQuery(name="findAllPaperIdBySessionId", query="select s from SessionPaper s where s.sessionId=:sSessionId"),
+    @NamedQuery(name="findSessionPaperBySessionId", query="select s from SessionPaper s where s.sessionId.sessionId=:sSessionId")
     
 })
 public class SessionPaper implements Serializable {
@@ -29,17 +31,23 @@ private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+    Enum.Status status;
+    @ManyToOne
     private Session sessionId;
+    @ManyToOne
     private Paper paperId;
 
     public SessionPaper() {
     }
 
-    public SessionPaper(Session sessionId, Paper paperId) {
+    public SessionPaper(Long id, Enum.Status status, Session sessionId, Paper paperId) {
+        this.id = id;
+        this.status = status;
         this.sessionId = sessionId;
         this.paperId = paperId;
     }
+
+    
 
     public Long getId() {
         return id;
@@ -63,6 +71,14 @@ private static final long serialVersionUID = 1L;
 
     public void setPaperId(Paper paperId) {
         this.paperId = paperId;
+    }
+
+    public Enum.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Enum.Status status) {
+        this.status = status;
     }
 
     @Override

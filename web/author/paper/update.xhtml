@@ -3,32 +3,118 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 template="/WEB-INF/Templates/authorLayout.xhtml"
                 >
-    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="title">Update Paper</ui:define>
+    <ui:define name="customCSS">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.min.css" />
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2-bootstrap4.min.css"/>
+        <!-- Theme style -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+        <!-- DataTables -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
+    </ui:define>
     <ui:define name="content">
         <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                 <span class="info-box-icon bg-success elevation-1"><i class="fas fa fa-book"></i></span>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Please Update your Paper</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <h:form a:method="POST" a:accept-charset="utf-8" enctype="multipart/form-data"  class="form-horizontal needs-validation" a:novalidate="">
+                                <div class="card-body">
+                                    <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
+                                    <div class="form-group">
+                                        <label for="">Paper Title</label>
+                                        <h:inputText class="form-control" value="#{authorController.paper.paperTitle}" a:placeholder="Please write paper title" a:required="required"/>
+                                        <h:inputHidden value="#{authorController.paper.paperId}"/>
+                                    </div>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Paper Submitted </span>
-                <span class="info-box-number">#{authorController.numberOfPaperSubmmited}</span>
-              </div>
-              <!-- /.info-box-content -->
+                                    <div class="form-group">
+                                        <label>Paper Topic (Tags)</label>
+                                        <h:selectManyListbox value="#{authorController.paper.tagList}" class="select2bs4 form-control" a:multiple="multiple" a:data-placeholder="Choose the Topic" a:required="required">
+
+                                            <c:forEach var="tag" items="#{homeController.getAllTags()}">
+                                                <c:set scope="request" var="previouslySelected" value="false"/>
+                                                <c:forEach var="paperTag" items="#{authorController.paper.paperTags}">
+                                                    <c:if test="#{tag.id==paperTag.tagId.id}">
+                                                        <c:set scope="request" var="previouslySelected" value="true"/>
+                                                        <f:selectItem a:selected="selected" itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="#{!previouslySelected}">
+                                                    <f:selectItem itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
+                                                </c:if>
+                                            </c:forEach>
+                                        </h:selectManyListbox>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Publisher</label>
+                                        <h:inputText class="form-control" value="#{authorController.paper.publisher}" a:placeholder="Publisher" a:required="required"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">Upload Paper</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <h:inputFile value="#{authorController.paper.pdfFile}" class="custom-file-input" a:accept="application/pdf"/>
+                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                            </div> 
+                                        </div>
+                                        <c:if test="#{not empty authorController.paper.paperUrl}">
+                                                <a href="#{authorController.paper.paperUrl}" target="_blank">Paper Link</a>
+                                            </c:if>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Paper Abstract</label>
+                                        <h:inputTextarea class="form-control" value="#{authorController.paper.paperAbstract}" a:placeholder="Paper Abstract" a:required="required"/>
+                                    </div>
+
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <h:commandButton id="btnSubmit" value="Update" class="btn btn-info" immediate="false" action="#{authorController.updatePaper()}"/>
+                                </div>
+                            </h:form>
+                        </div>
+
+                    </div><!--end row-->
+
+                </div><!--/. container-fluid -->
             </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
+        </section>
     </ui:define>
     <ui:define name="customScript">
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                bsCustomFileInput.init();
+
+                //Initialize Select2 Elements
+                $('.select2').select2()
+
+                //Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+            });
+
+        </script>
+
+
     </ui:define>
 </ui:composition>

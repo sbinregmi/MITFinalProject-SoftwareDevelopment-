@@ -1,16 +1,218 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/WEB-INF/Templates/authorLayout.xhtml">
+    <ui:define name="title">Join Conference</ui:define>
+
+    <ui:define name="customCSS">
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.css"></link>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2-bootstrap4.min.css"/>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+        <!-- DataTables -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
+        <script src="${facesContext.externalContext.requestContextPath}/js/jquery-3.2.1.min.js"></script>
+    </ui:define>
+    <ui:define name="content">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Conference List</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/author/dashboard.xhtml">Home</a></li>
+                            <li class="breadcrumb-item active">Conference</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="card">
+              
+                <div class="card-body p-0">
+                    <table id="example1" class="table table-striped projects">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">
+                                    #
+                                </th>
+                                <th style="width: 20%">
+                                    Conference Name
+                                </th>
+                                <th style="width: 30%">
+                                    Paper Title 
+                                </th>
+                                <th>
+                                    Topic 
+                                </th>
+                                <th style="width: 8%" class="text-center">
+                                    Country
+                                </th>
+                                <th class="text-center">
+                                    Conference Date Time
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="conference" items="#{authorController.getConferenceList()}">
+                                <tr>
+                                    <td>
+                                        #
+                                    </td>
+                                    <td>
+                                        <a>
+                                            #{conference.sessionName}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <ul class="list-inline">
+                                            <c:forEach var="p" items="#{conference.sessionPapers}">
+                                                <li>#{p.paperId.paperTitle}</li>
+                                            </c:forEach>
+                                        </ul>
+                                    </td>
+                                    <td class="project_progress">
+                                        <small>
+                                            AI
+                                        </small>
+                                    </td>
+                                    <td class="project-state">
+                                        #{conference.country} 
+                                    </td>
+                                    <td class="project-state">
+                                        #{conference.sessionDateTime} 
+                                    </td>
+                                    <td class="project-actions text-right">
+                                        <c:set var="isRequested" value="#{false}"/>
+                                        <c:forEach var="sessionPaper" items="#{conference.sessionPapers}">
+                                            <c:if test="#{sessionPaper.paperId.authorId.id == authorController.user.id}">
+                                                <c:set var="isRequested" value="#{true}"/>
+                                                <c:if test="#{sessionPaper.status='0'}">
+                                                    <button type="button" class="btn btn-info btn-sm">
+                                                        <i class="fas fa fa-spinner"></i> Pending
+                                                    </button>
+                                                </c:if>
+                                                <c:if test="#{sessionPaper.status='1'}">
+                                                    <button type="button" class="btn btn-info btn-sm">
+                                                        <i class="fas fa fa fa-times-circle-o"></i> Rejected
+                                                    </button>
+                                                </c:if>
+                                                <c:if test="#{sessionPaper.status='2'}">
+                                                    <button type="button" class="btn btn-info btn-sm">
+                                                        <i class="fa fa-check-circle-o"></i> Accepted
+                                                    </button>
+                                                </c:if>
+                                            </c:if>
+                                        </c:forEach>
+                                        <c:if test="#{!isRequested}">
+                                            <button type="button" class="btn btn-info btn-sm popupSelectPaper" data-sessionid="#{conference.sessionId}" data-toggle="modal" data-target="#modal-request">
+                                                <i class="fas fa-plus-circle"></i>  Request to Join
+                                            </button>
+                                        </c:if>
+                                    </td>
+                                </tr>   
+                            </c:forEach>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+        </section>
+        <!-- /.content -->
+        <div class="modal fade" id="modal-request">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Request to Join a Conference</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#x2715;</span>
+                        </button>
+                    </div>
+                    <h:form a:method="Post">
+                        <div class="modal-body">
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Choose a Paper</label>
+                                    <h:inputHidden a:name="sessionIdSessionRequest" id="sessionIdSessionRequest"/>
+                                    <h:selectOneMenu a:name="paperIdSessionRequest" class="form-control" a:data-placeholder="Select a Paper" a:required="required">
+                                        <c:forEach var="paper" items="#{authorController.getSubmittedPaper()}">
+                                            <f:selectItem itemLabel="#{paper.paperTitle}" itemValue="#{paper.paperId}"/>
+                                        </c:forEach>
+                                    </h:selectOneMenu>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <h:commandButton class="btn btn-info" value="Submit Request" immediate="false" action="#{authorController.submitRequestForSession()}">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </ui:define>
+    <ui:define name="customScript">
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/umd/popper.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
+
+        <!-- DataTables -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                bsCustomFileInput.init();
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    "order": [[5, "desc"]],
+                    "paging": true,
+                    "searching": true,
+                });
+                //Initialize Select2 Elements
+                $('.select2').select2()
+
+                //Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+            });
+            $('.popupSelectPaper').on('click', function (e) {
+                var sessionId = $(this).data('sessionid');
+                console.log(sessionId)
+                document.getElementsByName('sessionIdSessionRequest')[0].value = sessionId;
+            });
+        </script>
+    </ui:define>
+</ui:composition>

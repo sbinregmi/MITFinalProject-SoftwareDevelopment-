@@ -65,4 +65,18 @@ public class PaperTagsEJB {
         em.createNamedQuery("removeTagsByPaperId").setParameter("paperId", paperId);
         System.out.println(ctx.getCallerPrincipal().getName());
     }
+    
+    public void remove(Long paperId) {
+        PaperTags paperTag=em.find(PaperTags.class, paperId);
+         em.remove(paperTag);
+        System.out.println(ctx.getCallerPrincipal().getName());
+    }
+    //delete a UserTags
+    public void removePaperTags(PaperTags paperTag) {
+        if (!em.contains(paperTag)) {
+            paperTag = em.merge(paperTag);
+        }
+        em.remove(paperTag);
+        System.out.println(ctx.getCallerPrincipal().getName());
+    }
 }

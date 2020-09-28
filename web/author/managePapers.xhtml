@@ -1,9 +1,25 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
-                template="/WEB-INF/Templates/authorLayout.xhtml"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/WEB-INF/Templates/authorLayout.xhtml">
+    <ui:define name="title">Manage Paper</ui:define>
 
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="customCSS">
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.css"></link>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2-bootstrap4.min.css"/>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+        <!-- DataTables -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
+        <script src="${facesContext.externalContext.requestContextPath}/js/jquery-3.2.1.min.js"></script>
+
+    </ui:define>
     <ui:define name="content">
 
         <!-- Main content -->
@@ -19,81 +35,251 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Paper Title</th>
-                                            <th>Paper Topic</th>
-                                            <th>Publisher</th>
-                                            <th>Date of Submission</th>
-                                            <th>Submitted Paper</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="paper" items="#{authorController.getSubmittedPaper()}">
+                                <h:form a:name="paperListForm" a:method="Post">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
                                             <tr>
-                                                <td>#{paper.paperTitle}</td>
-                                                <td><c:forEach var="tag" items="#{paper.paperTags}">
-                                                        #{tag.tagId.name}<br/>
-                                                    </c:forEach></td>
-                                                <td>#{paper.publisher}</td>
-                                                <td> #{authorController.formaterForDate.format(paper.createdDate)}</td>
-                                                <td><a href="#{paper.paperUrl}" target="_blank">Paper Link</a></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-view">
-                                                        <i class="fas fa-eye"></i> 
-                                                    </button>
-
-                                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-
-                                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirm-delete"
-                                                            data-record-id="#{paper.paperId}" data-record-title="#{paper.paperTitle}">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
-                                                </td>
+                                                <th>Paper Title</th>
+                                                <th>Paper Topic</th>
+                                                <th>Publisher</th>
+                                                <th>Date of Submission</th>
+                                                <th>Submitted Paper</th>
+                                                <th>Actions</th>
                                             </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="paper" items="#{authorController.getSubmittedPaper()}">
+                                                <tr>
+                                                    <h:inputHidden value="#{paper.paperId}"/>
+                                                    <td>#{paper.paperTitle}</td>
+                                                    <td>
+                                                        <c:set var="i" value="#{0}"></c:set>
+                                                        <c:forEach var="tag" items="#{paper.paperTags}">
+                                                            #{tag.tagId.name}
+                                                            <c:set var="i" value="#{i+1}"></c:set>
+                                                            <c:if test="#{i !=paper.paperTags.size()}">
+                                                                ,
+                                                            </c:if><br/>
+                                                        </c:forEach></td>
+                                                    <td>#{paper.publisher}</td>
+                                                    <td> #{authorController.formaterForDate.format(paper.createdDate)}</td>
+                                                    <td>
+                                                        <c:if test="#{not empty paper.paperUrl}">
+                                                            <a href="#{paper.paperUrl}" target="_blank">Paper Link</a>
+                                                        </c:if>
+                                                        <c:if test="#{empty paper.paperUrl}">
+                                                            -
+                                                        </c:if>
+                                                    </td>
+                                                    <td>
+<!--                                                        <button type="button" class="btn btn-primary btn-sm popupViewModal" data-id="#{paper.paperId}" data-toggle="modal" data-target="#modal-view">
+
+                                                            <i class="fas fa-eye"></i> 
+                                                        </button>-->
+                                                            <h:commandLink class="btn btn-primary btn-sm popupViewModal"  action="#{authorController.paperDetail}" >
+                                                                <f:param name="id" value="#{paper.paperId}" />
+                                                                <!--                                                                <f:ajax render=":paperDetailForm @form" />
+                                                                a:data-id="#{paper.paperId}" a:data-toggle="modal" a:data-target="#modal-view"-->
+                                                                <i class="fas fa-eye"></i> 
+                                                            </h:commandLink>&#160;
+                                                            <h:commandLink class="btn btn-warning btn-sm popupEditModal"  action="#{authorController.paperEdit}">
+                                                                <f:param name="id" value="#{paper.paperId}" />
+<!--                                                                 a:data-id="#{paper.paperId}" a:data-toggle="modal" a:data-target="#modal-edit"
+                                                                <f:ajax render=":paperEditForm @form" />-->
+                                                                <i class="fas fa-edit"></i>
+                                                            </h:commandLink>
+<!--                                                        <button type="button" class="btn btn-warning btn-sm popupEditModal"  data-id="#{paper.paperId}" data-toggle="modal" data-target="#modal-edit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>-->
+
+                                                        <button type="button"  class="btn btn-danger btn-sm popupDeleteModal" data-id="#{paper.paperId}" data-toggle="modal" data-target="#modal-delete">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </h:form>
                             </div>
                             <!-- /.card-body -->
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+
+
+
+            <div class="modal fade" id="modal-edit" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-
+                            <h4 class="modal-title">Update your Paper</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&#x2715;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
-                            <p>You are about to delete <b>"<i class="title"></i>"</b> paper, this procedure is irreversible.</p>
-                            <p>Do you want to proceed?</p>
+                            <h:form id="paperEditForm" a:method="POST" a:accept-charset="utf-8" enctype="multipart/form-data"  class="form-horizontal needs-validation" a:novalidate="">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="">Paper Title</label>
+                                        <h:inputText class="form-control" value="#{authorController.paper.paperTitle}" a:placeholder="Please write paper title" a:required="required"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Paper Topic (Tags)</label>
+                                        <h:selectManyListbox value="#{authorController.paper.tagList}" class="select2bs4 form-control" a:multiple="multiple" a:data-placeholder="Choose the Topic" a:required="required">
+
+                                            <c:forEach var="tag" items="#{homeController.getAllTags()}">
+                                                <c:set scope="request" var="previouslySelected" value="false"/>
+                                                <c:forEach var="paperTag" items="#{authorController.paper.paperTags}">
+                                                    <c:if test="#{tag.id==paperTag.tagId.id}">
+                                                        <c:set scope="request" var="previouslySelected" value="true"/>
+                                                        <f:selectItem a:selected="selected" itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="#{!previouslySelected}">
+                                                    <f:selectItem itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
+                                                </c:if>
+                                            </c:forEach>
+                                        </h:selectManyListbox>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Publisher</label>
+                                        <h:inputText class="form-control" value="#{authorController.paper.publisher}" a:placeholder="Publisher" a:required="required"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">Upload Paper</label>
+
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <h:inputFile value="#{authorController.paper.pdfFile}" class="custom-file-input" a:accept="application/pdf" a:required="required"/>
+                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                            </div>
+                                        </div>
+                                        <c:if test="#{not empty authorController.paper.paperUrl}">
+                                            <a href="#{authorController.paper.paperUrl}" target="_blank">Paper Link</a>
+                                        </c:if>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Paper Abstract</label>
+                                        <h:inputTextarea class="form-control" value="#{authorController.paper.paperAbstract}" a:placeholder="Paper Abstract" a:required="required"/>
+                                    </div>
+
+                                </div>
+                                <!-- /.card-body -->
+                            </h:form>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-danger btn-ok">Delete</button>
+                            <button type="submit" class="btn btn-info">Update</button>
                         </div>
                     </div>
+                    <!-- /.modal-content -->
                 </div>
+                <!-- /.modal-dialog -->
             </div>
+            <!-- /.modal -->
+
+            <div class="modal fade" id="modal-view">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Details of your Paper</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&#x2715;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h:form id="paperDetailForm">
+                                <div class="col-md-12 mb-12">
+                                    <label for="">Paper Title: </label>
+                                    #{authorController.paper.paperTitle}
+
+                                </div>
+                                <div class="col-md-12 mb-12">
+                                    <label for="">Paper Topic: </label>
+                                    <c:forEach var="tag" items="#{authorController.paper.paperTags}">
+                                        #{tag.tagId.name}<br/>
+                                    </c:forEach>
+                                </div>
+                                <div class="col-md-12 mb-12">
+                                    <label for="">Publisher: </label>
+                                    #{authorController.paper.publisher}
+                                </div>
+                                <div class="col-md-12 mb-12">
+                                    <label for="">Submitted Paper: </label>
+                                    <c:if test="#{not empty authorController.paper.paperUrl}">
+                                        <a href="#{authorController.paper.paperUrl}" target="_blank">Paper Link</a>
+                                    </c:if>
+                                </div>
+                                <div class="col-md-12 mb-12">
+                                    <label for="">Paper Abstract: </label>
+                                    #{authorController.paper.paperAbstract}
+                                </div>
+                            </h:form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+
+
+            <div class="modal fade" id="modal-delete">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete Your Paper</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&#x2715;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h4>Do you want to delete your Paper?</h4>
+                            <h6>You won't be able to revert this!</h6>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <h:form a:method="POST" a:accept-charset="utf-8">
+                                <h:inputHidden a:name="paperIdToBeDelete" id="paperIdToBeDelete"></h:inputHidden>
+                                <h:commandButton id="confirm-delete" class="btn btn-danger" value="Yes, Delete" immediate="false" action="#{authorController.deletePaper()}">
+                                </h:commandButton>
+                            </h:form>
+
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
         </section>
     </ui:define>
     <ui:define name="customScript">
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/umd/popper.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
+
         <!-- DataTables -->
         <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables/jquery.dataTables.min.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-        <script>
+
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script type="text/javascript">
             $(function () {
 
 
@@ -101,6 +287,8 @@
                     "responsive": true,
                     "autoWidth": false,
                     "order": [[3, "desc"]],
+                    "paging": true,
+                    "searching": true,
                 });
                 $('#example2').DataTable({
                     "paging": true,
@@ -112,41 +300,29 @@
                     "responsive": true,
                 });
             });
-
-            //Delete modal
-            $('#confirm-delete').on('click', '.btn-ok', function (e) {
-                var $modalDiv = $(e.delegateTarget);
-                var id = $(this).data('recordId');
-                // $.ajax({url: '/api/record/' + id, type: 'DELETE'})
-                // $.post('/api/record/' + id).then()
-                $.ajax({
-			type : "POST",
-			contentType : "application/json",
-			url : "OCMS/author/deletePaper",
-			data : id,
-			timeout : 100000,
-			success : function(data) {
-				console.log("SUCCESS: ", data);
-				display(data);
-			},
-			error : function(e) {
-				console.log("ERROR: ", e);
-				display(e);
-			},
-			done : function(e) {
-				console.log("DONE");
-				enableSearchButton(true);
-			}
-		});
-                $modalDiv.addClass('loading');
-                setTimeout(function () {
-                    $modalDiv.modal('hide').removeClass('loading');
-                }, 1000)
+            $('.popupDeleteModal').on('click', function (e) {
+                var paperId = $(this).data('id');
+                document.getElementsByName('paperIdToBeDelete')[0].value = paperId;
             });
-            $('#confirm-delete').on('show.bs.modal', function (e) {
-                var data = $(e.relatedTarget).data();
-                $('.title', this).text(data.recordTitle);
-                $('.btn-ok', this).data('recordId', data.recordId);
+
+            $('#modal-edit').on('show.bs.modal', function (e) {
+
+                bsCustomFileInput.init();
+                $('select:not(.normal)').each(function () {
+                    $(this).select2({
+                        dropdownParent: $(this).parent().parent()
+                    });
+                });
+                //Initialize Select2 Elements
+                $('.select').select2()
+//Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+//                $('.select2bs4').select2({
+//                    dropdownParent: $('#modal-edit')
+//                });
+
             });
         </script>
     </ui:define>
