@@ -44,7 +44,7 @@ and open the template in the editor.
                     </li>
                 </ul>
 
-                <!-- SEARCH FORM -->
+<!--                 SEARCH FORM 
                 <form class="form-inline ml-3">
                     <div class="input-group input-group-sm">
                         <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search"/>
@@ -54,7 +54,7 @@ and open the template in the editor.
                                 </button>
                             </div>
                     </div>
-                </form>
+                </form>-->
             </nav>
             <!-- /.navbar -->
 
@@ -75,7 +75,7 @@ and open the template in the editor.
                             <img src="${facesContext.externalContext.requestContextPath}/backendResources/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"/>
                         </div>
                         <div class="info">
-                            <a href="#" class="d-block">#{authorController.user.firstName} #{authorController.user.lastName} </a>
+                            <a href="${facesContext.externalContext.requestContextPath}/author/profile.xhtml" class="d-block">#{authorController.user.firstName} #{authorController.user.lastName} </a>
                         </div>
                     </div>
 
@@ -101,7 +101,7 @@ and open the template in the editor.
                             </li>
 
                             <li class="nav-item">
-                                <a href="join_conference.html" class="nav-link">
+                                <a href="${facesContext.externalContext.requestContextPath}/author/joinConference.xhtml" class="nav-link">
                                     <i class="nav-icon fa fa-users" aria-hidden="true"></i>
                                     <p>
                                         Join a Conference   
@@ -152,7 +152,7 @@ and open the template in the editor.
 
             <!-- Main Footer -->
             <footer class="main-footer">
-                <strong>Copyright &amp;copy; 2020 <a href="">Easy Conference </a>.</strong>
+                <strong>Copyright &#169; 2020 <a href="">Easy Conference </a>.</strong>
                 All rights reserved.
                 <div class="float-right d-none d-sm-inline-block">
                     <b>Version</b> 1.0.0
@@ -168,7 +168,7 @@ and open the template in the editor.
         <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- overlayScrollbars -->
         <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-
+<ui:insert name="customScript"></ui:insert>
     </h:body>
-    <ui:insert name="customScript"></ui:insert>
+    
 </html>

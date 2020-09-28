@@ -65,6 +65,8 @@ private static final long serialVersionUID = 1L;
     private Part pdfFile;
     @Transient
     private List<Long> tagList;
+    @OneToMany(mappedBy = "paperId")
+    private List<SessionPaper> sessionPapers;
 
     public Paper() {
     }

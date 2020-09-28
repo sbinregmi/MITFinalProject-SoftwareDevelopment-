@@ -12,6 +12,8 @@ import java.util.TimeZone;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -24,19 +26,20 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries({
     @NamedQuery(name="findAllSession",query="select s from Session s"),
+    @NamedQuery(name="findUpcommingSession",query="select s from Session s where s.sessionDateTime>:currentDateTime"),
     @NamedQuery(name="findSessionByName", query="select s from Session s where s.sessionName=:sSessionName"),
     @NamedQuery(name="findSessionByTimeZone", query="select s from Session s where s.timeZone=:sTimeZone"),
     @NamedQuery(name="findSessionById", query="select s from Session s where s.sessionId=:sSessionId")
     
 })
 public class Session implements Serializable {
-
 private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sessionId;
     @Column(nullable = false)
     private String sessionName;
-    private TimeZone timeZone;
+    private String timeZone;
     @Column(nullable = false)
     private Date sessionDateTime;
     private String organization;
@@ -45,13 +48,15 @@ private static final long serialVersionUID = 1L;
     private int maximumParticipant;
     private Date createdDate;
     private Date updatedDate;
-    @OneToMany(mappedBy = "sessionId", cascade = CascadeType.PERSIST)
-    private List<SessionParticipant> sessionIds;
+    @OneToMany(mappedBy = "sessionId")
+    private List<SessionPaper> sessionPapers;
+    @OneToMany(mappedBy = "sessionId")
+    private List<SessionParticipant> sessionParticipants;
 
     public Session() {
     }
 
-    public Session(Long sessionId, String sessionName, TimeZone timeZone, Date sessionDateTime, String organization, String country, boolean isSeatAvailable, int maximumParticipant, Date createdDate, Date updatedDate) {
+    public Session(Long sessionId, String sessionName, String timeZone, Date sessionDateTime, String organization, String country, boolean isSeatAvailable, int maximumParticipant, Date createdDate, Date updatedDate) {
         this.sessionId = sessionId;
         this.sessionName = sessionName;
         this.timeZone = timeZone;
@@ -63,6 +68,22 @@ private static final long serialVersionUID = 1L;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
     }
+
+    public Session(Long sessionId, String sessionName, String timeZone, Date sessionDateTime, String organization, String country, boolean isSeatAvailable, int maximumParticipant, Date createdDate, Date updatedDate, List<SessionPaper> sessionPapers, List<SessionParticipant> sessionParticipants) {
+        this.sessionId = sessionId;
+        this.sessionName = sessionName;
+        this.timeZone = timeZone;
+        this.sessionDateTime = sessionDateTime;
+        this.organization = organization;
+        this.country = country;
+        this.isSeatAvailable = isSeatAvailable;
+        this.maximumParticipant = maximumParticipant;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+        this.sessionPapers = sessionPapers;
+        this.sessionParticipants = sessionParticipants;
+    }
+    
 
     public Long getSessionId() {
         return sessionId;
@@ -80,11 +101,11 @@ private static final long serialVersionUID = 1L;
         this.sessionName = sessionName;
     }
 
-    public TimeZone getTimeZone() {
+    public String getTimeZone() {
         return timeZone;
     }
 
-    public void setTimeZone(TimeZone timeZone) {
+    public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
     }
 
@@ -142,6 +163,22 @@ private static final long serialVersionUID = 1L;
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public List<SessionPaper> getSessionPapers() {
+        return sessionPapers;
+    }
+
+    public void setSessionPapers(List<SessionPaper> sessionPapers) {
+        this.sessionPapers = sessionPapers;
+    }
+
+    public List<SessionParticipant> getSessionParticipants() {
+        return sessionParticipants;
+    }
+
+    public void setSessionParticipants(List<SessionParticipant> sessionParticipants) {
+        this.sessionParticipants = sessionParticipants;
     }
 
     @Override

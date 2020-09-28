@@ -3,32 +3,82 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 template="/WEB-INF/Templates/authorLayout.xhtml"
                 >
-    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="title">View Paper</ui:define>
+    <ui:define name="customCSS">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.min.css" />
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2-bootstrap4.min.css"/>
+        <!-- Theme style -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+    </ui:define>
     <ui:define name="content">
         <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                 <span class="info-box-icon bg-success elevation-1"><i class="fas fa fa-book"></i></span>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Paper Detail</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="">Paper Title</label>
+                                    #{authorController.paper.paperTitle}
+                                </div>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Paper Submitted </span>
-                <span class="info-box-number">#{authorController.numberOfPaperSubmmited}</span>
-              </div>
-              <!-- /.info-box-content -->
+                                <div class="form-group">
+                                    <label>Paper Topic (Tags)</label>
+                                    <c:set var="i" value="#{0}"></c:set>
+                                    <c:forEach var="paperTag" items="#{authorController.paper.paperTags}">
+                                        #{paperTag.tagId.name}
+                                         <c:set var="i" value="#{i+1}"></c:set>
+                                         <c:if test="#{i !=authorController.paper.paperTags.size()}">
+                                         ,
+                                         </c:if>
+                                    </c:forEach>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">Publisher</label>
+                                    #{authorController.paper.publisher}
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Paper URL</label>
+                                    <div class="input-group">
+                                        <c:if test="#{not empty authorController.paper.paperUrl}">
+                                            <a href="#{authorController.paper.paperUrl}" target="_blank">Paper Link</a>
+                                        </c:if>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">Paper Abstract</label>
+                                    #{authorController.paper.paperAbstract}
+                                </div>
+
+                            </div>
+                            <!-- /.card-body -->
+
+
+                        </div>
+
+                    </div><!--end row-->
+
+                </div><!--/. container-fluid -->
             </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
+        </section>
     </ui:define>
     <ui:define name="customScript">
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
+
+
+
     </ui:define>
 </ui:composition>
