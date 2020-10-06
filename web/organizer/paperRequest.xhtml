@@ -1,0 +1,243 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="/WEB-INF/Templates/organizerLayout.xhtml"
+                >
+    <ui:define name="title">Paper Request</ui:define>
+    <ui:define name="customCSS">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+    </ui:define>
+    <ui:define name="content">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Paper Request</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/organizer/dashboard.xhtml">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/organizer/manageConferece.xhtml">Manage Conference</a></li>
+                            <li class="breadcrumb-item active">Paper Request</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <c:set var="sessionId" value="#{request.getParameter('id')}"/>
+        <c:if test="#{sessionId ==null || sessionId.isEmpty()}">
+            <c:set var="sessionId" value="#{organizerController.sessionId}"/>
+        </c:if>
+        <c:set var="session" value=""/>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-header">
+                                <h3 class="card-title">Lists of Paper request for conference: </h3>
+                            </div>
+                            <div class=" col-md-6 mb-3">
+                                <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
+                            </div>
+                            <c:if test="#{sessionId!=null}">
+                                <c:set var="session" value="#{organizerController.getConferenceById(sessionId)}"></c:set>
+                                <div class="row card-header">
+
+                                    <div class=" col-md-6 mb-3">
+                                        <label>Conference Name: &#160;&#160;</label>#{session.sessionName}
+                                    </div>
+                                    <div class=" col-md-6 mb-3">
+                                        <label>Time zone: &#160;&#160;</label>#{session.timeZone}
+                                    </div>
+                                    <div class=" col-md-6 mb-3">
+                                        <label>Conference Date: &#160;&#160;</label>#{session.sessionDateTime}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Approved Papers: </label>
+                                        <ul class="list-inline">
+                                            <c:set var="paperNum" value="#{1}"></c:set>
+                                            <c:forEach var="paper" items="#{session.sessionPapers}">
+                                                <c:if test="#{paper.status=='ACCEPTED'}">
+                                                    <li>#{paperNum}.&#160;<a href="#{paper.paperId.paperUrl}">#{paper.paperId.paperTitle}</a></li>
+                                                    <c:set var="paperNum" value="#{paperNum+1}"></c:set>
+                                                </c:if>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Paper Title</th>
+                                                <th>Paper Topic</th>
+                                                <th>Author Name</th>
+                                                <th>Author Email</th>
+                                                <th>Author Affiliation</th>
+                                                <th>Paper Create Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="paper" items="#{session.sessionPapers}">
+                                                <c:if test="#{paper.status=='PENDING'}">
+                                                    <tr>
+                                                        <td>#{paper.paperId.paperTitle}
+                                                        </td>
+                                                        <td>
+                                                            <c:set var="i" value="#{0}"></c:set>
+                                                            <c:forEach var="tag" items="#{paper.paperId.paperTags}">
+                                                                #{tag.tagId.name}
+                                                                <c:set var="i" value="#{i+1}"></c:set>
+                                                                <c:if test="#{i !=paper.paperId.paperTags.size()}">
+                                                                    ,&#160;
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </td>
+                                                        <td>#{paper.paperId.authorId.firstName}&#160;#{paper.paperId.authorId.lastName}</td>
+                                                        <td>#{paper.paperId.authorId.email}</td>
+                                                        <td>#{paper.paperId.authorId.qualification}</td>
+                                                        <td>#{authorController.formaterForDate.format(paper.paperId.authorId.createdDate)}</td>
+                                                        <td>
+                                                            <button type="button"  class="btn btn-success btn-sm popupAcceptPaperModal" data-sessionname="#{session.sessionName}" data-papertitle="#{paper.paperId.paperTitle}"
+                                                                    data-sessionpaperid="#{paper.id}" data-toggle="modal" data-target="#modal-acceptpaper">
+                                                                <i class="fas fa-check-circle"></i>
+                                                            </button>
+                                                            <button type="button"  class="btn btn-danger btn-sm popupRejectPaperModal" data-sessionname="#{session.sessionName}" data-papertitle="#{paper.paperId.paperTitle}"
+                                                                    data-sessionpaperid="#{paper.id}" data-toggle="modal" data-target="#modal-rejectpaper">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </c:if>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </c:if>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <div class="modal fade" id="modal-acceptpaper">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Accept paper for Conference</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#x2715;</span>
+                        </button>
+                    </div>
+                    <h:form a:method="Post">
+                        <div class="modal-body">
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    Do you want to accept paper "<span id="paperTitleAcceptId"></span>" for conference "<span id="sessionNameAcceptId"></span>"?
+                                    <h:inputHidden a:name="sessionPaperIdToAccept" id="sessionPaperIdToAccept"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <h:commandButton class="btn btn-info" value="Accept" immediate="false" action="#{organizerController.submitAcceptPaperForSession()}">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <div class="modal fade" id="modal-rejectpaper">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Reject paper for Conference</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#x2715;</span>
+                        </button>
+                    </div>
+                    <h:form a:method="Post">
+                        <div class="modal-body">
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    Do you want to reject paper "<span id="paperTitleRejectId"></span>" for conference "<span id="sessionNameRejectId"></span>"?
+                                    <h:inputHidden a:name="sessionPaperIdToReject" id="sessionPaperIdToReject"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <h:commandButton class="btn btn-danger" value="Reject" immediate="false" action="#{organizerController.submitRejectPaperForSession()}">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </ui:define>
+    <ui:define name="customScript">
+        <!-- jQuery -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/dist/js/adminlte.js"></script>
+        <!-- DataTables -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- PAGE SCRIPTS -->
+        <!-- OPTIONAL SCRIPTS -->
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    "order": [[2, "desc"]],
+                    "paging": true,
+                    "searching": true,
+                });
+                $('.popupAcceptPaperModal').on('click', function (e) {
+                    var sessionPaperId = $(this).data('sessionpaperid');
+                    var paperTitle = $(this).data('papertitle');
+                    var sessionName = $(this).data('sessionname');
+                    document.getElementById('paperTitleAcceptId').textContent = paperTitle;
+                    document.getElementById('sessionNameAcceptId').textContent = sessionName;
+                    document.getElementsByName('sessionPaperIdToAccept')[0].value = sessionPaperId;
+                });
+                $('.popupRejectPaperModal').on('click', function (e) {
+                    var sessionPaperId = $(this).data('sessionpaperid');
+                    var paperTitle = $(this).data('papertitle');
+                    var sessionName = $(this).data('sessionname');
+                    document.getElementById('paperTitleRejectId').textContent = paperTitle;
+                    document.getElementById('sessionNameRejectId').textContent = sessionName;
+                    document.getElementsByName('sessionPaperIdToReject')[0].value = sessionPaperId;
+                });
+            });
+        </script>
+    </ui:define>
+</ui:composition>

@@ -8,6 +8,8 @@ package OCMS.Entity;
 import OCMS.ModelData.Enum;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,8 +24,10 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(name="findAllSessionPaper",query="select s from SessionPaper s"),
-    @NamedQuery(name="findAllPaperIdBySessionId", query="select s from SessionPaper s where s.sessionId=:sSessionId"),
-    @NamedQuery(name="findSessionPaperBySessionId", query="select s from SessionPaper s where s.sessionId.sessionId=:sSessionId")
+    @NamedQuery(name="countAllSessionPaper",query="select COUNT(s) from SessionPaper s"),
+    @NamedQuery(name="findAllPaperIdBySessionId", query="select s from SessionPaper s where s.sessionId=:sessionId"),
+    @NamedQuery(name="findSessionPaperByPaperId", query="select s from SessionPaper s where s.paperId=:paperId"),
+    @NamedQuery(name="findSessionPaperBySessionId", query="select s from SessionPaper s where s.sessionId=:sessionId")
     
 })
 public class SessionPaper implements Serializable {
@@ -31,6 +35,7 @@ private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     Enum.Status status;
     @ManyToOne
     private Session sessionId;

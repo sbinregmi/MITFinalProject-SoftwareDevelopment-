@@ -3,11 +3,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 template="/WEB-INF/Templates/generalLayout.xhtml"
-                    
+
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:define name="title">Home</ui:define>
     <ui:define name="customCSS">
-        
+
         <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/main_styles.css" />
         <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/responsive.css" />  
     </ui:define>
@@ -16,23 +16,28 @@
     </ui:define>
     <ui:define name="banner">
         <div class="home_content_container">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<div class="home_content">
-							<div class="home_date">September 23rd, 2020</div>
-							<div class="home_title">2020 Artificial Intelligence Conference</div>
-							<div class="home_location">Melbourne, Australia</div>
-							<div class="home_text">Donec quis metus ac arcu luctus accumsan. Nunc in justo tincidunt, sodales nunc id, finibus nibh. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
-							<div class="home_buttons">
-								<div class="button home_button"><a href="#">Join the Conference </a></div>
-								<div class="button home_button"><a href="#">Find out more</a></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="home_content">
+                            <c:set var="homeBannerCounter" value="#{1}"></c:set>
+                            <c:forEach var="conference" items="#{homeController.getUpcomingTwoConferenceList()}">
+                                <c:if test="#{homeBannerCounter lt 2}">
+                                    <div class="home_date">#{homeController.formaterForDateMMMMddYYYY.format(conference.sessionDateTime)}</div>
+                                    <div class="home_title">#{conference.sessionName}</div>
+                                    <div class="home_text">#{conference.description}</div>
+                                    <div class="home_buttons">
+                                        <div class="button home_button"><a href="${facesContext.externalContext.requestContextPath}/login.xhtml">Join the Conference </a></div>
+                                        <div class="button home_button"><a href="${facesContext.externalContext.requestContextPath}/conference.xhtml#conference-#{conference.sessionId}">Find out more</a></div>
+                                    </div>
+                                </c:if>
+                                <c:set var="homeBannerCounter" value="#{2}"></c:set>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </ui:define>
     <ui:define name="content">
 
@@ -41,65 +46,65 @@
         <div class="intro">
             <div class="intro_content d-flex flex-row flex-wrap align-items-start justify-content-between">
                 <c:forEach var="tag" items="#{homeController.getAllTags()}">
-                     <!-- Intro Item -->
-                <div class="intro_item">
-                    <c:if test="#{not empty tag.url}">
-                       <div class="intro_image">
-                           <img src="${facesContext.externalContext.requestContextPath}#{tag.url.replace('\\', '/')}" alt="" />
-                       </div>
-                    </c:if>
-                    <div class="intro_body">
-                        <div class="intro_title"><a href="#">#{tag.name} </a></div>
-                        <div class="intro_subtitle">#{tag.description}</div>
+                    <!-- Intro Item -->
+                    <div class="intro_item">
+                        <c:if test="#{not empty tag.url}">
+                            <div class="intro_image">
+                                <img src="${facesContext.externalContext.requestContextPath}#{tag.url.replace('\\', '/')}" alt="" />
+                            </div>
+                        </c:if>
+                        <div class="intro_body">
+                            <div class="intro_title"><a href="#">#{tag.name} </a></div>
+                            <div class="intro_subtitle">#{tag.description}</div>
+                        </div>
                     </div>
-                </div>
                 </c:forEach>
-               
 
-                <!-- Intro Item -->
-                <div class="intro_item">
-                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_2.jpg" alt="" /></div>
-                    <div class="intro_body">
-                        <div class="intro_title"><a href="#">Blockchain</a></div>
-                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
-                    </div>
-                </div>
 
-                <!-- Intro Item -->
-                <div class="intro_item">
-                    <div class="intro_image"><img src="images/intro_3.jpg" alt="" /></div>
-                    <div class="intro_body">
-                        <div class="intro_title"><a href="#">IoT Technology</a></div>
-                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
-                    </div>
-                </div>
-
-                <!-- Intro Item -->
-                <div class="intro_item">
-                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_4.jpg" alt="" /></div>
-                    <div class="intro_body">
-                        <div class="intro_title"><a href="#">Python Programming</a></div>
-                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
-                    </div>
-                </div>
-
-                <!-- Intro Item -->
-                <div class="intro_item">
-                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_5.jpg" alt="" /></div>
-                    <div class="intro_body">
-                        <div class="intro_title"><a href="#">IoT Technology</a></div>
-                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
-                    </div>
-                </div>
-
-                <!-- Intro Item -->
-                <div class="intro_item">
-                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_6.jpg" alt="" /></div>
-                    <div class="intro_body">
-                        <div class="intro_title"><a href="#">IoT Technology</a></div>
-                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
-                    </div>
-                </div>
+                <!--                 Intro Item 
+                                <div class="intro_item">
+                                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_2.jpg" alt="" /></div>
+                                    <div class="intro_body">
+                                        <div class="intro_title"><a href="#">Blockchain</a></div>
+                                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
+                                    </div>
+                                </div>
+                
+                                 Intro Item 
+                                <div class="intro_item">
+                                    <div class="intro_image"><img src="images/intro_3.jpg" alt="" /></div>
+                                    <div class="intro_body">
+                                        <div class="intro_title"><a href="#">IoT Technology</a></div>
+                                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
+                                    </div>
+                                </div>
+                
+                                 Intro Item 
+                                <div class="intro_item">
+                                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_4.jpg" alt="" /></div>
+                                    <div class="intro_body">
+                                        <div class="intro_title"><a href="#">Python Programming</a></div>
+                                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
+                                    </div>
+                                </div>
+                
+                                 Intro Item 
+                                <div class="intro_item">
+                                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_5.jpg" alt="" /></div>
+                                    <div class="intro_body">
+                                        <div class="intro_title"><a href="#">IoT Technology</a></div>
+                                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
+                                    </div>
+                                </div>
+                
+                                 Intro Item 
+                                <div class="intro_item">
+                                    <div class="intro_image"><img src="${facesContext.externalContext.requestContextPath}/images/intro_6.jpg" alt="" /></div>
+                                    <div class="intro_body">
+                                        <div class="intro_title"><a href="#">IoT Technology</a></div>
+                                        <div class="intro_subtitle">Donec quis metus ac arcu luctus accumsan.</div>
+                                    </div>
+                                </div>-->
 
             </div>
         </div>
@@ -108,145 +113,48 @@
         <div class="calendar">
             <div class="container reset_container">
                 <div class="row">
-                    <div class="col-xl-6 calendar_col">
-                        <div class="calendar_container">
-                            <div class="calendar_title_bar d-flex flex-row align-items-center justify-content-start">
-                                <div><div class="calendar_icon"><img src="${facesContext.externalContext.requestContextPath}/images/calendar.svg" alt="" /></div></div>
-                                <div class="calendar_title">22 September Conference calendar</div>
-                            </div>
-                            <div class="calendar_items">
-
-                                <!-- Calendar Item -->
-                                <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
-                                    <div><div class="calendar_item_image"><img src="${facesContext.externalContext.requestContextPath}/images/event_1.jpg" alt="" /></div></div>
-                                    <div class="calendar_item_time">
-                                        <div>14:00</div>
-                                        <div></div>
-                                    </div>
-                                    <div class="calendar_item_text">
-                                        <div>About technology</div>
-                                        <div>08 AM - 04 PM</div>
-                                        <div>Speaker: Daniel Hill</div>
-                                    </div>
+                    <c:forEach var="conference" items="#{homeController.upcomingTwoConferenceList}">
+                        <div class="col-xl-6 calendar_col">
+                            <div class="calendar_container">
+                                <div class="calendar_title_bar d-flex flex-row align-items-center justify-content-start">
+                                    <div><div class="calendar_icon"><img src="${facesContext.externalContext.requestContextPath}/images/calendar.svg" alt="" /></div></div>
+                                    <div class="calendar_title">#{homeController.formaterForDate.format(conference.sessionDateTime)} Conference calendar</div>
                                 </div>
+                                <div class="calendar_items">
 
-                                <!-- Calendar Item -->
-                                <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
-                                    <div><div class="calendar_item_image"><img src="images/event_2.jpg" alt="" /></div></div>
-                                    <div class="calendar_item_time">
-                                        <div>15:00</div>
-                                        <div></div>
+
+
+                                    <!-- Calendar Item -->
+                                    <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
+                                        <div>
+                                            <a href="${facesContext.externalContext.requestContextPath}/conference.xhtml#conference-#{conference.sessionId}">#{conference.sessionName}</a>
+                                        </div>
+                                        <c:forEach var="sessionPaper" items="#{conference.sessionPapers}">
+
+                                            <div class="calendar_item_text">
+                                                <div>#{sessionPaper.paperId.paperTitle}</div>
+                                                <div>
+                                                    Topics:
+                                                    <c:set var="i" value="#{0}"></c:set>
+                                                    <c:forEach var="tag" items="#{sessionPaper.paperId.paperTags}">
+                                                        #{tag.tagId.name}
+                                                        <c:set var="i" value="#{i+1}"></c:set>
+                                                        <c:if test="#{i !=sessionPaper.paperId.paperTags.size()}">
+                                                            ,
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </div>
+                                                <div>Speaker: #{sessionPaper.paperId.authorId.firstName} #{sessionPaper.paperId.authorId.lastName}</div>
+                                            </div>
+                                        </c:forEach>
                                     </div>
-                                    <div class="calendar_item_text">
-                                        <div>About technology</div>
-                                        <div>08 AM - 04 PM</div>
-                                        <div>Speaker: Daniel Hill</div>
-                                    </div>
+
                                 </div>
-
-                                <!-- Calendar Item -->
-                                <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
-                                    <div><div class="calendar_item_image"><img src="${facesContext.externalContext.requestContextPath}/images/event_3.jpg" alt="" /></div></div>
-                                    <div class="calendar_item_time">
-                                        <div>17:00</div>
-                                        <div></div>
-                                    </div>
-                                    <div class="calendar_item_text">
-                                        <div>Conference calls</div>
-                                        <div>08 AM - 04 PM</div>
-                                        <div>Speaker: Daniel Hill</div>
-                                    </div>
-                                </div>
-
-                                <!-- Calendar Item -->
-                                <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
-                                    <div><div class="calendar_item_image"><img src="${facesContext.externalContext.requestContextPath}/images/event_4.jpg" alt="" /></div></div>
-                                    <div class="calendar_item_time">
-                                        <div>20:00</div>
-                                        <div></div>
-                                    </div>
-                                    <div class="calendar_item_text">
-                                        <div>About technology</div>
-                                        <div>08 AM - 04 PM</div>
-                                        <div>Speaker: Daniel Hill</div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-xl-6 calendar_col">
-                        <div class="calendar_container">
-                            <div class="calendar_title_bar d-flex flex-row align-items-center justify-content-start">
-                                <div><div class="calendar_icon"><img src="images/calendar.svg" alt="" /></div></div>
-                                <div class="calendar_title">23 October Conference calendar</div>
-                            </div>
-                            <div class="calendar_items">
-
-                                <!-- Calendar Item -->
-                                <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
-                                    <div><div class="calendar_item_image"><img src="images/event_5.jpg" alt="" /></div></div>
-                                    <div class="calendar_item_time">
-                                        <div>14:00</div>
-                                        <div></div>
-                                    </div>
-                                    <div class="calendar_item_text">
-                                        <div>About technology</div>
-                                        <div>08 AM - 04 PM</div>
-                                        <div>Speaker: Daniel Hill</div>
-                                    </div>
-                                </div>
-
-                                <!-- Calendar Item -->
-                                <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
-                                    <div><div class="calendar_item_image"><img src="images/event_6.jpg" alt="" /></div></div>
-                                    <div class="calendar_item_time">
-                                        <div>15:00</div>
-                                        <div></div>
-                                    </div>
-                                    <div class="calendar_item_text">
-                                        <div>About technology</div>
-                                        <div>08 AM - 04 PM</div>
-                                        <div>Speaker: Daniel Hill</div>
-                                    </div>
-                                </div>
-
-                                <!-- Calendar Item -->
-                                <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
-                                    <div><div class="calendar_item_image"><img src="images/event_7.jpg" alt="" /></div></div>
-                                    <div class="calendar_item_time">
-                                        <div>17:00</div>
-                                        <div></div>
-                                    </div>
-                                    <div class="calendar_item_text">
-                                        <div>Conference calls</div>
-                                        <div>08 AM - 04 PM</div>
-                                        <div>Speaker: Daniel Hill</div>
-                                    </div>
-                                </div>
-
-                                <!-- Calendar Item -->
-                                <div class="calendar_item d-flex flex-row align-items-center justify-content-start">
-                                    <div><div class="calendar_item_image"><img src="images/event_8.jpg" alt="" /></div></div>
-                                    <div class="calendar_item_time">
-                                        <div>20:00</div>
-                                        <div></div>
-                                    </div>
-                                    <div class="calendar_item_text">
-                                        <div>About technology</div>
-                                        <div>08 AM - 04 PM</div>
-                                        <div>Speaker: Daniel Hill</div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
+                    </c:forEach>
                 </div>
             </div>
         </div>
-
     </ui:define>
 </ui:composition>

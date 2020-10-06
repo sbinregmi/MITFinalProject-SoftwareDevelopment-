@@ -8,6 +8,8 @@ package OCMS.Entity;
 import OCMS.ModelData.Enum;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,8 +25,9 @@ import javax.persistence.OneToOne;
 @Entity
 @NamedQueries({
     @NamedQuery(name="findAllSessionParticipant",query="select s from SessionParticipant s"),
-    @NamedQuery(name="findAllParticipantIdBySessionId", query="select s from SessionParticipant s where s.sessionId=:sSessionId"),
-    @NamedQuery(name="findSessionParticipantBySessionId", query="select s from SessionParticipant s where s.participantId.id=:sParticipantId")
+    @NamedQuery(name="countAllSessionParticipant",query="select COUNT(s) from SessionParticipant s"),
+    @NamedQuery(name="findSessionParticipantBySessionId", query="select s from SessionParticipant s where s.sessionId=:sessionId"),
+    @NamedQuery(name="findSessionParticipantByParticipantId", query="select s from SessionParticipant s where s.participantId=:participantId")
 })
 public class SessionParticipant implements Serializable {
 
@@ -32,10 +35,9 @@ public class SessionParticipant implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    
     @ManyToOne
     private Session sessionId;
+    @Enumerated(EnumType.STRING)
     Enum.Status status;
     @ManyToOne
     private Users participantId;

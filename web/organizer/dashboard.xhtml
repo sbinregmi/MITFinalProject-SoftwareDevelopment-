@@ -1,24 +1,80 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
-                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-         <h:form a:method="POST" a:action="Logout" a:accept-charset="utf-8" a:name="loginform" class="form-group needs-validation" a:novalidate="">
-            <h:commandButton id="btnSubmit" value="Logout" class="btn btn-primary" immediate="false"/>
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/Templates/organizerLayout.xhtml"
+                >
+    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="content">
+        <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0 text-dark">Welcome #{authorController.user.firstName} #{authorController.user.lastName} </h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item">Logged in as </li>
+                                    <li class="breadcrumb-item active">Organizer</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+            #{organizerController.getStatisticForDashboard()}
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa fa-book"></i></span>
 
-        </h:form>
-    </body>
-</html>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Paper Submission </span>
+                                <span class="info-box-number">#{organizerController.numberOfPaperSubmission}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa fa-users"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Participants</span>
+                                <span class="info-box-number">#{organizerController.numberOfParticipant}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa fa-book"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Conferences</span>
+                                <span class="info-box-number">#{organizerController.numberOfConference}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
+    </ui:define>
+    <ui:define name="customScript">
+
+    </ui:define>
+</ui:composition>

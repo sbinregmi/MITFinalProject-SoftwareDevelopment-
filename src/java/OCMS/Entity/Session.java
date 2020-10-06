@@ -5,11 +5,10 @@
  */
 package OCMS.Entity;
 
+import static OCMS.Entity.Users_.country;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -25,15 +26,23 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="findAllSession",query="select s from Session s"),
-    @NamedQuery(name="findUpcommingSession",query="select s from Session s where s.sessionDateTime>:currentDateTime"),
-    @NamedQuery(name="findSessionByName", query="select s from Session s where s.sessionName=:sSessionName"),
-    @NamedQuery(name="findSessionByTimeZone", query="select s from Session s where s.timeZone=:sTimeZone"),
-    @NamedQuery(name="findSessionById", query="select s from Session s where s.sessionId=:sSessionId")
-    
+    @NamedQuery(name = "findAllSession", query = "select s from Session s")
+    ,
+    @NamedQuery(name = "countAllSession", query = "select COUNT(s) from Session s")
+    ,
+    @NamedQuery(name = "findUpcommingSession", query = "select s from Session s where s.sessionDateTime>:currentDateTime ORDER BY s.sessionDateTime DESC"),
+    @NamedQuery(name = "findUpcommingTwoSession", query = "select s from Session s where s.sessionDateTime>:currentDateTime ORDER BY s.sessionDateTime DESC")
+    ,
+    @NamedQuery(name = "findSessionByName", query = "select s from Session s where s.sessionName=:sSessionName")
+    ,
+    @NamedQuery(name = "findSessionByTimeZone", query = "select s from Session s where s.timeZone=:sTimeZone")
+    ,
+    @NamedQuery(name = "findSessionById", query = "select s from Session s where s.sessionId=:sSessionId")
+
 })
 public class Session implements Serializable {
-private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sessionId;
@@ -42,48 +51,36 @@ private static final long serialVersionUID = 1L;
     private String timeZone;
     @Column(nullable = false)
     private Date sessionDateTime;
-    private String organization;
-    private String country;
-    private boolean isSeatAvailable;
-    private int maximumParticipant;
+    private String imageUrl;
+    private String description;
     private Date createdDate;
     private Date updatedDate;
     @OneToMany(mappedBy = "sessionId")
     private List<SessionPaper> sessionPapers;
     @OneToMany(mappedBy = "sessionId")
     private List<SessionParticipant> sessionParticipants;
+    @Transient
+    private String sessionDateTimeStr;
+    @Transient
+    private Part image;
 
     public Session() {
     }
 
-    public Session(Long sessionId, String sessionName, String timeZone, Date sessionDateTime, String organization, String country, boolean isSeatAvailable, int maximumParticipant, Date createdDate, Date updatedDate) {
+    public Session(Long sessionId, String sessionName, String timeZone, Date sessionDateTime, String imageUrl, String description, Date createdDate, Date updatedDate, List<SessionPaper> sessionPapers, List<SessionParticipant> sessionParticipants, String sessionDateTimeStr, Part image) {
         this.sessionId = sessionId;
         this.sessionName = sessionName;
         this.timeZone = timeZone;
         this.sessionDateTime = sessionDateTime;
-        this.organization = organization;
-        this.country = country;
-        this.isSeatAvailable = isSeatAvailable;
-        this.maximumParticipant = maximumParticipant;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
-    }
-
-    public Session(Long sessionId, String sessionName, String timeZone, Date sessionDateTime, String organization, String country, boolean isSeatAvailable, int maximumParticipant, Date createdDate, Date updatedDate, List<SessionPaper> sessionPapers, List<SessionParticipant> sessionParticipants) {
-        this.sessionId = sessionId;
-        this.sessionName = sessionName;
-        this.timeZone = timeZone;
-        this.sessionDateTime = sessionDateTime;
-        this.organization = organization;
-        this.country = country;
-        this.isSeatAvailable = isSeatAvailable;
-        this.maximumParticipant = maximumParticipant;
+        this.imageUrl = imageUrl;
+        this.description = description;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.sessionPapers = sessionPapers;
         this.sessionParticipants = sessionParticipants;
+        this.sessionDateTimeStr = sessionDateTimeStr;
+        this.image = image;
     }
-    
 
     public Long getSessionId() {
         return sessionId;
@@ -117,36 +114,20 @@ private static final long serialVersionUID = 1L;
         this.sessionDateTime = sessionDateTime;
     }
 
-    public String getOrganization() {
-        return organization;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setOrganization(String organization) {
-        this.organization = organization;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getCountry() {
-        return country;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public boolean isIsSeatAvailable() {
-        return isSeatAvailable;
-    }
-
-    public void setIsSeatAvailable(boolean isSeatAvailable) {
-        this.isSeatAvailable = isSeatAvailable;
-    }
-
-    public int getMaximumParticipant() {
-        return maximumParticipant;
-    }
-
-    public void setMaximumParticipant(int maximumParticipant) {
-        this.maximumParticipant = maximumParticipant;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getCreatedDate() {
@@ -181,10 +162,25 @@ private static final long serialVersionUID = 1L;
         this.sessionParticipants = sessionParticipants;
     }
 
+    public String getSessionDateTimeStr() {
+        return sessionDateTimeStr;
+    }
+
+    public void setSessionDateTimeStr(String sessionDateTimeStr) {
+        this.sessionDateTimeStr = sessionDateTimeStr;
+    }
+
+    public Part getImage() {
+        return image;
+    }
+
+    public void setImage(Part image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
-        return "Session{" + "sessionId=" + sessionId + ", sessionName=" + sessionName + ", timeZone=" + timeZone + ", sessionDateTime=" + sessionDateTime + ", organization=" + organization + ", country=" + country + ", isSeatAvailable=" + isSeatAvailable + ", maximumParticipant=" + maximumParticipant + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + '}';
+        return "Session{" + "sessionId=" + sessionId + ", sessionName=" + sessionName + ", timeZone=" + timeZone + ", sessionDateTime=" + sessionDateTime + ", imageUrl=" + imageUrl + ", description=" + description + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", sessionPapers=" + sessionPapers + ", sessionParticipants=" + sessionParticipants + ", sessionDateTimeStr=" + sessionDateTimeStr + ", image=" + image + '}';
     }
-    
-    
+
 }
