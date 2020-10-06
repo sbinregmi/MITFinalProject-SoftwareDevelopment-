@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="/WEB-INF/Templates/organizerLayout.xhtml"
+                >
+    <ui:define name="title">Papers</ui:define>
+    <ui:define name="customCSS">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+         <!-- DataTables -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
+        <script src="${facesContext.externalContext.requestContextPath}/js/jquery-3.2.1.min.js"></script>
+    </ui:define>
+    <ui:define name="content">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Papers</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/organizer/dashboard.xhtml">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/organizer/manageConferece.xhtml">Manage Conference</a></li>
+                            <li class="breadcrumb-item active">Papers</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-header">
+                                <h3 class="card-title">Lists of Paper request for conference: </h3>
+                            </div>
+                            <div class=" col-md-6 mb-3">
+                                <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
+                            </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Paper Title</th>
+                                                <th>Paper Topic</th>
+                                                <th>Author Name</th>
+                                                <th>Author Email</th>
+                                                <th>Author Affiliation</th>
+                                                <th>Paper Created Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="paper" items="#{organizerController.getPaperList()}">
+                                                    <tr>
+                                                        <td>#{paper.paperTitle}
+                                                        </td>
+                                                        <td>
+                                                            <c:set var="i" value="#{0}"></c:set>
+                                                            <c:forEach var="tag" items="#{paper.paperTags}">
+                                                                #{tag.tagId.name}
+                                                                <c:set var="i" value="#{i+1}"></c:set>
+                                                                <c:if test="#{i !=paper.paperTags.size()}">
+                                                                    ,&#160;
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </td>
+                                                        <td>#{paper.authorId.firstName}&#160;#{paper.authorId.lastName}</td>
+                                                        <td>#{paper.authorId.email}</td>
+                                                        <td>#{paper.authorId.qualification}</td>
+                                                        <td>#{organizerController.formaterForDateTime.format(paper.authorId.createdDate)}</td>
+                                                        
+                                                    </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </ui:define>
+    <ui:define name="customScript">
+        <!-- jQuery -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/dist/js/adminlte.js"></script>
+        <!-- DataTables -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- PAGE SCRIPTS -->
+        <!-- OPTIONAL SCRIPTS -->
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    "order": [[2, "desc"]],
+                    "paging": true,
+                    "searching": true,
+                });
+                
+            });
+        </script>
+    </ui:define>
+</ui:composition>

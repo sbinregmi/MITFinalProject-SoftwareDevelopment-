@@ -43,7 +43,7 @@
 
             <!-- Default box -->
             <div class="card">
-              
+
                 <div class="card-body p-0">
                     <table id="example1" class="table table-striped projects">
                         <thead>
@@ -56,12 +56,6 @@
                                 </th>
                                 <th style="width: 30%">
                                     Paper Title 
-                                </th>
-                                <th>
-                                    Topic 
-                                </th>
-                                <th style="width: 8%" class="text-center">
-                                    Country
                                 </th>
                                 <th class="text-center">
                                     Conference Date Time
@@ -85,39 +79,33 @@
                                     <td>
                                         <ul class="list-inline">
                                             <c:forEach var="p" items="#{conference.sessionPapers}">
-                                                <li>#{p.paperId.paperTitle}</li>
+                                                <c:if test="#{p.status=='ACCEPTED'}">
+                                                    <li>#{p.paperId.paperTitle}</li>
+                                                </c:if>
                                             </c:forEach>
                                         </ul>
                                     </td>
-                                    <td class="project_progress">
-                                        <small>
-                                            AI
-                                        </small>
-                                    </td>
                                     <td class="project-state">
-                                        #{conference.country} 
-                                    </td>
-                                    <td class="project-state">
-                                        #{conference.sessionDateTime} 
+                                        #{authorController.formaterForDateTime.format(conference.sessionDateTime)} 
                                     </td>
                                     <td class="project-actions text-right">
                                         <c:set var="isRequested" value="#{false}"/>
                                         <c:forEach var="sessionPaper" items="#{conference.sessionPapers}">
                                             <c:if test="#{sessionPaper.paperId.authorId.id == authorController.user.id}">
                                                 <c:set var="isRequested" value="#{true}"/>
-                                                <c:if test="#{sessionPaper.status='0'}">
+                                                <c:if test="#{sessionPaper.status== 'PENDING'}">
                                                     <button type="button" class="btn btn-info btn-sm">
                                                         <i class="fas fa fa-spinner"></i> Pending
                                                     </button>
                                                 </c:if>
-                                                <c:if test="#{sessionPaper.status='1'}">
-                                                    <button type="button" class="btn btn-info btn-sm">
-                                                        <i class="fas fa fa fa-times-circle-o"></i> Rejected
+                                                <c:if test="#{sessionPaper.status=='REJECTED'}">
+                                                    <button type="button" class="btn btn-danger btn-sm">
+                                                        <i class="fas fa fa fa-times-circle"></i> Rejected
                                                     </button>
                                                 </c:if>
-                                                <c:if test="#{sessionPaper.status='2'}">
-                                                    <button type="button" class="btn btn-info btn-sm">
-                                                        <i class="fa fa-check-circle-o"></i> Accepted
+                                                <c:if test="#{sessionPaper.status=='ACCEPTED'}">
+                                                    <button type="button" class="btn btn-success btn-sm">
+                                                        <i class="fa fa-check-circle"></i> Join Conference
                                                     </button>
                                                 </c:if>
                                             </c:if>
@@ -130,7 +118,7 @@
                                     </td>
                                 </tr>   
                             </c:forEach>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -196,7 +184,7 @@
                 $("#example1").DataTable({
                     "responsive": true,
                     "autoWidth": false,
-                    "order": [[5, "desc"]],
+                    "order": [[3, "desc"]],
                     "paging": true,
                     "searching": true,
                 });

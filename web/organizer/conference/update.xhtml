@@ -1,16 +1,157 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="/WEB-INF/Templates/organizerLayout.xhtml"
+                >
+    <ui:define name="title">Update Conference</ui:define>
+    <ui:define name="customCSS">
+        <!-- daterange picker -->
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/backendResources/plugins/daterangepicker/daterangepicker.css"/>
+
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery-ui/jquery-ui.css"/>
+        <!-- Theme style -->
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+        <!-- Tempusdominus Bbootstrap 4 -->
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/backendResources/plugins/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css"/>
+    </ui:define>
+    <ui:define name="content">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Update Conference</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/organizer/dashboard.xhtml">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/organizer/manageConferece.xhtml">Manage Conference</a></li>
+                            <li class="breadcrumb-item active">Update Conference</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Please update a conference</h3>
+                            </div> 
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <h:form a:method="POST" a:accept-charset="utf-8" enctype="multipart/form-data"  class="form-horizontal needs-validation" a:novalidate="">
+                                <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="">Conference Name</label>
+                                        <h:inputHidden value="#{organizerController.session.sessionId}"/>
+                                        <h:inputText class="form-control" value="#{organizerController.session.sessionName}" a:placeholder="Conference Name" a:required="required"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Conference Date</label>
+
+                                        <div class="input-group date" id="timepicker" data-target-input="nearest">
+                                            <h:inputText id="date" class="form-control" value="#{organizerController.session.sessionDateTimeStr}" a:placeholder="Conference Date" a:data-target="#timepicker"/>
+                                            <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                            </div>
+                                            
+                                        </div>
+                                        <c:if test="#{not empty organizerController.session.sessionDateTime}">
+                                                Older Conference Date: #{organizerController.formaterForDateTime.format(organizerController.session.sessionDateTime)}
+                                        </c:if>
+                                        <!-- /.input group -->
+                                    </div>
+                                    <!-- /.form group -->
+
+                                    <div class="form-group">
+                                        <label for="">Conference TimeZone</label>
+
+                                        <h:selectOneMenu value="#{organizerController.session.timeZone}" class="form-control custom-select mr-sm-2 timeZoneDropdownClass" a:required="required">
+                                            <c:forEach var="timeZone" items="#{accountController.getListOfTimeZones()}">
+                                                <f:selectItem itemLabel="#{timeZone}" itemValue="#{timeZone}"/>
+                                            </c:forEach>
+                                        </h:selectOneMenu>
+                                    </div> 
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">Upload Image</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <h:inputFile value="#{organizerController.session.image}" class="custom-file-input" a:accept="image/x-png,image/gif,image/jpeg"/>
+                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                            </div>  
+
+                                        </div>
+                                        <c:if test="#{not empty organizerController.session.imageUrl}">
+                                            <a href="#{organizerController.session.imageUrl}" target="_blank">Session Image</a>
+                                        </c:if>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Short Description</label>
+                                        <h:inputTextarea class="form-control" value="#{organizerController.session.description}" a:placeholder="Short Description" a:required="required"/>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <h:commandButton id="btnSubmit" value="Submit" class="btn btn-info" immediate="false" action="#{organizerController.updateSession()}"/>
+                                </div>
+                            </h:form>
+                        </div>
+
+                    </div><!--end row-->
+
+                </div><!--/. container-fluid -->
+            </div>
+        </section>
+        <!-- /.content -->
+    </ui:define>
+    <ui:define name="customScript">
+        <!-- jQuery -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/dist/js/adminlte.js"></script>
+        <!-- InputMask -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/moment/moment.min.js"></script>
+        <!-- date-range-picker -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/daterangepicker/daterangepicker.js"></script>
+
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js"></script>
+
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery-ui/jquery-ui.min.js"></script> 
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script type="text/javascript">
+            $(function () {
+
+
+                $('#date').datepicker({
+                    minDate: new Date(),
+                    showAnim: "slide",
+
+                })
+
+                //Timepicker
+                $('#timepicker').datetimepicker({
+                    format: 'YYYY-MM-DD HH:mm',
+                    minDate: new Date(),
+                    sideBySide: true
+                })
+
+            })
+        </script>
+    </ui:define>
+</ui:composition>

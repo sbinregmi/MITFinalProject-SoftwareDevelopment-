@@ -76,14 +76,16 @@ public class AuthorController {
     private SessionPaper sessionPaper = new SessionPaper();
     private int numberOfPaperSubmmited;
     private SimpleDateFormat formaterForDate = new SimpleDateFormat("MMM dd, yyyy");
+    private SimpleDateFormat formaterForDateTime = new SimpleDateFormat("MMM dd, yyyy hh:mm");
 
     public SimpleDateFormat getFormaterForDate() {
         formaterForDate = new SimpleDateFormat("MMM dd, yyyy");
         return formaterForDate;
     }
 
-    public void setFormaterForDate(SimpleDateFormat formaterForDate) {
-        this.formaterForDate = formaterForDate;
+    public SimpleDateFormat getFormaterForDateTime() {
+        formaterForDateTime = new SimpleDateFormat("MMM dd, yyyy hh:mm");
+        return formaterForDateTime;
     }
 
     //setter amd getter for user
@@ -366,7 +368,7 @@ public class AuthorController {
         }
     }
 
-//Delete paper by paper id
+//POST: Delete paper by paper id
     @RequestMapping(value = "/author/deletePaper")
     public String deletePaper() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -388,6 +390,11 @@ public class AuthorController {
                     File previousFile = new File(servletContext.getRealPath(paperUrl));
                     result = Files.deleteIfExists(previousFile.toPath());
                 }
+                List<SessionPaper> sessionPaperList=sessionPaperEJB.findSessionPaperByPaperId(paper);
+                for (SessionPaper sessionPaper : sessionPaperList) {
+                    sessionPaperEJB.deleteSessionPaper(sessionPaper);
+                }
+                
                 paperEJB.deletePaperById(id);
                 context.addMessage("success", new FacesMessage("Paper is deleted successfully."));
                 return "managePaper";
@@ -402,6 +409,7 @@ public class AuthorController {
 
     }
 
+    //POST: REQUEST FOR SESSION
     public String submitRequestForSession() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
@@ -427,6 +435,7 @@ public class AuthorController {
         }
     }
 
+    //GET: PAPER DETAIL BY ID
     public String paperDetail() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
@@ -446,7 +455,8 @@ public class AuthorController {
             return "managePaper.xhtml";
         }
     }
-
+    
+    //GET: PAPER DETAIL TO EDIT BY ID
     public String paperEdit() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
@@ -484,25 +494,26 @@ public class AuthorController {
         }
     }
 
+    //GET: GET ALL SUBMITTED PAPERS
     public List<Paper> getSubmittedPaper() {
         List<Paper> paperList = paperEJB.findPaperByAuthorId(user.getId());
 
         return paperList;
     }
-
+    
+    //GET: GET ALL SESSION LIST
     public List<Session> getConferenceList() {
         List<Session> upcomingSessionList = new ArrayList<Session>();
         List<Session> finalUpcomingSessionList = new ArrayList<Session>();
         upcomingSessionList = sessionEJB.findUpcommingSession();
-//        List<SessionPaper> sessionPaperList=new ArrayList<SessionPaper>();
-//        List<SessionParticipant> sessionParticipantList=new ArrayList<SessionParticipant>();
-//        for(Session session:upcomingSessionList){
-//            sessionPaperList=sessionPaperEJB.findSessionPaperBySessionId(session.getSessionId());
-//            session.setSessionPapers(sessionPaperList);
-//            finalUpcomingSessionList.add(session);
-//        }
-//        return finalUpcomingSessionList;
-        return upcomingSessionList;
+        List<SessionPaper> sessionPaperList=new ArrayList<SessionPaper>();
+        List<SessionParticipant> sessionParticipantList=new ArrayList<SessionParticipant>();
+        for(Session session:upcomingSessionList){
+            sessionPaperList=sessionPaperEJB.findSessionPaperBySessionId(session);
+            session.setSessionPapers(sessionPaperList);
+            finalUpcomingSessionList.add(session);
+        }
+        return finalUpcomingSessionList;
     }
 
     @PostConstruct

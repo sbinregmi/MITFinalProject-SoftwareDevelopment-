@@ -1,24 +1,74 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets" 
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-         <h:form a:method="POST" a:action="#{facesContext.externalContext.requestContextPath}/Logout" a:accept-charset="utf-8" class="form-group needs-validation" a:novalidate="">
-            <h:commandButton id="btnSubmit" value="Logout" class="btn btn-primary" immediate="false"/>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/Templates/participantLayout.xhtml"
+                >
+    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="content">
+        <!-- Main content -->
+        <section class="content">
+            #{participantController.getNumberOfConference()}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="info-box mb-4">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa fa-plus-square"></i></span>
 
-        </h:form>
-    </body>
-</html>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Conference Requested</span>
+                                <span class="info-box-number">#{participantController.numberOfConferenceRequested}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="info-box mb-4">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-book"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Conference Accepted</span>
+                                <span class="info-box-number">#{participantController.numberOfConferenceAccepted}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="info-box mb-4">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa fa-check-square"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Conference Joined </span>
+                                <span class="info-box-number">#{participantController.numberOfConferenceJoined}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="info-box mb-4">
+                            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa fa-ban"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Conferences Rejected</span>
+                                <span class="info-box-number">#{participantController.numberOfConferenceRejected}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div><!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
+        <!-- /.content-wrapper -->
+    </ui:define>
+    <ui:define name="customScript">
+
+    </ui:define>
+</ui:composition>

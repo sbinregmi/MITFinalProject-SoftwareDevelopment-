@@ -10,12 +10,20 @@ package OCMS.ModelData;
  * @author SabinRegmi
  */
 public class Enum {
-    public enum Status{
-        PENDING,
-        ACCEPTED,
-        REJECTED
+
+    public enum Status {
+        PENDING(0),
+        ACCEPTED(1),
+        REJECTED(2),
+        JOINED(3);
+        private int value;
+
+        private Status(int value) {
+            this.value = value;
+        }
     }
-    public enum Role{
+
+    public enum Role {
         Participant,
         Admin,
         Author,

@@ -34,6 +34,7 @@ import javax.servlet.http.Part;
     ,
     @NamedQuery(name = "findPaperByTitle", query = "select p from Paper p where p.paperTitle=:pTitle ORDER BY p.createdDate DESC")
     ,
+   
     @NamedQuery(name = "findPaperById", query = "select p from Paper p where p.paperId=:pPaperId")
    
     ,

@@ -26,7 +26,7 @@ import javax.persistence.Transient;
 @Entity
 @NamedQueries({
     @NamedQuery(name="findAllUser",query="select u from Users u"),
-    @NamedQuery(name="findUserByRole", query="select u from Users u where u.role=:uRole"),
+    @NamedQuery(name="findUserByRole", query="select u from Users u where u.role=:role"),
     @NamedQuery(name="findUserById", query="select u from Users u where u.id=:uId"),
     @NamedQuery(name="loginUser", query="select u from Users u where (u.userName=:userName AND u.password=:password) OR (u.email=:email AND u.password=:password)"),
     @NamedQuery(name="findUserByEmailOrUsername", query="select u from Users u where u.userName=:userName OR u.email=:email")

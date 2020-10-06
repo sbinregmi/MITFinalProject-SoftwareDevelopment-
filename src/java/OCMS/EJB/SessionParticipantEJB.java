@@ -5,7 +5,9 @@
  */
 package OCMS.EJB;
 
+import OCMS.Entity.Session;
 import OCMS.Entity.SessionParticipant;
+import OCMS.Entity.Users;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -29,16 +31,41 @@ public class SessionParticipantEJB {
     public SessionParticipant findSessionParticipantById(Long id) {
         return em.find(SessionParticipant.class, id);
     }
+      //count sessionPaarticipant
+    public Long countAllSessionParticipant() {
+        Long sessionParticipantNumber= (Long)em.createNamedQuery("countAllSessionParticipant").getSingleResult();
+        return sessionParticipantNumber;
+    }
     
-     //find sessionPaper by session Id
-    public List<SessionParticipant> findSessionParticipantBySessionId(Long sessionId) {
-        List<SessionParticipant> sessionParticipantList= em.createNamedQuery("findSessionParticipantBySessionId").setParameter("sessionId", sessionId).getResultList();
+     //find sessionPaarticipant by session Id
+    public List<SessionParticipant> findSessionParticipantBySessionId(Session session) {
+        List<SessionParticipant> sessionParticipantList= em.createNamedQuery("findSessionParticipantBySessionId").setParameter("sessionId", session).getResultList();
         return sessionParticipantList;
     }
-    //create a paper
+    
+    //find session participant by participant
+    public List<SessionParticipant> findSessionParticipantByParticipantId(Users participant) {
+        List<SessionParticipant> sessionParticipantList= em.createNamedQuery("findSessionParticipantByParticipantId").setParameter("participantId", participant).getResultList();
+        return sessionParticipantList;
+    }
+    
+    //update a SessionParticipant
+    public SessionParticipant updateSessionParticipant(SessionParticipant sessionParticipant) {
+        SessionParticipant s = em.merge(sessionParticipant);
+        System.out.println(ctx.getCallerPrincipal().getName());
+        return s;
+    }
+    //create a session participant
     public SessionParticipant createSessionParticipant(SessionParticipant sessionParticipant) {
         em.persist(sessionParticipant);
         System.out.println(ctx.getCallerPrincipal().getName());
         return sessionParticipant;
+    }
+    
+    //delete a session Participant
+    public void deleteSessionParticipant(SessionParticipant sessionParticipant) {
+        sessionParticipant=em.find(SessionParticipant.class, sessionParticipant.getId());
+        em.remove(sessionParticipant);
+        System.out.println(ctx.getCallerPrincipal().getName());
     }
 }

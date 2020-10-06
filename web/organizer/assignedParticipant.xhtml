@@ -1,0 +1,220 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="/WEB-INF/Templates/organizerLayout.xhtml"
+                >
+    <ui:define name="title">Assigned Participant</ui:define>
+    <ui:define name="customCSS">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+    </ui:define>
+    <ui:define name="content">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Assigned Participant</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/organizer/dashboard.xhtml">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#{facesContext.externalContext.requestContextPath}/organizer/manageConferece.xhtml">Manage Conference</a></li>
+                            <li class="breadcrumb-item active">Participant Request</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <c:set var="sessionId" value="#{request.getParameter('id')}"/>
+        <c:set var="session" value=""/>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-header">
+                                <h3 class="card-title">Lists of Request from Participants for </h3>
+                            </div>
+                            <div class=" col-md-6 mb-3">
+                                <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
+                            </div>
+                            <c:if test="#{not empty sessionId}">
+                                <c:set var="session" value="#{organizerController.getConferenceById(sessionId)}"/>
+                                <div class="row card-header">
+                                    <div class=" col-md-6 mb-3">
+                                        <label>Conference Name: &#160;&#160;</label>#{session.sessionName}
+                                    </div>
+                                    <div class=" col-md-6 mb-3">
+                                        <label>Time zone: &#160;&#160;</label>#{session.timeZone}
+                                    </div>
+                                    <div class=" col-md-6 mb-3">
+                                        <label>Conference Date: &#160;&#160;</label>#{session.sessionDateTime}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Approved Paper: </label>
+                                        <ul class="list-inline">
+                                            <c:set var="paperNum" value="#{1}"></c:set>
+                                            <c:forEach var="paper" items="#{session.sessionPapers}">
+                                                <c:if test="#{paper.status=='ACCEPTED'}">
+                                                    <li>#{paperNum}.&#160;<a href="#{paper.paperId.paperUrl}">#{paper.paperId.paperTitle}</a></li>
+                                                    <c:set var="paperNum" value="#{paperNum+1}"></c:set>
+                                                </c:if>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Time Zone</th>
+                                                <th>Affiliation</th>
+                                                <th>Country</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="participant" items="#{session.sessionParticipants}">
+                                                <c:if test="#{participant.status=='ACCEPTED'}">
+                                                    <tr>
+                                                        <td>#{participant.participantId.firstName}&#160;#{partcipant.participantId.lastName}</td>
+                                                        <td>#{participant.participantId.email}</td>
+                                                        <td>#{participant.participantId.phoneNumber}</td>
+                                                        <td>#{participant.participantId.timeZone}</td>
+                                                        <td>#{participant.participantId.qualification}</td>
+                                                        <td>#{participant.participantId.country}</td>
+
+                                                    </tr>
+                                                </c:if>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </c:if>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="modal fade" id="modal-acceptparticipant">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Accept paper for Conference</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#x2715;</span>
+                        </button>
+                    </div>
+                    <h:form a:method="Post">
+                        <div class="modal-body">
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    Do you want to accept participant "<span id="participantNameAcceptId"></span>" for conference "<span id="sessionNameAcceptId"></span>"?
+                                    <h:inputHidden a:name="sessionParticipantIdToAccept" id="sessionParticipantIdToAccept"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <h:commandButton class="btn btn-info" value="Accept" immediate="false" action="#{organizerController.submitAcceptParticipantForSession()}">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <div class="modal fade" id="modal-rejectparticipant">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Reject paper for Conference</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#x2715;</span>
+                        </button>
+                    </div>
+                    <h:form a:method="Post">
+                        <div class="modal-body">
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    Do you want to reject participant "<span id="participantNameRejectId"></span>" for conference "<span id="sessionNameRejectId"></span>"?
+                                    <h:inputHidden a:name="sessionParticipantIdToReject" id="sessionParticipantIdToReject"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <h:commandButton class="btn btn-danger" value="Reject" immediate="false" action="#{organizerController.submitRejectParticipantForSession()}">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </ui:define>
+    <ui:define name="customScript">
+        <!-- jQuery -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/dist/js/adminlte.js"></script>
+        <!-- DataTables -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- PAGE SCRIPTS -->
+        <!-- OPTIONAL SCRIPTS -->
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    "order": [[2, "desc"]],
+                    "paging": true,
+                    "searching": true,
+                });
+                $('.popupAcceptParticipantModal').on('click', function (e) {
+                    var sessionParticipantId = $(this).data('sessionparticipantid');
+                    var participantName = $(this).data('participantname');
+                    var sessionName = $(this).data('sessionname');
+                    document.getElementById('participantNameAcceptId').textContent = participantName;
+                    document.getElementById('sessionNameAcceptId').textContent = sessionName;
+                    document.getElementsByName('sessionParticipantIdToAccept')[0].value = sessionParticipantId;
+                });
+                $('.popupRejectParticipantModal').on('click', function (e) {
+                    var sessionParticipantId = $(this).data('sessionparticipantid');
+                    var participantName = $(this).data('participantname');
+                    var sessionName = $(this).data('sessionname');
+                    document.getElementById('participantNameRejectId').textContent = participantName;
+                    document.getElementById('sessionNameRejectId').textContent = sessionName;
+                    document.getElementsByName('sessionParticipantIdToReject')[0].value = sessionParticipantId;
+                });
+            });
+        </script>
+    </ui:define>
+</ui:composition>

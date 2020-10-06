@@ -15,14 +15,18 @@ INSERT INTO [dbo].[USERS]
            ([ADDRESS],[COUNTRY],[CREATEDDATE],[EMAIL],[FIRSTNAME],[ISACTIVE],[ISAPPROVED],[ISPUBLIC],[LASTNAME]
            ,[PASSWORD],[PHONENUMBER],[QUALIFICATION],[ROLE],[TIMEZONE],[UPDATEDDATE],[USERNAME])
      VALUES
-           ('Melbourne 1','Australia','2020-02-02','sabin@gmail.com','Sabin',1,1,1,'Regmi','sbinregmi','98545555','MIT From CQU',
+           ('Melbourne 1','Australia','2020-02-02','sabin@gmail.com','Sabin',1,1,1,'Regmi','sabin123','98545555','MIT From CQU',
             'Author','GMT+10',null,'sbinregmi'),
-           ('ABc address','Australia','2020-02-02','ahorif@gmail.com','Md',1,1,1,'Shorif','shorif','98545555','MIT From CQU',
+           ('ABc address','Australia','2020-02-02','shorif@gmail.com','Md',1,1,1,'Shorif','shorif123','98545555','MIT From CQU',
             'Participant','GMT+10',null,'shorif'),
-           ('ABc address','Australia','2020-02-02','prashant@gmail.com','Prashant',1,1,1,'Gaurav','prashant','98545555','MIT From CQU',
+			('ABc address','Australia','2020-02-02','participant@gmail.com','Md',1,1,1,'Shorif','participant123','98545555','MIT From CQU',
+            'Participant','GMT+10',null,'participant'),
+           ('ABc address','Australia','2020-02-02','prashant@gmail.com','Prashant',1,1,1,'Gaurav','prashant123','98545555','MIT From CQU',
             'Organizer','GMT+10',null,'prashant'),
-           ('ABc address','Australia','2020-02-02','admin@gmail.com','Admin',1,1,1,'Admin','admin','98545555','MIT From CQU',
-            'Admin','GMT+10',null,'admin')
+           ('ABc address','Australia','2020-02-02','admin@gmail.com','Admin',1,1,1,'Admin','admin123','98545555','MIT From CQU',
+            'Admin','GMT+10',null,'admin'),
+			('ABc address','Australia','2020-02-02','author@gmail.com','Admin',1,1,1,'Author','author123','98545555','MIT From CQU',
+            'Author','GMT+10',null,'author')
 			
 GO
 
@@ -65,44 +69,52 @@ INSERT INTO [dbo].[PAPERTAGS]
 		   (3,1)
 GO
 INSERT INTO [dbo].[SESSION]
-           ([COUNTRY]
-           ,[CREATEDDATE]
-           ,[ISSEATAVAILABLE]
-           ,[MAXIMUMPARTICIPANT]
-           ,[ORGANIZATION]
+           ([CREATEDDATE]
+		   ,[IMAGEURL]
+		   ,[DESCRIPTION]
            ,[SESSIONDATETIME]
            ,[SESSIONNAME]
            ,[TIMEZONE]
            ,[UPDATEDDATE])
      VALUES
-           ('Australia'
-           ,'2020-09-08'
-           ,1
-           ,10
-           ,'ABC'
+           ('2020-09-08'
+           ,''
+           ,'This is description'
            ,'2020-10-20 23:05:48.907'
            ,'Session 1'
-           ,'GMT10+'
+           ,'GMT+10'
            ,null),
 
-		   ('Australia'
-           ,'2020-09-08'
-           ,1
-           ,10
-           ,'ABC'
+		   ('2020-09-08'
+           ,''
+           ,'This is description'
            ,'2020-10-20 23:05:48.907'
            ,'Session 2'
-           ,'GMT10+'
+           ,'GMT+10'
            ,null),
-		    ('Australia'
-           ,'2020-09-08'
-           ,1
-           ,10
-           ,'ABC'
+		    ('2020-09-08'
+           ,''
+           ,'This is description'
            ,'2020-08-20 23:05:48.907'
-           ,'Session 2'
-           ,'GMT10+'
+           ,'Session 3'
+           ,'GMT+10'
            ,null)
+GO
+INSERT INTO [dbo].[SESSIONPAPER]
+           (STATUS
+           ,PAPERID_PAPERID
+           ,SESSIONID_SESSIONID)
+		   VALUES('ACCEPTED',
+		   2,
+		   1)
+GO
+INSERT INTO [dbo].[SESSIONPARTICIPANT]
+           (STATUS
+           ,PARTICIPANTID_ID
+           ,SESSIONID_SESSIONID)
+		   VALUES('ACCEPTED',
+		   2,
+		   1)
 GO
 DBCC CHECKIDENT (PAPERTAGS, reseed,6)
 GO
@@ -115,3 +127,6 @@ GO
 DBCC CHECKIDENT (TAGS, reseed,9)
 GO
 DBCC CHECKIDENT (SESSION, reseed,5)
+GO
+DBCC CHECKIDENT (SESSIONPAPER, reseed,5)
+SELECT * FROM SESSION
