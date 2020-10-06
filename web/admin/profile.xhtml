@@ -4,22 +4,19 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                template="/WEB-INF/Templates/authorLayout.xhtml"
+                template="/WEB-INF/Templates/adminLayout.xhtml"
                 >
     <ui:define name="title">Profile</ui:define>
-    <ui:define name="customCSS">
-        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.css"></link>
-        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.min.css"/>
-        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2-bootstrap4.min.css"/>
-        <script src="${facesContext.externalContext.requestContextPath}/js/jquery-3.2.1.min.js"></script>
+    <ui:define name="customCSS">        
     </ui:define>
+
     <ui:define name="content">
+
         <!-- Main content -->
-        <section class="content container">
+        <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-3">
-
                         <!-- About Me Box -->
                         <div class="card card-primary">
                             <div class="card-header">
@@ -30,27 +27,27 @@
                                 <strong><i class="fas fa-user mr-1"></i> Name</strong>
 
                                 <p class="text-muted">
-                                    #{authorController.user.firstName} #{authorController.user.lastName}
+                                    #{adminController.user.firstName} #{adminController.user.lastName} 
                                 </p>
                                 <hr/> 
                                 <strong><i class="fas fa-book mr-1"></i> Qualification</strong>
 
                                 <p class="text-muted">
-                                    #{authorController.user.qualification}
+                                    #{adminController.user.qualification}
                                 </p>
 
                                 <hr/>
 
                                 <strong><i class="fas fa-envelope mr-1"></i> Email </strong>
 
-                                <p class="text-muted">#{authorController.user.email}</p>
+                                <p class="text-muted">#{adminController.user.email}</p>
 
                                 <hr/>
 
                                 <strong><i class="fas fa-phone mr-1"></i> Phone </strong>
 
                                 <p class="text-muted">
-                                    #{authorController.user.phoneNumber}
+                                    #{adminController.user.phoneNumber}
                                 </p>
 
                                 <hr/>
@@ -59,81 +56,67 @@
                         </div>
                         <!-- /.card -->
                     </div>
-                    <!-- /.col -->
+
                     <div class="col-md-9">
                         <div class="card">
                             <div class="card-header p-2">
                                 <ul class="nav nav-pills">
-                                    <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
+                                    <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Update Records</a></li>
                                 </ul>
-                                <div class="form-group row">
-                                    <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
-                                </div>
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div class="tab-content">
                                     <div class="active tab-pane" id="settings">
+                                        
                                         <h:form a:method="POST" a:accept-charset="utf-8"  class="form-horizontal needs-validation" a:novalidate="">
                                             <div class="form-group row">
                                                 <label for="inputName" class="col-sm-2 col-form-label">First Name</label>
                                                 <div class="col-sm-10">
-                                                    <h:inputText class="form-control" value="#{authorController.user.firstName}" a:placeholder="First Name" a:required="required"/>
+                                                    <h:inputText class="form-control" value="#{adminController.user.firstName}" a:placeholder="First Name" a:required="required"/>
                                                 </div>
                                             </div>
+
                                             <div class="form-group row">
                                                 <label for="inputName" class="col-sm-2 col-form-label">Last Name</label>
                                                 <div class="col-sm-10">
-                                                    <h:inputText class="form-control" value="#{authorController.user.lastName}" a:placeholder="Last Name" a:required="required"/>
+                                                    <h:inputText class="form-control" value="#{adminController.user.lastName}" a:placeholder="First Name" a:required="required"/>
                                                 </div>
                                             </div>
+
                                             <div class="form-group row">
                                                 <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                                                 <div class="col-sm-10">
-                                                    <h:inputText a:type="email" class="form-control" value="#{authorController.user.email}" a:placeholder="Email" a:required="required"/>
+                                                    <h:inputText class="form-control" value="#{adminController.user.email}" a:placeholder="First Name" a:required="required"/>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="inputName2" class="col-sm-2 col-form-label">Qualification</label>
                                                 <div class="col-sm-10">
-                                                    <h:inputText class="form-control" value="#{authorController.user.qualification}" a:placeholder="Qualification"/>
+                                                    <h:inputText class="form-control" value="#{adminController.user.qualification}" a:placeholder="First Name" a:required="required"/>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="inputExperience" class="col-sm-2 col-form-label">Username</label>
                                                 <div class="col-sm-10">
-                                                    <h:inputText class="form-control" value="#{authorController.user.userName}" a:placeholder="Username" a:required="required"/>
+                                                    <h:inputText class="form-control" value="#{adminController.user.userName}" a:placeholder="First Name" a:required="required"/>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="inputPhone" class="col-sm-2 col-form-label">Phone</label>
+                                                <label for="inputExperience" class="col-sm-2 col-form-label">Password</label>
                                                 <div class="col-sm-10">
-                                                    <h:inputText class="form-control" value="#{authorController.user.phoneNumber}" a:placeholder="Phone"/>
+                                                    <h:inputText class="form-control" value="#{adminController.user.password}" a:placeholder="First Name" a:required="required"/>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="inputInterestGroup" class="col-sm-2 col-form-label">Interest Group</label>
+                                                <label for="inputSkills" class="col-sm-2 col-form-label">Phone</label>
                                                 <div class="col-sm-10">
-                                                    <h:selectManyListbox value="#{authorController.user.tagList}" class="select2bs4 form-control" a:multiple="multiple" a:data-placeholder="Choose the Topic"
-                                                                         style="width: 100%;" a:required="required">
-                                                        <c:forEach var="tag" items="#{homeController.getAllTags()}">
-                                                            <c:set var="selected" value="false" />
-                                                            <c:forEach var="userTag" items="#{authorController.user.userTags}">
-                                                                <c:if test="#{tag.id==userTag.userTagId.id}">
-                                                                    <f:selectItem a:selected="selected" itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
-                                                                    <c:set var="selected" value="true" />
-                                                                </c:if>
-                                                            </c:forEach>
-                                                            <c:if test="#{!selected}">
-                                                                <f:selectItem itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </h:selectManyListbox>
+                                                    <h:inputText class="form-control" value="#{adminController.user.phoneNumber}" a:placeholder="First Name" a:required="required"/>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Country</label>
                                                 <div class="col-sm-10">
-                                                    <h:selectOneMenu value="#{authorController.user.country}" class="form-control custom-select mr-sm-2 timeZoneDropdownClass">
+                                                    <h:selectOneMenu value="#{adminController.user.country}" class="form-control custom-select mr-sm-2 timeZoneDropdownClass">
                                                         <c:forEach var="country" items="#{accountController.getListOfCountries()}">
                                                             <f:selectItem itemLabel="#{country}" itemValue="#{country}"/>
                                                         </c:forEach>
@@ -143,18 +126,20 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Time Zone</label>
                                                 <div class="col-sm-10">
-                                                    <h:selectOneMenu value="#{authorController.user.timeZone}" class="form-control custom-select mr-sm-2 timeZoneDropdownClass" a:required="required">
+                                                    <h:selectOneMenu value="#{adminController.user.timeZone}" class="form-control custom-select mr-sm-2 timeZoneDropdownClass" a:required="required">
                                                         <c:forEach var="timeZone" items="#{accountController.getListOfTimeZones()}">
                                                             <f:selectItem itemLabel="#{timeZone}" itemValue="#{timeZone}"/>
                                                         </c:forEach>
                                                     </h:selectOneMenu>
                                                 </div>
                                             </div>
+                                            
+                                            
                                             <div class="form-group row">
                                                 <div class="offset-sm-2 col-sm-10">
-                                                    <h:commandButton id="btnSubmit" value="Update" class="btn btn-danger" immediate="false" action="#{authorController.updateProfile()}"/>
+                                                    <h:commandButton id="btnSubmit" value="Update" class="btn btn-success" immediate="false" action="#{adminController.updateProfile()}"/>                                                    
                                                 </div>
-                                            </div>  
+                                            </div>
                                         </h:form>
                                     </div>
                                     <!-- /.tab-pane -->
@@ -165,31 +150,17 @@
                         </div>
                         <!-- /.nav-tabs-custom -->
                     </div>
-                    <!-- /.col -->
+
                 </div>
                 <!-- /.row -->
+
             </div><!--/. container-fluid -->
         </section>
+        <!-- /.content -->
+
     </ui:define>
+    
     <ui:define name="customScript">
-        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/popper.js"></script>
-        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
-        <script src="${facesContext.externalContext.requestContextPath}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-        <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
-        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
-        <script>
-            $(document).ready(function () {
 
-                bsCustomFileInput.init();
-
-                //Initialize Select2 Elements
-                $('.select2').select2()
-
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4'
-                })
-            });
-        </script>
     </ui:define>
 </ui:composition>

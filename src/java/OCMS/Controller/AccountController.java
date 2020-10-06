@@ -85,7 +85,9 @@ public class AccountController {
             Users isUserExist = userEJB.findUserByEmailOrUsername(user.getUserName());
             if (isUserExist == null) {
                 user.setIsActive(true);
-                if (user.getRole().equals(Role.Participant)) {
+                if (user.getRole() == null) {
+                    user.setRole(Role.Organiser.toString());
+                } else if (user.getRole().equals(Role.Participant)) {
                     user.setIsApproved(true);
                 } else {
                     user.setIsApproved(false);
@@ -95,28 +97,31 @@ public class AccountController {
                 user = userEJB.createUser(user);
                 if (user.getId() != null) {
                     UserTags userTag = new UserTags();
-                    for (Long tag : user.getTagList()) {
-                        userTag = new UserTags();
-                        userTag.setUserId(user);
-                        userTag.setUserTagId(tagsEJB.findTagById(tag));
-                        userTag = userTagsEJB.createUserTag(userTag);
-                    }
-                    if (userTag != null) {
-                        user = new Users();
-                        context.addMessage("sucess", new FacesMessage("User registration is succeessful."));
-                    } else {
-                        for (UserTags uTag : userTagsEJB.findTagsByUserId(user.getId())) {
-                            userTagsEJB.removeUserTags(uTag);
+                    if (user.getTagList() != null) {
+                        for (Long tag : user.getTagList()) {
+                            userTag = new UserTags();
+                            userTag.setUserId(user);
+                            userTag.setUserTagId(tagsEJB.findTagById(tag));
+                            userTag = userTagsEJB.createUserTag(userTag);
                         }
-                        userEJB.deleteUser(user);
+                        if (userTag != null) {
+                            user = new Users();
+                            context.addMessage("sucess", new FacesMessage("User registration is succeessful."));
+                        } else {
+                            for (UserTags uTag : userTagsEJB.findTagsByUserId(user.getId())) {
+                                userTagsEJB.removeUserTags(uTag);
+                            }
+                            userEJB.deleteUser(user);
+                        }
                     }
+
                 } else {
                     context.addMessage("error", new FacesMessage("User registratiom is failed."));
                 }
             } else {
                 context.addMessage("error", new FacesMessage("Username or email already exist."));
             }
-
+            
             return "register";
         } catch (Exception e) {
             context.addMessage("error", new FacesMessage("Internal server error. Please try later." + e.getLocalizedMessage()));

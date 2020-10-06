@@ -1,0 +1,185 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="/WEB-INF/Templates/adminLayout.xhtml"
+                >
+    <ui:define name="title">Profile</ui:define>
+    <ui:define name="customCSS">
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.css"></link>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/plugins/select2/select2-bootstrap4.min.css"/>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/dist/css/adminlte.min.css"/>
+        <!-- DataTables -->
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
+        <script src="${facesContext.externalContext.requestContextPath}/js/jquery-3.2.1.min.js"></script>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">List of Conference Organisers 
+                                    <a class="btn btn-info btn-sm" href="${facesContext.externalContext.requestContextPath}/admin/organiser/createOrganiser.xhtml">
+                                        <i class="fas fa-plus-square"></i>  Add a New Organiser</a>
+
+
+                                </h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Address</th> 
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="organiser" items="#{adminController.getAllOrganisers()}">
+                                            <tr>
+                                                <h:inputHidden value="#{organiser.id}">
+                                                    <td>#{organiser.firstName}</td>
+                                                    <td>#{organiser.lastName}</td>
+                                                    <td>#{organiser.email}</td>
+                                                    <td>#{organiser.phoneNumber}</td>
+                                                    <td>#{organiser.address}</td>
+                                                    <td>
+                                                        <h:commandLink class="btn btn-warning btn-sm" action="#{adminController.editOrganiser}">
+                                                            <f:param name="id" value="#{organiser.id}" />
+                                                            <i class="fas fa-edit"></i>
+                                                        </h:commandLink>&#160;  
+
+                                                        <button type="button"  class="btn btn-danger btn-sm popupDeleteModal" data-id="#{organiser.id}" data-toggle="modal" data-target="#modal-delete">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </td>
+                                                </h:inputHidden>
+                                            </tr>               
+                                        </c:forEach>
+                                    </tbody> 
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div><!--/. container-fluid -->
+            
+            
+            <div class="modal fade" id="modal-delete">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete Your Paper</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&#x2715;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h4>Do you want to delete this Organiser?</h4>
+                            <h6>You won't be able to revert this!</h6>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <h:form a:method="POST" a:accept-charset="utf-8">
+                                <h:inputHidden a:name="userIdToBeDeleted" id="paperIdToBeDelete"></h:inputHidden>
+                                <h:commandButton id="confirm-delete" class="btn btn-danger" value="Yes, Delete" immediate="false" action="#{adminController.deleteUser()}">
+                                </h:commandButton>
+                            </h:form>
+
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
+            
+            
+            
+            
+        </section>
+        <!-- /.content -->
+
+    </ui:define>
+
+    <ui:define name="customScript">
+<script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/umd/popper.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
+
+        <!-- DataTables -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+        <script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
+        <script type="text/javascript">
+            $(function () {
+
+
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    "order": [[3, "desc"]],
+                    "paging": true,
+                    "searching": true,
+                });
+                $('#example2').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": false,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            });
+            $('.popupDeleteModal').on('click', function (e) {
+                var paperId = $(this).data('id');
+                document.getElementsByName('paperIdToBeDelete')[0].value = paperId;
+            });
+
+            $('#modal-edit').on('show.bs.modal', function (e) {
+
+                bsCustomFileInput.init();
+                $('select:not(.normal)').each(function () {
+                    $(this).select2({
+                        dropdownParent: $(this).parent().parent()
+                    });
+                });
+                //Initialize Select2 Elements
+                $('.select').select2()
+//Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+//                $('.select2bs4').select2({
+//                    dropdownParent: $('#modal-edit')
+//                });
+
+            });
+        </script>
+    </ui:define>
+</ui:composition>

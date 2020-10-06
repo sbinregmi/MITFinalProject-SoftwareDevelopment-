@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="/WEB-INF/Templates/adminLayout.xhtml"
+                >
+    <ui:define name="title">Profile</ui:define>
+    <ui:define name="customCSS">        
+    </ui:define>
+
+    <ui:define name="content">
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Submitted Papers</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Paper Title</th>
+                                            <th>Paper Topic</th>
+                                            <th>Publisher</th>
+                                            <th>Date of Submission</th>
+                                            <th>Submitted By</th>
+                                            <th>Submitted Paper</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="paper" items="#{adminController.getAllPapers()}">
+                                            <tr>
+                                                <td>#{paper.paperTitle}</td>
+                                                <td>#{paper.paperAbstract}</td>
+                                                <td>#{paper.publisher}</td>
+                                                <td>#{paper.createdDate}</td>
+                                                <td> <a href="" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-view"> <i class="fas fa-eye"></i>#{paper.authorId.firstName}+" "#{paper.authorId.lastName}</a></td>
+                                                <td><a href="" title="">#{paper.paperUrl}</a></td>
+
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div><!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
+
+    </ui:define>
+
+    <ui:define name="customScript">
+
+    </ui:define>
+</ui:composition>

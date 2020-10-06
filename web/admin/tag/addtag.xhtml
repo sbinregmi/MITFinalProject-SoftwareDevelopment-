@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/Templates/adminLayout.xhtml"
+                >
+    <ui:define name="title">Add Tag</ui:define>
+    <ui:define name="content">
+        <!-- Main content -->
+
+
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Add a New Tag</h3>
+                            </div>
+                           
+                            <div class="col-md-9">
+
+                                
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <div class="active tab-pane" id="settings">
+                                            <h:form a:accept-charset="utf-8"  class="form-horizontal needs-validation" a:novalidate="" enctype="multipart/form-data">
+                                                <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
+                                                <div class="form-group row">
+                                                    <label for="inputName" class="col-sm-4 col-form-label">Tag Name</label>
+                                                    <div class="col-sm-8">
+                                                        <h:inputText class="form-control" value="#{adminController.tag.name}" a:placeholder="Tag Name" a:required="required"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputName" class="col-sm-4 col-form-label">Description</label>
+                                                    <div class="col-sm-8">
+                                                        <h:inputTextarea value="#{adminController.tag.description}"  class="form-control" a:placeholder="Description"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputName" class="col-sm-4 col-form-label">Upload File</label>
+                                                    <div class="col-sm-8">
+                                                        <h:inputFile value="#{adminController.tag.image}" a:accept="image/x-png,image/gif,image/jpeg"/> 
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="offset-sm-4 col-sm-10">
+                                                        <h:commandButton id="btnSubmit" value="Save Tag" class="btn btn-success" immediate="false" action="#{adminController.addTag()}"/>
+                                                    </div>
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                        <!-- /.tab-pane -->
+                                    </div>
+
+                                    <!-- /.tab-content -->
+                                </div><!-- /.card-body -->
+
+                                <!-- /.nav-tabs-custom -->
+                            </div> 
+                        </div>
+
+                    </div><!--end row-->
+
+                </div><!--/. container-fluid -->
+            </div>
+        </section>
+
+    </ui:define>
+    <ui:define name="customScript">
+    </ui:define>
+</ui:composition>

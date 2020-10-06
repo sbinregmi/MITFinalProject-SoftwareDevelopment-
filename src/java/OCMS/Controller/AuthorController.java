@@ -369,7 +369,7 @@ public class AuthorController {
 //Delete paper by paper id
     @RequestMapping(value = "/author/deletePaper")
     public String deletePaper() {
-        FacesContext context = FacesContext.getCurrentInstance();
+            FacesContext context = FacesContext.getCurrentInstance();
         try {
             Map<String, String> requestParamMap = context.getExternalContext().getRequestParameterMap();
             if (requestParamMap.containsKey("paperIdToBeDelete")) {

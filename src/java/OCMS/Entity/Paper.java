@@ -56,7 +56,7 @@ private static final long serialVersionUID = 1L;
     private Date createdDate;
     private Date updatedDate;
     private String paperAbstract;
-    @ManyToOne
+    @ManyToOne  
     private Users authorId;
     private String publisher;
     @OneToMany(mappedBy = "paperId", cascade = CascadeType.PERSIST)

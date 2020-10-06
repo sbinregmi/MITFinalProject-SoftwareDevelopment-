@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/Templates/adminLayout.xhtml"
+
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="title">Add Tag</ui:define>
+    <ui:define name="content">
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">List of Tags
+
+                                        <a class="btn btn-info btn-sm" href="${facesContext.externalContext.requestContextPath}/admin/tag/addtag.xhtml">
+                                        <i class="fas fa-plus-square"></i> Add a New Tag
+                                    </a>
+
+                                </h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <h:form a:name="tagsListForm" a:method="Post">
+                                    <table id="" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tag Name</th>
+                                                <th>Description</th>
+                                                <th>URL</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="tag" items="#{adminController.getAllTags()}">
+                                                <tr>
+                                                    <h:inputHidden value="#{tag.id}">
+                                                        <td>#{tag.name}</td>
+                                                        <td>#{tag.description}</td>
+                                                        <td>#{tag.url}</td>                                            
+                                                        <td>
+                                                            <h:commandLink class="btn btn-warning btn-sm popupEditModal"  action="#{adminController.editTag()}">
+                                                                <f:param name="id" value="#{tag.id}" />
+                                                                <i class="fas fa-edit"></i>
+                                                            </h:commandLink>
+
+                                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </td>
+                                                    </h:inputHidden>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody> 
+                                    </table>
+                                </h:form>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div><!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
+
+    </ui:define>
+    <ui:define name="customScript">
+    </ui:define>
+</ui:composition>
