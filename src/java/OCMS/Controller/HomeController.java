@@ -118,8 +118,10 @@ public class HomeController {
         try {
             HttpSession session = request.getSession();
             Users loggedInUser = (Users) session.getAttribute("user");
+            if(loggedInUser!=null){
             this.user = userEJB.findUserById(loggedInUser.getId());
             setUser(user);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -59,6 +59,18 @@ public class PaperTagsEJB {
             return paperTagsList;
         }
     }
+    
+    //find paperTags by Tag ID
+    public List<PaperTags> findPaperTagsByTagId(Long tagId) {
+        List<PaperTags> paperTagsList = em.createNamedQuery("findPaperTagsByTagId").setParameter("tagId", tagId).getResultList();
+        if (paperTagsList == null) {
+            return null;
+        } else {
+            return paperTagsList;
+        }
+    }
+    
+    
 
     //delete a UserTags
     public void removeTagsByPaperId(Long paperId) {

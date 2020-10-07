@@ -45,7 +45,7 @@ public class Users implements Serializable {
     @Column(nullable = false)
     private String email;
     private String phoneNumber;
-    private String qualification;
+    private String affiliation;
     @Column(nullable = false)
     private String role;
     private boolean isApproved;
@@ -80,7 +80,7 @@ public class Users implements Serializable {
         this.country = country;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.qualification = qualification;
+        this.affiliation = qualification;
         this.role = role;
         this.isApproved = isApproved;
         this.isPublic = isPublic;
@@ -105,7 +105,7 @@ public class Users implements Serializable {
         this.country = country;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.qualification = qualification;
+        this.affiliation = qualification;
         this.role = role;
         this.isApproved = isApproved;
         this.isPublic = isPublic;
@@ -167,12 +167,12 @@ public class Users implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getQualification() {
-        return qualification;
+    public String getAffiliation() {
+        return affiliation;
     }
 
-    public void setQualification(String qualification) {
-        this.qualification = qualification;
+    public void setAffiliation(String affiliation) {
+        this.affiliation = affiliation;
     }
 
     public String getRole() {
@@ -290,7 +290,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", country=" + country + ", email=" + email + ", phoneNumber=" + phoneNumber + ", qualification=" + qualification + ", role=" + role + ", isApproved=" + isApproved + ", isPublic=" + isPublic + ", isActive=" + isActive + ", userName=" + userName + ", password=" + password + ", timeZone=" + timeZone + ", address=" + address + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", paperList=" + paperList + ", sessionParticipantList=" + sessionParticipantList + ", userTags=" + userTags + '}';
+        return "User{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", country=" + country + ", email=" + email + ", phoneNumber=" + phoneNumber + ", qualification=" + affiliation + ", role=" + role + ", isApproved=" + isApproved + ", isPublic=" + isPublic + ", isActive=" + isActive + ", userName=" + userName + ", password=" + password + ", timeZone=" + timeZone + ", address=" + address + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", paperList=" + paperList + ", sessionParticipantList=" + sessionParticipantList + ", userTags=" + userTags + '}';
     }
    
     

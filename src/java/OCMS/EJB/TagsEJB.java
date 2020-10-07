@@ -49,4 +49,10 @@ public class TagsEJB {
         System.out.println(ctx.getCallerPrincipal().getName());
         return tag;
     }
+    
+    public void remove(Tags tag) {
+        tag=em.find(Tags.class, tag.getId());
+        em.remove(tag);
+        System.out.println(ctx.getCallerPrincipal().getName());
+    }
 }

@@ -6,11 +6,12 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 template="/WEB-INF/Templates/adminLayout.xhtml"
                 >
-    <ui:define name="title">Profile</ui:define>
+    <ui:define name="title">Authors</ui:define>
     <ui:define name="customCSS">        
     </ui:define>
 
     <ui:define name="content">
+
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -18,60 +19,45 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Submitted Papers</h3>
+                                <h3 class="card-title">List of Authors</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
+                                <h:messages errorClass="errorMessage" infoClass="successMessage" showSummary="true"></h:messages>
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                                <th>Paper Title</th>
-                                                <th>Paper Topic</th>
-                                                <th>Author Name</th>
-                                                <th>Author Email</th>
-                                                <th>Author Affiliation</th>
-                                                <th>Paper Created Date</th>
-                                                <th>Action</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                            <th>Username</th>
+                                            <th>Affiliation</th>
+                                            <th>Country</th>
+                                            <th>Address</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="paper" items="#{adminController.getAllPapers()}">
-                                            <tr>
-                                                <td>#{paper.paperTitle}
-                                                        </td>
-                                                        <td>
-                                                            <c:set var="i" value="#{0}"></c:set>
-                                                            <c:forEach var="tag" items="#{paper.paperTags}">
-                                                                #{tag.tagId.name}
-                                                                <c:set var="i" value="#{i+1}"></c:set>
-                                                                <c:if test="#{i !=paper.paperTags.size()}">
-                                                                    ,&#160;
-                                                                </c:if>
-                                                            </c:forEach>
-                                                        </td>
-                                                        <td>#{paper.authorId.firstName}&#160;#{paper.authorId.lastName}</td>
-                                                        <td>#{paper.authorId.email}</td>
-                                                        <td>#{paper.authorId.affiliation}</td>
-                                                        <td>#{organizerController.formaterForDateTime.format(paper.createdDate)}</td>
-                                                
-                                                
-                                                
-                                                
-                                                
-                                                
-<!--                                                <td>#{paper.paperTitle}</td>
-                                                <td>#{paper.paperTags}</td>
-                                                <td>#{paper.publisher}</td>
-                                                <td>#{paper.createdDate}</td>
-                                                <td> <a href="" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-view"> <i class="fas fa-eye"></i> #{paper.authorId.firstName} #{paper.authorId.lastName}</a></td>
-                                                <td><a href="#{paper.paperUrl}" title="" target="_blank">Paper URL</a></td>-->
 
+                                        <c:forEach var="author" items="#{adminController.allAuthors}">
+                                            <tr>
+                                                <td>#{author.firstName}</td>
+                                                <td>#{author.lastName}</td>
+                                                <td>#{author.email}</td>
+                                                <td>#{author.userName}</td>
+                                                <td>#{author.affiliation}</td>
+                                                <td>#{author.country}</td>
+                                                <td>#{author.address}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete">
+
+                                                    <button type="button" class="btn btn-danger btn-sm popupDeleteModal" data-id="#{author.id}" data-toggle="modal" data-target="#modal-delete">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
+
                                             </tr>
+
+
                                         </c:forEach>
                                     </tbody>
                                 </table>
@@ -84,12 +70,40 @@
 
             </div><!--/. container-fluid -->
         </section>
+
+        <div class="modal fade" id="modal-delete">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Participant</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#x2715;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Do you want to delete author?</h4>
+                        <h6>You won't be able to revert this!</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <h:form a:method="POST" a:accept-charset="utf-8">
+
+                            <h:inputHidden a:name="userIdToBeDeleted" id="userIdToBeDeleted"></h:inputHidden>
+                            <h:commandButton id="confirm-delete" class="btn btn-danger" value="Yes, Delete" immediate="false" action="#{adminController.deleteParticipant()}">
+                            </h:commandButton>
+                        </h:form>
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
         <!-- /.content -->
 
     </ui:define>
 
     <ui:define name="customScript">
-        
         <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
 
         <!-- DataTables -->
@@ -121,6 +135,5 @@
                 });
             });
         </script>
-
     </ui:define>
 </ui:composition>

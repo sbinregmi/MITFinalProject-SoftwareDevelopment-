@@ -11,7 +11,6 @@ import OCMS.EJB.UserTagsEJB;
 import OCMS.Entity.Tags;
 import OCMS.Entity.UserTags;
 import OCMS.Entity.Users;
-import static OCMS.Entity.Users_.userTags;
 import OCMS.ModelData.Enum.Role;
 import java.util.Date;
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class AccountController {
             if (isUserExist == null) {
                 user.setIsActive(true);
                 if (user.getRole() == null) {
-                    user.setRole(Role.Organiser.toString());
+                    user.setRole(Role.Organizer.toString());
                 } else if (user.getRole().equals(Role.Participant)) {
                     user.setIsApproved(true);
                 } else {

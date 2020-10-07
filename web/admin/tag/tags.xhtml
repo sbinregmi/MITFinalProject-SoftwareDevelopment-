@@ -27,7 +27,7 @@
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <h:form a:name="tagsListForm" a:method="Post">
-                                    <table id="" class="table table-bordered table-striped">
+                                    <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>Tag Name</th>
@@ -42,14 +42,16 @@
                                                     <h:inputHidden value="#{tag.id}">
                                                         <td>#{tag.name}</td>
                                                         <td>#{tag.description}</td>
-                                                        <td>#{tag.url}</td>                                            
                                                         <td>
-                                                            <h:commandLink class="btn btn-warning btn-sm popupEditModal"  action="#{adminController.editTag()}">
+                                                            <a href="#{tag.url}" target="_blank">Image</a>
+                                                        </td>                                            
+                                                        <td>
+                                                            <h:commandLink class="btn btn-warning btn-sm"  action="#{adminController.editTag}">
                                                                 <f:param name="id" value="#{tag.id}" />
                                                                 <i class="fas fa-edit"></i>
                                                             </h:commandLink>
 
-                                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete">
+                                                            <button type="button" class="btn btn-danger btn-sm popupDeleteModal" data-id="#{tag.id}" data-toggle="modal" data-target="#modal-delete">
                                                                 <i class="fas fa-trash-alt"></i>
                                                             </button>
                                                         </td>
@@ -67,10 +69,71 @@
                 <!-- /.row -->
 
             </div><!--/. container-fluid -->
+            
         </section>
+        
+        <div class="modal fade" id="modal-delete">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Tag</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#x2715;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Do you want to delete tag?</h4>
+                        <h6>You won't be able to revert this!</h6>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <h:form a:method="POST" a:accept-charset="utf-8">
+                            
+                            <h:inputHidden a:name="tagIdToBeDeleted" id="tagIdToBeDeleted"></h:inputHidden>
+                            <h:commandButton id="confirm-delete" class="btn btn-danger" value="Yes, Delete" immediate="false" action="#{adminController.deleteTag()}">
+                            </h:commandButton>
+                        </h:form>
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
         <!-- /.content -->
 
     </ui:define>
     <ui:define name="customScript">
+        <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
+
+        <!-- DataTables -->
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/backendResources/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+        
+        <script type="text/javascript">
+            $(function () {
+
+                $('.select').select2()
+//Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                    "order": [[2, "desc"]],
+                    "paging": true,
+                    "searching": true,
+                });
+
+                $('.popupDeleteModal').on('click', function (e) {
+                    var tagID = $(this).data('id');
+                    document.getElementsByName('tagIdToBeDeleted')[0].value = tagID;
+                });
+            });
+        </script>
     </ui:define>
 </ui:composition>

@@ -5,7 +5,6 @@
  */
 package OCMS.Entity;
 
-import static OCMS.Entity.Users_.country;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

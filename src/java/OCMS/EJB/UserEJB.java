@@ -35,7 +35,7 @@ public class UserEJB {
 
     //find users by role
     public List<Users> findUserByRole(String role) {
-        return em.createNamedQuery("findUserByRole").setParameter("uRole", role).getResultList();
+        return em.createNamedQuery("findUserByRole").setParameter("role", role).getResultList();
     }
 
     //find users by Id

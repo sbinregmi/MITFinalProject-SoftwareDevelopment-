@@ -50,7 +50,7 @@
                     <div class="intro_item">
                         <c:if test="#{not empty tag.url}">
                             <div class="intro_image">
-                                <img src="${facesContext.externalContext.requestContextPath}#{tag.url.replace('\\', '/')}" alt="" />
+                                <img src="#{tag.url.replace('\\', '/')}" alt="" />
                             </div>
                         </c:if>
                         <div class="intro_body">

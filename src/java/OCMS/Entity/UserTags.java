@@ -21,7 +21,8 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findTagsByUserId", query = "select ut from UserTags ut where ut.userId.id=:userId"),
-    @NamedQuery(name = "removeTagsByUserId", query = "Delete FROM UserTags ut where ut.userId.id=:userId")
+    @NamedQuery(name = "removeTagsByUserId", query = "Delete FROM UserTags ut where ut.userId.id=:userId"),
+    @NamedQuery(name = "findUserTagsByTagId", query = "select ut from UserTags ut where ut.userTagId.id=:tagId")
 })
 public class UserTags implements Serializable {
     private static final long serialVersionUID = 1L;

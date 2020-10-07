@@ -21,6 +21,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findTagsByPaperId", query = "select pt from PaperTags pt where pt.paperId.paperId=:paperId"),
+    @NamedQuery(name = "findPaperTagsByTagId", query = "select pt from PaperTags pt where pt.tagId.id=:tagId"),
      @NamedQuery(name = "removeTagsByPaperId", query = "Delete FROM PaperTags pt where pt.paperId.paperId=:paperId")
 })
 public class PaperTags implements Serializable {

@@ -27,6 +27,6 @@ public class Enum {
         Participant,
         Admin,
         Author,
-        Organiser
+        Organizer
     }
 }

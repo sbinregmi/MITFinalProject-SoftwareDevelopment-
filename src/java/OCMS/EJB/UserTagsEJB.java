@@ -58,6 +58,16 @@ public class UserTagsEJB {
             return userTagsList;
         }
     }
+    
+    //find UserTag by Tag ID
+    public List<UserTags> findUserTagsByTagId(Long tagId) {
+        List<UserTags> userTagsList = em.createNamedQuery("findUserTagsByTagId").setParameter("tagId", tagId).getResultList();
+        if (userTagsList == null) {
+            return null;
+        } else {
+            return userTagsList;
+        }
+    }
 
     //update a UserTags
     public UserTags updateUserTag(UserTags userTags) {
@@ -75,4 +85,6 @@ public class UserTagsEJB {
         System.out.println(ctx.getCallerPrincipal().getName());
     }
 
+    
+    
 }

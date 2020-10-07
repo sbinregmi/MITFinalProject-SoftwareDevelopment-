@@ -6,7 +6,7 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 template="/WEB-INF/Templates/adminLayout.xhtml"
                 >
-    <ui:define name="title">Profile</ui:define>
+    <ui:define name="title">Update Organiser </ui:define>
     <ui:define name="customCSS">        
     </ui:define>
 
@@ -18,7 +18,7 @@
                     <div class="col-md-12">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Please Create an Organiser</h3>
+                                <h3 class="card-title">Please Update an Organiser</h3>
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
@@ -29,40 +29,41 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="">First Name</label>
-                                        <h:inputText value="#{accountController.user.firstName}" class="form-control" a:placeholder="First Name" a:required="required"/>
+                                        <h:inputText value="#{adminController.organiser.firstName}" class="form-control" a:placeholder="First Name" a:required="required"/>
+                                        <h:inputHidden value="#{adminController.organiser.id}"/>
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">Please enter first name.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="">Last Name</label>
-                                        <h:inputText value="#{accountController.user.lastName}" class="form-control" a:placeholder="Last Name" a:required="required"/>
+                                        <h:inputText value="#{adminController.organiser.lastName}" class="form-control" a:placeholder="Last Name" a:required="required"/>
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">Please enter last name.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="">Username</label>
-                                        <h:inputText value="#{accountController.user.userName}" class="form-control" a:placeholder="Username" a:required="required"/>
+                                        <h:inputText value="#{adminController.organiser.userName}" class="form-control" a:placeholder="Username" a:required="required"/>
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">Please enter username.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="">Email</label>
-                                        <h:inputText a:type="email" value="#{accountController.user.email}" class="form-control" a:placeholder="email" a:required="required"/>
+                                        <h:inputText a:type="email" value="#{adminController.organiser.email}" class="form-control" a:placeholder="email" a:required="required"/>
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">Please enter valid email address.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="">Phone</label>
-                                        <h:inputText value="#{accountController.user.phoneNumber}" class="form-control" a:placeholder="Phone Number" />
+                                        <h:inputText value="#{adminController.organiser.phoneNumber}" class="form-control" a:placeholder="Phone Number" />
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="">Address </label>
-                                        <h:inputText value="#{accountController.user.address}" class="form-control" a:placeholder="Address" a:required="required"/>
+                                        <h:inputText value="#{adminController.organiser.address}" class="form-control" a:placeholder="Address" a:required="required"/>
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">Please enter your address.</div>
                                     </div>
@@ -70,20 +71,20 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label for="">Password</label>
-                                        <h:inputText value="#{accountController.user.password}" a:type="password" class="form-control" a:placeholder="Password" a:required="required"/>
+                                        <h:inputText value="#{adminController.organiser.password}" a:type="password" class="form-control" a:placeholder="Password" a:required="required"/>
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">Please enter password.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="">Qualification</label>
-                                        <h:inputText value="#{accountController.user.qualification}" class="form-control" a:placeholder="Educational Qualification"/>
+                                        <label for="">Affiliation</label>
+                                        <h:inputText value="#{adminController.organiser.affiliation}" class="form-control" a:placeholder="Educational Qualification"/>
                                     </div>
 
 
                                     <div class="col-md-6 mb-6">
                                         <label for="">Time Zone</label>
-                                        <h:selectOneMenu value="#{accountController.user.timeZone}" id="timeZone" class="custom-select mr-sm-2 timeZoneDropdownClass form-control">
+                                        <h:selectOneMenu value="#{adminController.organiser.timeZone}" id="timeZone" class="custom-select mr-sm-2 timeZoneDropdownClass form-control">
                                             <f:selectItem itemLabel="Choose Timezone" a:disabled="disabled"/>
                                             <c:forEach var="timeZone" items="#{accountController.getListOfTimeZones()}">
                                                 <f:selectItem itemLabel="#{timeZone}" itemValue="#{timeZone}"/>
@@ -93,7 +94,7 @@
                                     </div>
                                     <div class="col-md-6 mb-6">
                                         <label for="">Country</label>
-                                        <h:selectOneMenu  value="#{accountController.user.country}" id="country" class="custom-select mr-sm-2 form-control" a:required="required">
+                                        <h:selectOneMenu  value="#{adminController.organiser.country}" id="country" class="custom-select mr-sm-2 form-control" a:required="required">
                                             <f:selectItem itemLabel="Choose Country" a:selected="true" a:disabled="disabled"/>
                                             <c:forEach var="country" items="#{accountController.getListOfCountries()}">
                                                 <f:selectItem itemLabel="#{country}" itemValue="#{country}"/>
@@ -104,8 +105,7 @@
                                     </div>
 
                                     <div class="col-md-12" style="text-align:center;margin-top: 20px;">
-                                        <h:commandButton id="btnSubmit" value="Update an Organiser" class="btn btn-success" immediate="false" action="#{accountController.createNewUser()}"/>
-
+                                        <h:commandButton id="btnSubmit" value="Update an Organiser" class="btn btn-success" immediate="false" action="#{adminController.updateOrganiser()}"/>
                                     </div>
 
                                 </div>

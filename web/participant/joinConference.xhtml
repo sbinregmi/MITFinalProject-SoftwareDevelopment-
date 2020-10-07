@@ -102,16 +102,12 @@
                                                     #{tag.tagId.name}
                                                     <c:set var="i" value="#{i+1}"></c:set>
                                                     <c:if test="#{i !=p.paperId.paperTags.size()}">
-                                                        ,
                                                     </c:if>
 
                                                 </c:forEach>
                                                 <br/>
                                             </c:if>
                                         </c:forEach>
-                                        <small>
-                                            AI
-                                        </small>
                                     </td>
                                     <td class="project-state">
                                         #{participantController.formaterForDateTime.format(conference.sessionDateTime)} 

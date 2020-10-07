@@ -247,7 +247,7 @@ public class OrganizerController {
             Part image = session.getImage();
             String oldImageUrl = sessionOlder.getImageUrl();
             if (!oldImageUrl.isEmpty() && oldImageUrl != null) {
-                oldImageUrl = oldImageUrl.replace("/OCMS\\", "/");
+                oldImageUrl = oldImageUrl.replace(servletContext.getContextPath(), "");
                 oldImageUrl = oldImageUrl.replace("\\", "/");
                 File previousFile = new File(servletContext.getRealPath(oldImageUrl));
                 boolean result = Files.deleteIfExists(previousFile.toPath());
@@ -346,7 +346,7 @@ public class OrganizerController {
                 boolean result = false;
                 String imageUrl = session.getImageUrl();
                 if (!imageUrl.isEmpty() && imageUrl != null) {
-                    imageUrl = imageUrl.replace("/OCMS\\", "/");
+                    imageUrl = imageUrl.replace(servletContext.getContextPath(), "");
                     imageUrl = imageUrl.replace("\\", "/");
                     File previousFile = new File(servletContext.getRealPath(imageUrl));
                     result = Files.deleteIfExists(previousFile.toPath());
@@ -450,18 +450,18 @@ public class OrganizerController {
                 sessionParticipant.setStatus(OCMS.ModelData.Enum.Status.REJECTED);
                 sessionParticipant = sessionParticipantEJB.updateSessionParticipant(sessionParticipant);
                 context.addMessage("success", new FacesMessage("Participant " + sessionParticipant.getParticipantId().getFirstName() + " " + sessionParticipant.getParticipantId().getLastName()
-                        + " for conference " + sessionPaper.getSessionId().getSessionName() + " is rejected."));
+                        + " for conference " + sessionParticipant.getSessionId().getSessionName() + " is rejected."));
                 //request.setAttribute("id", sessionParticipantIdToReject);
                 setSessionId(sessionParticipant.getSessionId().getSessionId());
                 return "participantRequest";
             } else {
                 context.addMessage("error", new FacesMessage("Internal server error."));
-                return "paperRequest";
+                return "participantRequest";
             }
 
         } catch (Exception ex) {
             context.addMessage("error", new FacesMessage("Internal server error."));
-            return "paperRequest";
+            return "participantRequest";
         }
     }
 

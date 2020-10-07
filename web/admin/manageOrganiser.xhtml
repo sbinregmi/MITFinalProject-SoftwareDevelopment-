@@ -38,41 +38,40 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Address</th> 
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="organiser" items="#{adminController.getAllOrganisers()}">
+                                <h:form a:name="organiserListForm" a:method="Post">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
                                             <tr>
-                                                <h:inputHidden value="#{organiser.id}">
-                                                    <td>#{organiser.firstName}</td>
-                                                    <td>#{organiser.lastName}</td>
-                                                    <td>#{organiser.email}</td>
-                                                    <td>#{organiser.phoneNumber}</td>
-                                                    <td>#{organiser.address}</td>
-                                                    <td>
-                                                        <h:commandLink class="btn btn-warning btn-sm" action="#{adminController.editOrganiser}">
-                                                            <f:param name="id" value="#{organiser.id}" />
-                                                            <i class="fas fa-edit"></i>
-                                                        </h:commandLink>&#160;  
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Address</th> 
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="organiser" items="#{adminController.getAllOrganisers()}">
+                                                <tr>
+                                                    <h:inputHidden value="#{organiser.id}">
+                                                        <td>#{organiser.firstName}</td>
+                                                        <td>#{organiser.lastName}</td>
+                                                        <td>#{organiser.email}</td>
+                                                        <td>#{organiser.phoneNumber}</td>
+                                                        <td>#{organiser.address}</td>
+                                                        <td>
+                                                            <h:commandLink class="btn btn-warning btn-sm" action="#{adminController.editOrganiser}">
+                                                                <f:param name="organiserId" value="#{organiser.id}" />
+                                                                <i class="fas fa-edit"></i>
+                                                            </h:commandLink>  
 
-                                                        <button type="button"  class="btn btn-danger btn-sm popupDeleteModal" data-id="#{organiser.id}" data-toggle="modal" data-target="#modal-delete">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </button>
-                                                    </td>
-                                                </h:inputHidden>
-                                            </tr>               
-                                        </c:forEach>
-                                    </tbody> 
-                                </table>
+                                                        </td>
+                                                    </h:inputHidden>    
+                                                </tr>               
+                                            </c:forEach>
+                                        </tbody> 
+                                    </table>
+                                </h:form>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -81,49 +80,14 @@
                 <!-- /.row -->
 
             </div><!--/. container-fluid -->
-            
-            
-            <div class="modal fade" id="modal-delete">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Delete Your Paper</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&#x2715;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <h4>Do you want to delete this Organiser?</h4>
-                            <h6>You won't be able to revert this!</h6>
-                            
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <h:form a:method="POST" a:accept-charset="utf-8">
-                                <h:inputHidden a:name="userIdToBeDeleted" id="paperIdToBeDelete"></h:inputHidden>
-                                <h:commandButton id="confirm-delete" class="btn btn-danger" value="Yes, Delete" immediate="false" action="#{adminController.deleteUser()}">
-                                </h:commandButton>
-                            </h:form>
 
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-
-            
-            
-            
-            
         </section>
         <!-- /.content -->
 
     </ui:define>
 
     <ui:define name="customScript">
-<script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/umd/popper.js"></script>
+        <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/umd/popper.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/styles/bootstrap4/bootstrap.min.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
         <script src="${facesContext.externalContext.requestContextPath}/plugins/select2/select2.full.min.js"></script>
@@ -142,44 +106,17 @@
                 $("#example1").DataTable({
                     "responsive": true,
                     "autoWidth": false,
-                    "order": [[3, "desc"]],
+                    "order": [[0, "desc"]],
                     "paging": true,
                     "searching": true,
                 });
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
+                
             });
             $('.popupDeleteModal').on('click', function (e) {
                 var paperId = $(this).data('id');
                 document.getElementsByName('paperIdToBeDelete')[0].value = paperId;
             });
 
-            $('#modal-edit').on('show.bs.modal', function (e) {
-
-                bsCustomFileInput.init();
-                $('select:not(.normal)').each(function () {
-                    $(this).select2({
-                        dropdownParent: $(this).parent().parent()
-                    });
-                });
-                //Initialize Select2 Elements
-                $('.select').select2()
-//Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4'
-                })
-//                $('.select2bs4').select2({
-//                    dropdownParent: $('#modal-edit')
-//                });
-
-            });
         </script>
     </ui:define>
 </ui:composition>

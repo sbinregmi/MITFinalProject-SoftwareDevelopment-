@@ -19,6 +19,7 @@ and open the template in the editor.
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="Conference project" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="${facesContext.externalContext.requestContextPath}/styles/style.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/fontawesome-free/css/all.min.css"/>
         <!-- overlayScrollbars -->
         <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/backendResources/plugins/overlayScrollbars/css/OverlayScrollbars.min.css"/>
@@ -39,7 +40,7 @@ and open the template in the editor.
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>
                     <li class="nav-item d-none d-sm-inline-block">
-                        <a href="" class="nav-link">Home</a>
+                        <a href="${facesContext.externalContext.requestContextPath}/admin/dashboard.xhtml" class="nav-link">Home</a>
                     </li>
                 </ul>
             </nav>
@@ -48,7 +49,7 @@ and open the template in the editor.
             <!-- Main Sidebar Container -->
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
-                <a href="${facesContext.externalContext.requestContextPath}/admin/dashboard.xhtml" class="brand-link">
+                <a href="${facesContext.externalContext.requestContextPath}/index.xhtml" class="brand-link">
                     <img src="${facesContext.externalContext.requestContextPath}/backendResources/dist/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                          style="opacity: .8"/>
                     <span class="brand-text font-weight-light">Easy Conference </span>
@@ -99,6 +100,15 @@ and open the template in the editor.
                                     <i class="nav-icon fa fa-users" aria-hidden="true"></i>
                                     <p>
                                         Participants    
+                                    </p>
+                                </a>
+                            </li> 
+                            
+                            <li class="nav-item">
+                                <a href="${facesContext.externalContext.requestContextPath}/admin/author.xhtml" class="nav-link">
+                                    <i class="nav-icon fa fa-users" aria-hidden="true"></i>
+                                    <p>
+                                        Authors    
                                     </p>
                                 </a>
                             </li> 

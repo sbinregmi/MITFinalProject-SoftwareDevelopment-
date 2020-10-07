@@ -267,7 +267,7 @@ public class AuthorController {
             if (pdfFile != null) {
                 String oldPaperUrl = oldPaper.getPaperUrl();
                 if (!oldPaperUrl.isEmpty()) {
-                    oldPaperUrl = oldPaperUrl.replace("/OCMS\\", "/");
+                    oldPaperUrl = oldPaperUrl.replace(servletContext.getContextPath(), "");
                     oldPaperUrl = oldPaperUrl.replace("\\", "/");
                     File previousFile = new File(servletContext.getRealPath(oldPaperUrl));
                     boolean result = Files.deleteIfExists(previousFile.toPath());
@@ -385,7 +385,7 @@ public class AuthorController {
                 boolean result = false;
                 String paperUrl = paper.getPaperUrl();
                 if (!paperUrl.isEmpty()) {
-                    paperUrl = paperUrl.replace("/OCMS\\", "/");
+                    paperUrl = paperUrl.replace(servletContext.getContextPath(), "");
                     paperUrl = paperUrl.replace("\\", "/");
                     File previousFile = new File(servletContext.getRealPath(paperUrl));
                     result = Files.deleteIfExists(previousFile.toPath());
