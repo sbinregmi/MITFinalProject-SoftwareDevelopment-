@@ -86,7 +86,7 @@
                                                                 <i class="fas fa-edit"></i>
                                                             </h:commandLink>
 
-                                                        <button type="button"  class="btn btn-danger btn-sm popupDeleteModal" data-id="#{paper.paperId}" data-toggle="modal" data-target="#modal-delete">
+                                                            <button type="button"  class="btn btn-danger btn-sm popupDeleteModal" data-papername="#{paper.paperTitle}" data-id="#{paper.paperId}" data-toggle="modal" data-target="#modal-delete">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </button>
 
@@ -105,130 +105,6 @@
 
 
 
-            <div class="modal fade" id="modal-edit" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Update your Paper</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&#x2715;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <h:form id="paperEditForm" a:method="POST" a:accept-charset="utf-8" enctype="multipart/form-data"  class="form-horizontal needs-validation" a:novalidate="">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="">Paper Title</label>
-                                        <h:inputText class="form-control" value="#{authorController.paper.paperTitle}" a:placeholder="Please write paper title" a:required="required"/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Paper Topic (Tags)</label>
-                                        <h:selectManyListbox value="#{authorController.paper.tagList}" class="select2bs4 form-control" a:multiple="multiple" a:data-placeholder="Choose the Topic" a:required="required">
-
-                                            <c:forEach var="tag" items="#{homeController.getAllTags()}">
-                                                <c:set scope="request" var="previouslySelected" value="false"/>
-                                                <c:forEach var="paperTag" items="#{authorController.paper.paperTags}">
-                                                    <c:if test="#{tag.id==paperTag.tagId.id}">
-                                                        <c:set scope="request" var="previouslySelected" value="true"/>
-                                                        <f:selectItem a:selected="selected" itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
-                                                    </c:if>
-                                                </c:forEach>
-                                                <c:if test="#{!previouslySelected}">
-                                                    <f:selectItem itemLabel="#{tag.name}" itemValue="#{tag.id}"/>
-                                                </c:if>
-                                            </c:forEach>
-                                        </h:selectManyListbox>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="">Publisher</label>
-                                        <h:inputText class="form-control" value="#{authorController.paper.publisher}" a:placeholder="Publisher" a:required="required"/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="exampleInputFile">Upload Paper</label>
-
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <h:inputFile value="#{authorController.paper.pdfFile}" class="custom-file-input" a:accept="application/pdf" a:required="required"/>
-                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                            </div>  
-                                        </div>
-                                        <c:if test="#{not empty authorController.paper.paperUrl}">
-                                            <a href="#{authorController.paper.paperUrl}" target="_blank">Paper Link</a>
-                                        </c:if>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="">Paper Abstract</label>
-                                        <h:inputTextarea class="form-control" value="#{authorController.paper.paperAbstract}" a:placeholder="Paper Abstract" a:required="required"/>
-                                    </div>
-
-                                </div>
-                                <!-- /.card-body -->
-                            </h:form>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-info">Update</button>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-
-            <div class="modal fade" id="modal-view">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Details of your Paper</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&#x2715;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <h:form id="paperDetailForm">
-                                <div class="col-md-12 mb-12">
-                                    <label for="">Paper Title: </label>
-                                    #{authorController.paper.paperTitle}
-
-                                </div>
-                                <div class="col-md-12 mb-12">
-                                    <label for="">Paper Topic: </label>
-                                    <c:forEach var="tag" items="#{authorController.paper.paperTags}">
-                                        #{tag.tagId.name}<br/>
-                                    </c:forEach>
-                                </div>
-                                <div class="col-md-12 mb-12">
-                                    <label for="">Publisher: </label>
-                                    #{authorController.paper.publisher}
-                                </div>
-                                <div class="col-md-12 mb-12">
-                                    <label for="">Submitted Paper: </label>
-                                    <c:if test="#{not empty authorController.paper.paperUrl}">
-                                        <a href="#{authorController.paper.paperUrl}" target="_blank">Paper Link</a>
-                                    </c:if>
-                                </div>
-                                <div class="col-md-12 mb-12">
-                                    <label for="">Paper Abstract: </label>
-                                    #{authorController.paper.paperAbstract}
-                                </div>
-                            </h:form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-
-
             <div class="modal fade" id="modal-delete">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -239,7 +115,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h4>Do you want to delete your Paper?</h4>
+                            <h4>Do you want to delete "<span id="papername"></span>" Paper?</h4>
                             <h6>You won't be able to revert this!</h6>
                         </div>
                         <div class="modal-footer">
@@ -297,6 +173,8 @@
             $('.popupDeleteModal').on('click', function (e) {
                 var paperId = $(this).data('id');
                 document.getElementsByName('paperIdToBeDelete')[0].value = paperId;
+                var papername = $(this).data('papername');
+                document.getElementById('papername').innerText = papername;
             });
 
            

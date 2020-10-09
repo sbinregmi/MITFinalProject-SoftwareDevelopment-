@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -44,6 +47,8 @@ public class AccountController {
     private UserTagsEJB userTagsEJB;
     @EJB
     private TagsEJB tagsEJB;
+    @Inject
+    HttpServletRequest request;
     private Users user = new Users();
     private List<Users> userList = new ArrayList<Users>();
     private boolean isJustCreated = false;
@@ -120,7 +125,7 @@ public class AccountController {
             } else {
                 context.addMessage("error", new FacesMessage("Username or email already exist."));
             }
-            
+
             return "register";
         } catch (Exception e) {
             context.addMessage("error", new FacesMessage("Internal server error. Please try later." + e.getLocalizedMessage()));
@@ -130,9 +135,21 @@ public class AccountController {
 
     public String resetPassword() {
         FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> requestParamMap = context.getExternalContext().getRequestParameterMap();
+        String type = "";
+        String newPassword = "";
+        String userNameOrEmail = "";
+        if (requestParamMap.containsKey("logintype")) {
+            type = requestParamMap.get("logintype");
+        }
+        if (requestParamMap.containsKey("userName")) {
+            userNameOrEmail = requestParamMap.get("userName");
+        }
+        if (requestParamMap.containsKey("password")) {
+            newPassword = requestParamMap.get("password");
+        }
         try {
-            String newPassword = user.getPassword();
-            String userNameOrEmail = user.getUserName();
+
             user = userEJB.findUserByEmailOrUsername(userNameOrEmail);
             if (user != null) {
                 if (newPassword == null || newPassword.isEmpty()) {
@@ -140,23 +157,44 @@ public class AccountController {
                     user.setUserName(userNameOrEmail);
                     setIsUsernameOrEmailExists(true);
                     context.addMessage("success", new FacesMessage("Username/Email found. Reset your password."));
-                    return "resetpassword";
+                    if (type.equalsIgnoreCase("admin")) {
+                        return "adminrecoverpassword";
+                    } else {
+                        return "resetpassword";
+                    }
+
                 } else {
                     user.setPassword(newPassword);
                     user = userEJB.updateUser(user);
                     if (user != null) {
+                        user=new Users();
                         context.addMessage("success", new FacesMessage("Password reset is successful."));
                     } else {
                         context.addMessage("error", new FacesMessage("Password reset is failed."));
                     }
+                    if (type.equalsIgnoreCase("admin")) {
+                        return "adminrecoverpassword";
+                    } else {
+                        return "resetpassword";
+                    }
                 }
             } else {
                 context.addMessage("error", new FacesMessage("Username or email does not exist."));
+
             }
-            return "resetpassword";
+            if (type.equalsIgnoreCase("admin")) {
+                return "adminforgotpassword";
+            } else {
+                return "resetpassword";
+            }
+
         } catch (Exception e) {
             context.addMessage("success", new FacesMessage("Internal server error. Please try later."));
-            return "resetpassword";
+            if (type.equalsIgnoreCase("admin")) {
+                return "adminrecoverpassword";
+            } else {
+                return "resetpassword";
+            }
         }
     }
 

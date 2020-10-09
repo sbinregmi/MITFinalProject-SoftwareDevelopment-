@@ -3,40 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/Session.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/organizer/assignedParticipant.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/organizer/manageConference.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/ModelData/Enum.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/participant/joinConference.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/index.html</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/SessionParticipant.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/EJB/SessionEJB.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/EJB/UserEJB.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/UserTags.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/HomeController.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/WEB-INF/Templates/organizerLayout.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/Users.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/WEB-INF/Templates/adminLayout.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/organizer/participant.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/LoginFilter.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/organizer/paperRequest.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/AuthorController.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/SessionPaper.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/Paper.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/index.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/EJB/SessionPaperEJB.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/author/managePapers.xhtml</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/adminforgotpassword.xhtml</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/AccountController.java</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/login.xhtml</file>
             <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/LoginServlet.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/organizer/participantRequest.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Entity/Tags.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/WEB-INF/Templates/authorLayout.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/WEB-INF/Templates/generalLayout.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/ContactController.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/Controller/OrganizerController.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/WEB-INF/Templates/participantLayout.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/organizer/paper.xhtml</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/src/java/OCMS/EJB/SessionParticipantEJB.java</file>
-            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/author/joinConference.xhtml</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/adminrecoverpassword.xhtml</file>
+            <file>file:/G:/Assignment/term%204/New%20Project/OCMS/web/resetpassword.xhtml</file>
         </group>
     </open-files>
 </project-private>

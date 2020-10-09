@@ -64,7 +64,7 @@
                                         <label for="">Address </label>
                                         <h:inputText value="#{accountController.user.address}" class="form-control" a:placeholder="Address" a:required="required"/>
                                         <div class="valid-feedback"></div>
-                                        <div class="invalid-feedback">Please enter your address.</div>
+                                        <div class="invalid-feedback">Please enter address.</div>
                                     </div>
 
 
@@ -76,8 +76,8 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="">Qualification</label>
-                                        <h:inputText value="#{accountController.user.affiliation}" class="form-control" a:placeholder="Educational Qualification"/>
+                                        <label for="">Affiliation</label>
+                                        <h:inputText value="#{accountController.user.affiliation}" class="form-control" a:placeholder="Affiliation"/>
                                     </div>
 
 
@@ -89,7 +89,6 @@
                                                 <f:selectItem itemLabel="#{timeZone}" itemValue="#{timeZone}"/>
                                             </c:forEach>
                                         </h:selectOneMenu>
-                                        <span>Your current time zone is selected. You can change.</span>
                                     </div>
                                     <div class="col-md-6 mb-6">
                                         <label for="">Country</label>
@@ -100,7 +99,7 @@
                                             </c:forEach>
                                         </h:selectOneMenu >
                                         <div class="valid-feedback"></div>
-                                        <div class="invalid-feedback">Please select your country.</div>
+                                        <div class="invalid-feedback">Please select country.</div>
                                     </div>
 
                                     <div class="col-md-12" style="text-align:center;margin-top: 20px;">
@@ -122,6 +121,6 @@
     </ui:define>
 
     <ui:define name="customScript">
-
+<script src="${facesContext.externalContext.requestContextPath}/js/formValidation.js"></script>
     </ui:define>
 </ui:composition>

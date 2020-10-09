@@ -96,7 +96,7 @@
                                                             <i class="fas fa-edit"></i> 
                                                         </h:commandLink>
 
-                                                        <button type="button" class="btn btn-danger btn-sm popupDeleteModal" data-toggle="modal" data-id="#{conference.sessionId}" data-target="#modal-delete">
+                                                        <button type="button" class="btn btn-danger btn-sm popupDeleteModal" data-toggle="modal" data-conferencename="#{conference.sessionName}" data-id="#{conference.sessionId}" data-target="#modal-delete">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </button>
                                                     </td>
@@ -124,7 +124,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <h4>Do you want to delete conference?</h4>
+                        <h4>Do you want to delete "<span id="conferencename"></span>"?</h4>
                         <h6>You won't be able to revert this!</h6>
                     </div>
                     <div class="modal-footer">
@@ -177,6 +177,8 @@
                 $('.popupDeleteModal').on('click', function (e) {
                     var sessionId = $(this).data('id');
                     document.getElementsByName('sessionIdToBeDelete')[0].value = sessionId;
+                    var conferencename = $(this).data('conferencename');
+                    document.getElementById('conferencename').innerText = conferencename;
                 });
             });
         </script>

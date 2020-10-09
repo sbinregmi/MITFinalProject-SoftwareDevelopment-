@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         HttpServletRequest servletRequest = (HttpServletRequest) request;
+        HttpServletRequest servletRequest = (HttpServletRequest) request;
         String baseUrl = servletRequest.getServletContext().getContextPath();
         response.sendRedirect(baseUrl + "/login.xhtml");
     }
@@ -61,38 +61,63 @@ public class LoginServlet extends HttpServlet {
         String baseUrl = servletRequest.getServletContext().getContextPath();
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
+        String loginType = request.getParameter("logintype");
         response.setContentType("text/html");
         Users user = new Users();
 
         try {
             user = userEJB.loginUser(userName, password);
             HttpSession session = request.getSession(); //Creating a session
-            if (user != null) {
-                session.setAttribute("user", user);
-                if (user.getRole().equals("Admin")) {
-                    baseUrl = baseUrl + "/admin/dashboard.xhtml";
+            if (loginType.equalsIgnoreCase("admin")) {
+                if (user != null) {
+                    session.setAttribute("user", user);
+                    if (user.getRole().equals("Admin")) {
+                        baseUrl = baseUrl + "/admin/dashboard.xhtml";
 
-                } else if (user.getRole().equals("Author") && user.isIsApproved()) {
-                    baseUrl = baseUrl + "/author/dashboard.xhtml";
+                    } else if (user.getRole().equals("Organizer") && user.isIsApproved()) {
+                        baseUrl = baseUrl + "/organizer/dashboard.xhtml";
 
-                } else if (user.getRole().equals("Organizer") && user.isIsApproved()) {
-                    baseUrl = baseUrl + "/organizer/dashboard.xhtml";
-
-                } else if (user.getRole().equals("Participant")) {
-                    baseUrl = baseUrl + "/participant/dashboard.xhtml";
-
+                    } else {
+                        request.getSession().setAttribute("errMessage", "Roles is not defined.");
+                        //request.setAttribute("errMessage", "Roles is not defined.");
+                        baseUrl = baseUrl + "/adminlogin.xhtml";
+                    }
+                    //request.getRequestDispatcher(baseUrl).forward(request, response);
+                    response.sendRedirect(baseUrl);
                 } else {
-                    request.getSession().setAttribute("errMessage", "Roles is not defined.");
-                    //request.setAttribute("errMessage", "Roles is not defined.");
-                    baseUrl = baseUrl + "/login.xhtml";
-                }
-                //request.getRequestDispatcher(baseUrl).forward(request, response);
-                response.sendRedirect(baseUrl);
-            } else {
-                request.getSession().setAttribute("errMessage", "Username or password incorrect.");
-                //request.setAttribute("errMessage", "Username or password incorrect.");
-                response.sendRedirect(baseUrl + "/login.xhtml");
+                    request.getSession().setAttribute("errMessage", "Username or password incorrect.");
+                    //request.setAttribute("errMessage", "Username or password incorrect.");
+                    response.sendRedirect(baseUrl + "/adminlogin.xhtml");
 
+                }
+            } else if (loginType.equalsIgnoreCase("general")) {
+                if (user != null) {
+                    session.setAttribute("user", user);
+                    if (user.getRole().equals("Admin")) {
+                        baseUrl = baseUrl + "/admin/dashboard.xhtml";
+
+                    } else if (user.getRole().equals("Author") && user.isIsApproved()) {
+                        baseUrl = baseUrl + "/author/dashboard.xhtml";
+
+                    } else if (user.getRole().equals("Organizer") && user.isIsApproved()) {
+                        baseUrl = baseUrl + "/organizer/dashboard.xhtml";
+
+                    } else if (user.getRole().equals("Participant")) {
+                        baseUrl = baseUrl + "/participant/dashboard.xhtml";
+
+                    } else {
+                        request.getSession().setAttribute("errMessage", "Roles is not defined.");
+                        //request.setAttribute("errMessage", "Roles is not defined.");
+                        baseUrl = baseUrl + "/login.xhtml";
+                    }
+                    //request.getRequestDispatcher(baseUrl).forward(request, response);
+                    response.sendRedirect(baseUrl);
+                } else {
+                    request.getSession().setAttribute("errMessage", "Username or password incorrect.");
+                    //request.setAttribute("errMessage", "Username or password incorrect.");
+                    response.sendRedirect(baseUrl + "/login.xhtml");
+
+                }
             }
 
         } catch (IOException e1) {

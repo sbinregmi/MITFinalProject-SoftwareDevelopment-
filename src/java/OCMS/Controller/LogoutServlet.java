@@ -6,6 +6,7 @@
 package OCMS.Controller;
 
 import OCMS.Entity.Users;
+import OCMS.ModelData.Enum.Role;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -62,8 +63,15 @@ public class LogoutServlet extends HttpServlet {
 
         try {
             HttpSession session = request.getSession(); //Creating a session
+            Users loggedInUser = (Users) session.getAttribute("user");
             session.invalidate();
-            response.sendRedirect(baseUrl + "/login.xhtml");
+            if(loggedInUser.getRole().equalsIgnoreCase(Role.Admin.toString())|| loggedInUser.getRole().equalsIgnoreCase(Role.Organizer.toString())){
+                response.sendRedirect(baseUrl + "/adminlogin.xhtml");
+            }
+            else{
+                response.sendRedirect(baseUrl + "/login.xhtml");
+            }
+            
         } catch (Exception e2) {
             e2.printStackTrace();
         }

@@ -236,10 +236,17 @@ public class AdminController {
         return paperEJB.findAllPaper();
     }
 
-    public void updateProfile() {
+    public String updateProfile() {
         FacesContext context = FacesContext.getCurrentInstance();
         user.setUpdatedDate(new Date());
-        usersEJB.updateUser(user);
+        if(user!=null){
+            user=usersEJB.updateUser(user);
+             context.addMessage("success", new FacesMessage("Profile updated successfully."));
+        }
+        else{
+            context.addMessage("error", new FacesMessage("Internal server error."));
+        }
+        return "profile";
     }
 
     public String deleteUser() {

@@ -50,7 +50,7 @@
                                                 <td>#{participant.address}</td>
                                                 <td>
 
-                                                    <button type="button" class="btn btn-danger btn-sm popupDeleteModal" data-id="#{participant.id}" data-toggle="modal" data-target="#modal-delete">
+                                                    <button type="button" class="btn btn-danger btn-sm popupDeleteModal" data-name="#{participant.firstName} #{participant.lastName}" data-id="#{participant.id}" data-toggle="modal" data-target="#modal-delete">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
@@ -81,7 +81,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <h4>Do you want to delete participant?</h4>
+                        <h4>Do you want to delete "<span id="participantname"></span>" participant?</h4>
                         <h6>You won't be able to revert this!</h6>
                     </div>
                     <div class="modal-footer">
@@ -132,6 +132,8 @@
                 $('.popupDeleteModal').on('click', function (e) {
                     var userId = $(this).data('id');
                     document.getElementsByName('userIdToBeDeleted')[0].value = userId;
+                    var name = $(this).data('name');
+                    document.getElementById('participantname').innerText = name;
                 });
             });
         </script>

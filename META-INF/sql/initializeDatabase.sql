@@ -13,7 +13,7 @@ Use [OCMSDB]
 GO
 INSERT INTO [dbo].[USERS]
            ([ADDRESS],[COUNTRY],[CREATEDDATE],[EMAIL],[FIRSTNAME],[ISACTIVE],[ISAPPROVED],[ISPUBLIC],[LASTNAME]
-           ,[PASSWORD],[PHONENUMBER],[QUALIFICATION],[ROLE],[TIMEZONE],[UPDATEDDATE],[USERNAME])
+           ,[PASSWORD],[PHONENUMBER],[AFFILIATION],[ROLE],[TIMEZONE],[UPDATEDDATE],[USERNAME])
      VALUES
            ('Melbourne 1','Australia','2020-02-02','sabin@gmail.com','Sabin',1,1,1,'Regmi','sabin123','98545555','MIT From CQU',
             'Author','GMT+10',null,'sbinregmi'),
